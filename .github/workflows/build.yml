@@ -43,7 +43,7 @@ jobs:
       - name: Zipping build result (javadoc)
         uses: papeloto/action-zip@v1
         with:
-          files: build/docs/
+          files: build/docs/javadoc/
           dest: u/Process-Scheduling-Simulator-JavaDoc.zip
 
       - name: Move raw build result

@@ -27,7 +27,7 @@ jobs:
       - name: Zipping Docs
         uses: papeloto/action-zip@v1
         with:
-          files: build/docs/
+          files: build/docs/javadoc/
           dest: ./u/javadoc.zip
 
       - name: Generate checksum
