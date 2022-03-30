@@ -1,0 +1,43 @@
+name: Upload JavaDoc (main, develop)
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/javadoc-upload-test
+
+jobs:
+  upload-javadoc:
+    name: Upload JavaDoc
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build JavaDoc
+        shell: sh
+        run: gradle javadoc
+
+      - name: Zipping Docs
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/docs/javadoc/
+          dest: ./u/javadoc.zip
+
+      - name: Generate checksum
+        run: shasum -a 512 ./u/javadoc.zip >> ./u/SHA512_CHECKSUM
+
+      - name: Upload doxygen document to server
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        with:
+          server: ftp.abstr.net
+          port: 3333
+          username: ost10
+          password: ${{ secrets.ftp_password }}
+          local-dir: './u/'

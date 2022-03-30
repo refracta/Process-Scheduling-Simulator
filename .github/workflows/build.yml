@@ -1,0 +1,60 @@
+name: Build Project
+on: [push]
+jobs:
+  build_artifacts:
+    name: Build Artifacts
+    runs-on: windows-2022
+    steps:
+      - name: Get latest code
+        uses: actions/checkout@v2
+
+      - name: Setup java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
+      - name: Build project (default)
+        shell: cmd
+        run: call gradle build
+
+      - name: Build project (jpackage)
+        shell: cmd
+        run: call gradle jpackage
+
+      - name: Build project (javadoc & version.txt)
+        shell: cmd
+        run: gradle javadoc && gradle version
+
+      - name: Rename build files
+        shell: powershell
+        run: Rename-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)" Process-Scheduling-Simulator
+
+      - name: Clean build files
+        shell: powershell
+        run: Remove-Item "build/jpackage/Process-Scheduling-Simulator/*.ico"
+
+      - name: Zipping build result (jpackage)
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/jpackage/Process-Scheduling-Simulator/
+          dest: u/Process-Scheduling-Simulator.zip
+
+      - name: Zipping build result (javadoc)
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/docs/javadoc/
+          dest: u/Process-Scheduling-Simulator-JavaDoc.zip
+
+      - name: Move raw build result
+        shell: powershell
+        run: Move-Item build/distributions/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-Raw.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: |
+            u/Process-Scheduling-Simulator.zip
+            u/Process-Scheduling-Simulator-Raw.zip
+            u/Process-Scheduling-Simulator-JavaDoc.zip
