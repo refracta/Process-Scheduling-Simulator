@@ -10,7 +10,7 @@ jobs:
 
       - name: Init gradle
         shell: cmd
-        run: call SET JAVA_HOME=%JAVA_HOME_17_X64% && gradle init
+        run: call ECHO %JAVA_HOME% && SET JAVA_HOME=%JAVA_HOME_17_X64% && ECHO %JAVA_HOME% && gradle init
 
       - name: Build project
         shell: cmd
