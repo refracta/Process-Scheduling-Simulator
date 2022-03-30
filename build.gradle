@@ -26,7 +26,7 @@ application {
 
 jlink {
     launcher {
-        name = rootProject.name
+        name = rootProject.name + '-' + version
     }
 }
 
@@ -54,6 +54,10 @@ javadoc {
     options.addStringOption('umlImageDirectory', 'uml')
     options.docletpath = configurations.umlDoclet.files.asType(List)
     options.doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
+}
+
+task versionTxt()  {
+    new File(projectDir, "version.txt").text = version
 }
 
 tasks.withType(JavaCompile) {

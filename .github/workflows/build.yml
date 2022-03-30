@@ -20,11 +20,11 @@ jobs:
 
       - name: Build project
         shell: cmd
-        run: call gradle build && gradle jpackage
+        run: call gradle build && gradle jpackage && gradle version
 
       - name: Clean build files
         shell: powershell
-        run: Remove-Item build/jpackage/Process-Scheduling-Simulator/*.ico
+        run: Remove-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)/*.ico"
 
       - name: Zipping build result (jpackage)
         uses: papeloto/action-zip@v1
@@ -35,7 +35,7 @@ jobs:
       - name: Move raw build result
         shell: powershell
         run: Move-Item build/distributions/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-Raw.zip
-          
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
