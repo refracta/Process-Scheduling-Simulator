@@ -24,15 +24,15 @@ jobs:
 
       - name: Dir test1
         shell: powershell
-        run: call dir
+        run: dir
         
       - name: Dir test2
         shell: powershell
-        run: call dir build/jpackage/Process-Scheduling-Simulator
+        run: dir build/jpackage/Process-Scheduling-Simulator
 
       - name: Clean build file
         shell: powershell
-        run: call Remove-Item build/jpackage/Process-Scheduling-Simulator/*.ico
+        run: Remove-Item build/jpackage/Process-Scheduling-Simulator/*.ico
 
       - name: Zipping build result
         uses: papeloto/action-zip@v1
