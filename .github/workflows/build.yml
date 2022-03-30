@@ -3,7 +3,7 @@ on: [push]
 jobs:
   build_artifacts:
     name: Build Artifacts
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Get latest code
         uses: actions/checkout@v2
