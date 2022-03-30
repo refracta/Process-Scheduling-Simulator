@@ -14,13 +14,17 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
-      - name: Init gradle
+      - name: Build project (default)
         shell: cmd
-        run: call gradle init
+        run: call gradle build
 
-      - name: Build project
+      - name: Build project (jpackage)
         shell: cmd
-        run: call gradle build && gradle jpackage && gradle version
+        run: call gradle jpackage
+
+      - name: Build project (javadoc & version.txt)
+        shell: cmd
+        run: gradle javadoc && gradle version
 
       - name: Rename
         shell: powershell
@@ -36,6 +40,12 @@ jobs:
           files: build/jpackage/Process-Scheduling-Simulator/
           dest: u/Process-Scheduling-Simulator.zip
 
+      - name: Zipping build result (javadoc)
+        uses: papeloto/action-zip@v1
+        with:
+          files: build/docs/
+          dest: u/Process-Scheduling-Simulator-JavaDoc.zip
+
       - name: Move raw build result
         shell: powershell
         run: Move-Item build/distributions/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-Raw.zip
@@ -47,3 +57,4 @@ jobs:
           path: |
             u/Process-Scheduling-Simulator.zip
             u/Process-Scheduling-Simulator-Raw.zip
+            u/Process-Scheduling-Simulator-JavaDoc.zip
