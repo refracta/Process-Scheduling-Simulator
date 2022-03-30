@@ -22,6 +22,14 @@ jobs:
         shell: cmd
         run: call gradle jpackage
 
+      - name: Dir test1
+        shell: powershell
+        run: call dir
+        
+      - name: Dir test2
+        shell: powershell
+        run: call dir build/jpackage/Process-Scheduling-Simulator
+
       - name: Clean build file
         shell: powershell
         run: call Remove-Item build/jpackage/Process-Scheduling-Simulator/*.ico
