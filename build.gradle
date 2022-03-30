@@ -26,7 +26,7 @@ application {
 
 jlink {
     launcher {
-        name = rootProject.name
+        name = rootProject.name + '-' + version
     }
 }
 
