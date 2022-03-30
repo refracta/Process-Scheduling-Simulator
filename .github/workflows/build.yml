@@ -26,7 +26,7 @@ jobs:
         shell: cmd
         run: gradle javadoc && gradle version
 
-      - name: Rename
+      - name: Rename build files
         shell: powershell
         run: Rename-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)" Process-Scheduling-Simulator
 
