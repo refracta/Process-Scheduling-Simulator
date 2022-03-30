@@ -22,9 +22,13 @@ jobs:
         shell: cmd
         run: call gradle build && gradle jpackage && gradle version
 
+      - name: Rename
+        shell: powershell
+        run: Rename-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)" Process-Scheduling-Simulator
+
       - name: Clean build files
         shell: powershell
-        run: Remove-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)/*.ico"
+        run: Remove-Item "build/jpackage/Process-Scheduling-Simulator/*.ico"
 
       - name: Zipping build result (jpackage)
         uses: papeloto/action-zip@v1
