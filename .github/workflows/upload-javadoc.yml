@@ -11,7 +11,7 @@ jobs:
 
       - name: Build JavaDoc
         shell: cmd
-        run: call gradle javadoc
+        run: gradle javadoc
 
       - name: Zipping Docs
         uses: papeloto/action-zip@v1
