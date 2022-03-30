@@ -8,9 +8,15 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v2
 
+      - name: Setup java
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+
       - name: Init gradle
         shell: cmd
-        run: call ECHO %JAVA_HOME% && SET JAVA_HOME=%JAVA_HOME_17_X64%\bin && ECHO %JAVA_HOME% && gradle init
+        run: call gradle init
 
       - name: Build project
         shell: cmd
