@@ -31,7 +31,7 @@ jlink {
 }
 
 javafx {
-    version = "18"
+    version = '18'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
@@ -51,13 +51,15 @@ test {
 
 javadoc {
     source = sourceSets.main.allJava
-    options.addStringOption("umlImageDirectory", "uml")
+    options.addStringOption('umlImageDirectory', 'uml')
     options.docletpath = configurations.umlDoclet.files.asType(List)
-    options.doclet = "nl.talsmasoftware.umldoclet.UMLDoclet"
+    options.doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
+}
+
+task versionTxt()  {
+    new File(projectDir, "version.txt").text = version
 }
 
 tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+    options.encoding = 'UTF-8'
 }
-
-
