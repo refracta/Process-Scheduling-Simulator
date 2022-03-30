@@ -8,6 +8,10 @@ jobs:
       - name: Get latest code
         uses: actions/checkout@v2
 
+      - name: Set JDK version
+        shell: cmd
+        run: call SET JAVA_HOME=%JAVA_HOME_17_X64%
+
       - name: Init gradle
         shell: cmd
         run: call gradle init
