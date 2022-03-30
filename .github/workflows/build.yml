@@ -28,7 +28,7 @@ jobs:
 
       - name: Move raw build result
         shell: powershell
-        run: Move-Item build/jpackage/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-Raw.zip
+        run: Move-Item build/distributions/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-Raw.zip
         
       - name: Zipping build result (jpackage)
         uses: papeloto/action-zip@v1
