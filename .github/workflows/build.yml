@@ -20,29 +20,26 @@ jobs:
 
       - name: Build project
         shell: cmd
-        run: call gradle jpackage
+        run: call gradle build && gradle jpackage
 
-      - name: Dir test1
-        shell: powershell
-        run: dir
-        
-      - name: Dir test2
-        shell: powershell
-        run: dir build/jpackage/Process-Scheduling-Simulator
-
-      - name: Clean build file
+      - name: Clean build files
         shell: powershell
         run: Remove-Item build/jpackage/Process-Scheduling-Simulator/*.ico
 
-      - name: Zipping build result
+      - name: Move raw build result
+        shell: powershell
+        run: Move-Item build/jpackage/Process-Scheduling-Simulator-*.zip u/Process-Scheduling-Simulator-raw.zip
+        
+      - name: Zipping build result (jpackage)
         uses: papeloto/action-zip@v1
         with:
           files: build/jpackage/Process-Scheduling-Simulator/
           dest: u/Process-Scheduling-Simulator.zip
-
+          
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: build
           path: |
             u/Process-Scheduling-Simulator.zip
+            u/Process-Scheduling-Simulator-Raw.zip
