@@ -26,7 +26,7 @@ jobs:
           dest: ./u/javadoc.zip
 
       - name: Generate checksum
-        run: shasum -a 512 ./u/docs.zip >> ./u/SHA512_CHECKSUM
+        run: shasum -a 512 ./u/javadoc.zip >> ./u/SHA512_CHECKSUM
 
       - name: Upload doxygen document to server
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
