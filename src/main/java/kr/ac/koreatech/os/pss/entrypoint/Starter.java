@@ -34,9 +34,9 @@ public class Starter extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("안녕!");
         Button btn = new Button();
-        btn.setText("Print 'Hello World'");
+        btn.setText("Print '안녕'");
         btn.setOnAction(event -> LOGGER.info("Hello World!"));
         StackPane root = new StackPane();
         root.getChildren().add(btn);
