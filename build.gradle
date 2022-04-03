@@ -56,7 +56,8 @@ javadoc {
     options.doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
 }
 
-task versionTxt()  {
+task versionTxt() {
+    buildDir.mkdir()
     new File(projectDir, "build/version.txt").text = version
 }
 
