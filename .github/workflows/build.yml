@@ -28,7 +28,7 @@ jobs:
 
       - name: Rename build files
         shell: powershell
-        run: Rename-Item "build/jpackage/Process-Scheduling-Simulator-$(cat version.txt)" Process-Scheduling-Simulator
+        run: Rename-Item "build/jpackage/Process-Scheduling-Simulator-$(cat build/version.txt)" Process-Scheduling-Simulator
 
       - name: Clean build files
         shell: powershell

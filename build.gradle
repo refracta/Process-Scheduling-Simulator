@@ -57,7 +57,7 @@ javadoc {
 }
 
 task versionTxt()  {
-    new File(projectDir, "version.txt").text = version
+    new File(projectDir, "build/version.txt").text = version
 }
 
 tasks.withType(JavaCompile) {
