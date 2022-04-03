@@ -30,8 +30,8 @@ public class ScheduleData {
     private final List<DefaultProcess> resultProcesses = new ArrayList<>();
 
     /**
-     * Map<AbstractCore, List<DefaultProcess>> 꼴의 코어 스케쥴 맵을 반환하는 획득자(Getter) 함수\
-     * List<T extends AbstractProcess>의 예시: [DefaultProcess, DefaultProcess, EmptyProcess, EmptyProcess]
+     * Map&lt;AbstractCore, List&lt;DefaultProcess&gt;&gt; 꼴의 코어 스케쥴 맵을 반환하는 획득자(Getter) 함수\
+     * List&lt;T extends AbstractProcess&gt;의 예시: [DefaultProcess, DefaultProcess, EmptyProcess, EmptyProcess]
      *
      * @return 코어 스케쥴 맵
      */
