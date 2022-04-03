@@ -69,7 +69,7 @@ public class ScheduleData {
      * @return 스케쥴 요청된 프로세스들의 평균 응답 시간
      */
     public double getAverageResponseTime() {
-        return getResultProcesses().stream().mapToDouble(p -> p.getTurnaroundTime()).average().getAsDouble();
+        return getResultProcesses().stream().mapToDouble(DefaultProcess::getTurnaroundTime).average().getAsDouble();
     }
 
     public int size() {

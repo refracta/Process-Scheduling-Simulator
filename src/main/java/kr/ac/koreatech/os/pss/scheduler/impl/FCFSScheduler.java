@@ -22,7 +22,7 @@ public class FCFSScheduler extends AbstractScheduler {
     protected void schedule(int time, List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
         Map<AbstractCore, List<DefaultProcess>> schedule = scheduleData.getSchedule();
         PriorityQueue<DefaultProcess> processQueue = new PriorityQueue<>(Comparator.comparingInt(DefaultProcess::getArrivalTime));
-        processQueue.addAll(processes.stream().filter(p -> !p.isFinished() && p.getArrivalTime() <= time).collect(Collectors.toList()));
+        processQueue.addAll(processes.stream().filter(p -> !p.isFinished() && p.getArrivalTime() <= time).toList());
         for (AbstractCore core : cores) {
             List<DefaultProcess> coreSchedule = schedule.get(core);
             if (processQueue.isEmpty()) {
