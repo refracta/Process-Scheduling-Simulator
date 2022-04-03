@@ -50,6 +50,7 @@ test {
 }
 
 javadoc {
+    options.encoding = 'UTF-8'
     source = sourceSets.main.allJava
     options.addStringOption('umlImageDirectory', 'uml')
     options.docletpath = configurations.umlDoclet.files.asType(List)
