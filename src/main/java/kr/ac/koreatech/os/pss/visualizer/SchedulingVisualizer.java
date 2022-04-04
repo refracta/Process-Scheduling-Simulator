@@ -12,7 +12,10 @@ import java.io.IOException;
 import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getPackagePath;
 import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getResourceFiles;
 
-
+/**
+ * @author unta1337
+ * @author refracta
+ */
 public class SchedulingVisualizer extends Application {
     /**
      * Starter.java start method
