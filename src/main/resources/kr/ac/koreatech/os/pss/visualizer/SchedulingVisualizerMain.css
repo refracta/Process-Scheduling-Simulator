@@ -15,7 +15,31 @@
 }
 
 .left-menu-text-title {
-    -fx-font-family: "NanumSquare Bold";
+    -fx-font-family: "NanumSquare ExtraBold";
+    -fx-font-size: 24px;
+}
+
+.right-menu {
+    -fx-pref-width: 482;
+    -fx-spacing: 10px;
+    -fx-padding: 8px;
+}
+
+.right-menu-core-text {
+    -fx-font-size: 14px;
+}
+
+.right-menu-task-text {
+    -fx-font-size: 14px;
+}
+
+.right-menu-task-title {
+    -fx-font-family: "NanumSquare ExtraBold";
+    -fx-font-size: 24px;
+}
+
+.right-menu-core-title {
+    -fx-font-family: "NanumSquare ExtraBold";
     -fx-font-size: 24px;
 }
 
@@ -35,4 +59,12 @@
 
 #left-menu-bottom {
     -fx-pref-height: 132px;
+}
+
+#right-menu-task-container {
+    -fx-pref-height: 150px;
+}
+
+#right-menu-core-container {
+    -fx-pref-height: 250px;
 }

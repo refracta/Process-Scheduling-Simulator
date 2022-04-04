@@ -1,5 +1,6 @@
 package kr.ac.koreatech.os.pss.entrypoint;
 
+import javafx.application.Application;
 import kr.ac.koreatech.os.pss.visualizer.SchedulingVisualizer;
 
 import java.util.logging.Logger;
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  * @author refracta
  * @author unta1337
  */
-public class Starter extends SchedulingVisualizer {
+public class Starter {
     /**
      * Start 클래스를 위한 기본 로거.
      */
@@ -22,6 +23,6 @@ public class Starter extends SchedulingVisualizer {
      * @param args String[] args
      */
     public static void main(String[] args) throws Exception {
-        launch(args);
+        Application.launch(SchedulingVisualizer.class, args);
     }
 }
