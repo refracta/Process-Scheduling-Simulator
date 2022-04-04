@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractScheduler {
     /**
      * 스케쥴러 클래스를 구현할 때 직접 재정의하여 구현해야하는 함수
-     * 이 함수에서는 매 시간(time)마다 scheduleData.getSchedule() (Map&lt;AbstractCore, List&lt;DefaultProcess&gt;>)의 value (List&lt;DefaultProcess)의 index(=time)에 프로세스를 채워 넣어야 한다. 채워 넣지 않은 경우 schedule 함수가 종료 된 후 모든 코어의 index(=time)에 EmptyProcess가 추가된다.
+     * 이 함수에서는 매 시간(time)마다 scheduleData.getSchedule() (Map&lt;AbstractCore, List&lt;DefaultProcess&gt;&gt;)의 value (List&lt;DefaultProcess)의 index(=time)에 프로세스를 채워 넣어야 한다. 채워 넣지 않은 경우 schedule 함수가 종료 된 후 모든 코어의 index(=time)에 EmptyProcess가 추가된다.
      * 매 시간(time)마다 processes 매개변수는 이전 시간에 호출된 processes 매개변수를 복사(clone)한 값이 호출된다.
      * scheduleData.getSchedule()의 index(=time)에 추가된 프로세스가 있는 경우 다음 시간 (time+1)에 호출되는 processes의 해당 프로세스는 코어의 성능 수치 만큼 남은 실행 시간이 감소한다.
      * 모든 프로세스의 isFinished가 참을 반환하면 이 함수 호출이 중지된다. (남은 실행 시간 == 0)
