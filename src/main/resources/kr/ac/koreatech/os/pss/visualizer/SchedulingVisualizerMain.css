@@ -1,8 +1,38 @@
-#test {
-    -fx-font-size: 20px;
+.root {
     -fx-font-family: "NanumSquare";
+    -fx-font-size: 12px;
 }
 
-.VBox {
-    -fx-text-alignment: center;
+.left-menu {
+    -fx-pref-width: 132px;
+    -fx-spacing: 10px;
+    -fx-padding: 8px;
+    -fx-background-color: gray;
+}
+
+.left-menu-text {
+    -fx-font-size: 14px;
+}
+
+.left-menu-text-title {
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 24px;
+}
+
+#main-container {
+    -fx-pref-width: 640px;
+    -fx-pref-height: 400px;
+    -fx-background-color: lightgray;
+}
+
+#left-menu-container {
+    -fx-pref-height: 392px;
+}
+
+#left-menu-top {
+    -fx-pref-height: 252px;
+}
+
+#left-menu-bottom {
+    -fx-pref-height: 132px;
 }

@@ -1,15 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import java.lang.String?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="640.0" stylesheets="@SchedulingVisualizerMain.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+
+<FlowPane id="main-container" stylesheets="@SchedulingVisualizerMain.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="177.0">
+      <FlowPane id="left-menu-container" prefHeight="200.0" prefWidth="200.0" styleClass="left-menu">
          <children>
-            <Text layoutX="76.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <VBox id="left-menu-top" prefHeight="200.0" prefWidth="100.0" styleClass="left-menu">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="OS-PSS">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                        <String fx:value="left-menu-text-title" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="P-Cores: 2">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="E-Cores: 4">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method: RR">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time quantum: 4">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox id="left-menu-bottom" prefHeight="200.0" prefWidth="100.0" styleClass="left-menu">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Processes">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                        <String fx:value="left-menu-text-title" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="In progress: 4">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Waiting: 2">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Done: 4">
+                     <styleClass>
+                        <String fx:value="left-menu" />
+                        <String fx:value="left-menu-text" />
+                     </styleClass>
+                  </Text>
+               </children>
+            </VBox>
          </children>
-      </AnchorPane>
+      </FlowPane>
    </children>
-</Pane>
+</FlowPane>
