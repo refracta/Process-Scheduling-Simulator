@@ -1,12 +1,6 @@
 package kr.ac.koreatech.os.pss.entrypoint;
 
 import kr.ac.koreatech.os.pss.visualizer.SchedulingVisualizer;
-import kr.ac.koreatech.os.pss.visualizer.SchedulingVisualizerController;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 
 import java.util.logging.Logger;
 
@@ -27,5 +21,7 @@ public class Starter extends SchedulingVisualizer {
      *
      * @param args String[] args
      */
-    public static void main(String[] args) throws Exception { launch(args); }
+    public static void main(String[] args) throws Exception {
+        launch(args);
+    }
 }
