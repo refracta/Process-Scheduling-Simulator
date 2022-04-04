@@ -7,6 +7,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getPackagePath;
+import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getResourceFiles;
+
+
 public class SchedulingVisualizer extends Application {
     /**
      * Starter.java start method
@@ -26,14 +32,15 @@ public class SchedulingVisualizer extends Application {
         primaryStage.show();
     }
 
+
     public void preLoad() {
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquare_acB.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquare_acEB.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareR_acL.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareR_acR.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareB.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareEB.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareL.ttf"), 10.0);
-        Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font/NanumSquareR.ttf"), 10.0);
+        try {
+            String path = getPackagePath(SchedulingVisualizer.class);
+            getResourceFiles(path + "font").stream().forEach(font -> {
+                Font.loadFont(getClass().getResourceAsStream(path + font), 0);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
