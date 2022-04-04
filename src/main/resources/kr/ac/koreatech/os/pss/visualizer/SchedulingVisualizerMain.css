@@ -1,0 +1,8 @@
+#test {
+    -fx-font-size: 20px;
+    -fx-font-family: "NanumSquare";
+}
+
+.VBox {
+    -fx-text-alignment: center;
+}
