@@ -7,18 +7,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-
-import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getPackagePath;
-import static kr.ac.koreatech.os.pss.utility.ResourceUtils.getResourceFiles;
-
 /**
  * 스케쥴러 비주얼라이저 클래스
  *
- * @author refracta
  * @author unta1337
+ * @author refracta
  */
 public class SchedulingVisualizer extends Application {
+
     /**
      * 비주얼라이저 Java-FX 엔트리 포인트
      *
@@ -38,16 +34,16 @@ public class SchedulingVisualizer extends Application {
     }
 
     /**
+     * 외부 폰트 목록
+     */
+    private static final String[] FONTS = {"NanumSquareB.ttf", "NanumSquareEB.ttf", "NanumSquareL.ttf", "NanumSquareR.ttf", "NanumSquare_acB.ttf", "NanumSquare_acEB.ttf", "NanumSquare_acL.ttf", "NanumSquare_acR.ttf"};
+
+    /**
      * 폰트 및 이미지 등 리소스를 불러옴
      */
     public void preLoad() {
-        try {
-            String path = getPackagePath(SchedulingVisualizer.class) + "font";
-            getResourceFiles(path).stream().forEach(font -> {
-                Font.loadFont(getClass().getResourceAsStream("/" + path + "/" + font), 0);
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String font : FONTS) {
+            Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font" + "/" + font), -1);
         }
     }
 }
