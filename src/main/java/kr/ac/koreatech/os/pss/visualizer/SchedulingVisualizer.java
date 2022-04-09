@@ -4,8 +4,15 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
+import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
+import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
+import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.impl.FCFSScheduler;
 
 /**
  * 스케쥴러 비주얼라이저 클래스
@@ -25,11 +32,22 @@ public class SchedulingVisualizer extends Application {
     public void start(Stage primaryStage) throws Exception {
         preLoad();
 
-        FlowPane root = FXMLLoader.load(SchedulingVisualizer.class.getResource("SchedulingVisualizerMain.fxml"));
-        Scene scene = new Scene(root);
+        FCFSScheduler fcfsScheduler = new FCFSScheduler();
+        AbstractCore[] cores = {new EfficiencyCore(), new PerformanceCore(), new PerformanceCore()};
+        DefaultProcess[] processes = {
+                new DefaultProcess(0, 1, 4),
+                new DefaultProcess(1, 2, 4),
+                new DefaultProcess(2, 3, 7),
+                new DefaultProcess(3, 3, 7),
+                new DefaultProcess(4, 3, 7),
+                new DefaultProcess(5, 3, 7),
+        };
+        ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
 
+        CoreInfoController controller = CoreInfoController.getCoreInfoController(scheduleData);
+
+        Scene scene = new Scene(controller.getPane());
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
