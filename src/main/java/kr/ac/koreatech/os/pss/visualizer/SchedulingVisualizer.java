@@ -1,10 +1,7 @@
 package kr.ac.koreatech.os.pss.visualizer;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
@@ -44,9 +41,9 @@ public class SchedulingVisualizer extends Application {
         };
         ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
 
-        CoreInfoController controller = CoreInfoController.getCoreInfoController(scheduleData);
+        ProcessStatus processStatus = ProcessStatus.getProcessStatus(cores, scheduleData);
 
-        Scene scene = new Scene(controller.getPane());
+        Scene scene = new Scene(processStatus.getPane());
         primaryStage.setScene(scene);
         primaryStage.show();
     }

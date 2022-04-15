@@ -1,6 +1,8 @@
 package kr.ac.koreatech.os.pss.scheduler.data;
 
 import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
+import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.process.impl.EmptyProcess;
 
@@ -8,6 +10,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 스케쥴링 결과 데이터를 저장하는 클래스
@@ -52,6 +55,24 @@ public class ScheduleData {
     public double getPowerUsage(AbstractCore core) {
         List<DefaultProcess> coreSchedule = getSchedule().get(core);
         return coreSchedule.stream().mapToDouble(process -> process instanceof EmptyProcess ? core.getStandbyPower() : core.getRunningPower()).sum();
+    }
+
+    /**
+     * 스케쥴링에 사용된 코어 중 성능 코어의 개수를 가져온다.
+     *
+     * @return 스케케츌에 사용된 코어 중 성능 코어의 개수
+     */
+    public int getNumPCores() {
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof PerformanceCore ? 1 : 0).reduce(0, (acc, e) -> acc + e);
+    }
+
+    /**
+     * 스케쥴링에 사용된 코어 중 효율 코어의 개수를 가져온다.
+     *
+     * @return 스케케츌에 사용된 효율 중 성능 코어의 개수
+     */
+    public int getNumECores() {
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof EfficiencyCore ? 1 : 0).reduce(0, (acc, e) -> acc + e);
     }
 
     /**
