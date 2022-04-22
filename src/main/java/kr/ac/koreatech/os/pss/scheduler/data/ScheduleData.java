@@ -43,6 +43,25 @@ public class ScheduleData {
     }
 
     /**
+     * 스케쥴 요청된 코어의 리스트를 반환한다.
+     *
+     * @return 코어 리스트
+     */
+    public List<AbstractCore> getCores() {
+        return new ArrayList<>(getSchedule().keySet());
+    }
+
+    /**
+     * 해당 코어의 스케쥴 리스트를 반환한다.
+     *
+     * @param core 스케쥴 리스트를 반환할 코어
+     * @return 스케쥴 리스트
+     */
+    public List<DefaultProcess> getCoreSchedule(AbstractCore core) {
+        return getSchedule().get(core);
+    }
+
+    /**
      * 코어의 스케쥴 맵을 기반으로 전력 사용량의 총계를 가져온다.
      * 프로세스가 EmptyProcess이면 대기 전력이 아니면 실행 전력으로 계산이 이루어진다.
      *
@@ -50,8 +69,18 @@ public class ScheduleData {
      * @return 스케쥴된 전력 사용량 총계
      */
     public double getPowerUsage(AbstractCore core) {
-        List<DefaultProcess> coreSchedule = getSchedule().get(core);
+        List<DefaultProcess> coreSchedule = getCoreSchedule(core);
         return coreSchedule.stream().mapToDouble(process -> process instanceof EmptyProcess ? core.getStandbyPower() : core.getRunningPower()).sum();
+    }
+
+    /**
+     * 모든 코어의 스케쥴 맵을 기반으로 모든 코어의 전력 사용량 총계를를 더한 값을 가져온다.
+     * 프로세스가 EmptyProcess이면 대기 전력이 아니면 실행 전력으로 계산이 이루어진다.
+     *
+     * @return 전체 코어의 전력 사용량
+     */
+    public double getTotalPowerUsage() {
+        return getCores().stream().mapToDouble(this::getPowerUsage).sum();
     }
 
     /**

@@ -4,6 +4,7 @@ import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.process.impl.EmptyProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.exception.ScheduleTimeoutException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,25 @@ import java.util.stream.Collectors;
  * @author refracta
  */
 public abstract class AbstractScheduler {
+    /**
+     *  최대 스케쥴 시간
+     */
+    private int maxTime = 65536 - 1;
+
+    /**
+     * 추상 스케줄러 클래스의 생성자
+     * @param maxTime 최대 스케줄 시간
+     */
+    public AbstractScheduler(int maxTime) {
+        this.maxTime = maxTime;
+    }
+
+    /**
+     * 추상 스케줄러 클래스의 생성자
+     */
+    public AbstractScheduler() {
+    }
+
     /**
      * 스케쥴러 클래스를 구현할 때 직접 재정의하여 구현해야하는 함수
      * 이 함수에서는 매 시간(time)마다 scheduleData.getSchedule() (Map&lt;AbstractCore, List&lt;DefaultProcess&gt;&gt;)의 value (List&lt;DefaultProcess)의 index(=time)에 프로세스를 채워 넣어야 한다. 채워 넣지 않은 경우 schedule 함수가 종료 된 후 모든 코어의 index(=time)에 EmptyProcess가 추가된다.
@@ -50,7 +70,6 @@ public abstract class AbstractScheduler {
      * @param scheduleData    스케쥴링 결과를 저장하는 데이터 객체
      */
     protected void end(List<AbstractCore> cores, List<DefaultProcess> resultProcesses, ScheduleData scheduleData) {
-
     }
 
     /**
@@ -66,13 +85,16 @@ public abstract class AbstractScheduler {
         List<DefaultProcess> copyProcesses = List.copyOf(processes).stream().map(DefaultProcess::clone).toList();
 
         Map<AbstractCore, List<DefaultProcess>> schedule = scheduleData.getSchedule();
-        cores.forEach(c -> schedule.put(c, new ArrayList<>()));
+        copyCores.forEach(c -> schedule.put(c, new ArrayList<>()));
 
         init(copyCores, copyProcesses, scheduleData);
         for (int time = 0; !copyProcesses.stream().allMatch(DefaultProcess::isFinished); time++) {
+            if (maxTime <= time) {
+                throw new ScheduleTimeoutException(maxTime, copyCores, copyProcesses, scheduleData);
+            }
             schedule(time, copyCores, copyProcesses, scheduleData);
 
-            Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = scheduleData.getSchedule().entrySet();
+            Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = schedule.entrySet();
             for (Map.Entry<AbstractCore, List<DefaultProcess>> e : entries) {
                 AbstractCore core = e.getKey();
                 List<DefaultProcess> tProcesses = e.getValue();
@@ -90,11 +112,11 @@ public abstract class AbstractScheduler {
                     if (dp.getLeftBurstTime() - core.getPerformance() <= 0) {
                         processFromCP.setLeftBurstTime(0);
                         processFromCP.setTurnaroundTime(t + 1 - processFromCP.getArrivalTime());
+                        int realBurstTime = (int) schedule.values().stream().mapToLong(l -> l.stream().filter(p -> p.getId() == processFromCP.getId()).count()).sum();
+                        processFromCP.setWaitingTime(processFromCP.getTurnaroundTime() - realBurstTime);
                     } else if (!processFromCP.isFinished() && t == time) {
                         processFromCP.setLeftBurstTime(processFromCP.getLeftBurstTime() - core.getPerformance());
                     }
-
-
                 }
             }
             copyProcesses = List.copyOf(copyProcesses).stream().map(DefaultProcess::clone).collect(Collectors.toList());
@@ -105,13 +127,13 @@ public abstract class AbstractScheduler {
                 }
             }
         }
-        end(copyCores, copyProcesses, scheduleData);
-        Collection<List<DefaultProcess>> schedules = scheduleData.getSchedule().values();
-        scheduleData.getResultProcesses().addAll(copyProcesses);
-        int max = schedules.stream().mapToInt(List::size).max().getAsInt();
-        for (List<DefaultProcess> s : schedules) {
+        Collection<List<DefaultProcess>> values = schedule.values();
+        int max = values.stream().mapToInt(List::size).max().getAsInt();
+        for (List<DefaultProcess> s : values) {
             s.addAll(Collections.nCopies(max - s.size(), EmptyProcess.getInstance()));
         }
+        end(copyCores, copyProcesses, scheduleData);
+        scheduleData.getResultProcesses().addAll(copyProcesses);
         return scheduleData;
     }
 
