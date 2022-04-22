@@ -22,7 +22,7 @@ jobs:
 
       - name: Build JavaDoc
         shell: sh
-        run: gradle javadoc
+        run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore
 
       - name: Zipping Docs
         uses: papeloto/action-zip@v1
