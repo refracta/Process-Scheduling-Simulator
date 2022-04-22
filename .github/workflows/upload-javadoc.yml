@@ -1,7 +1,7 @@
 name: Upload JavaDoc (main, develop)
 on: [ push ]
 env:
-  GRAPHVIZ_DOT: 'C:\\Program Files\\Graphviz\\bin\\dot.exe'
+  GRAPHVIZ_DOT: 'C:\Program Files\Graphviz\bin\dot.exe'
 
 jobs:
   upload-javadoc:
