@@ -1,15 +1,12 @@
 name: Upload JavaDoc (main, develop)
-on:
-  push:
-    branches:
-      - main
-      - develop
-      - feature/javadoc-upload-test
+on: [ push ]
+env:
+  GRAPHVIZ_DOT: 'C:\\Program Files\\Graphviz\\bin\\dot.exe'
 
 jobs:
   upload-javadoc:
     name: Upload JavaDoc
-    runs-on: ubuntu-20.04
+    runs-on: windows-2022
     steps:
       - name: Get latest code
         uses: actions/checkout@v2
@@ -24,7 +21,7 @@ jobs:
         uses: ts-graphviz/setup-graphviz@v1
 
       - name: Build JavaDoc
-        shell: sh
+        shell: cmd
         run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore
 
       - name: Zipping Docs
@@ -34,7 +31,8 @@ jobs:
           dest: ./u/javadoc.zip
 
       - name: Generate checksum
-        run: shasum -a 512 ./u/javadoc.zip >> ./u/SHA512_CHECKSUM
+        shell: pwsh
+        run: Get-FileHash ./u/javadoc.zip -Algorithm SHA512 >> ./u/SHA512_CHECKSUM
 
       - name: Upload doxygen document to server
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
