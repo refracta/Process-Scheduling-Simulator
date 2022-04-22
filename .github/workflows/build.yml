@@ -1,7 +1,7 @@
 name: Build Project
 on: [ push ]
 env:
-  GRAPHVIZ_DOT: 'C:\\Program Files\\Graphviz\\bin\\dot.exe'
+  GRAPHVIZ_DOT: 'C:\Program Files\Graphviz\bin\dot.exe'
 jobs:
   build_artifacts:
     name: Build Artifacts
