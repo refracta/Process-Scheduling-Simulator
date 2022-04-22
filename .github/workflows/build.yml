@@ -29,7 +29,7 @@ jobs:
 
       - name: Build project (javadoc & version.txt)
         shell: cmd
-        run: gradle javadoc && gradle version
+        run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore && gradle version
 
       - name: Rename build files
         shell: powershell
