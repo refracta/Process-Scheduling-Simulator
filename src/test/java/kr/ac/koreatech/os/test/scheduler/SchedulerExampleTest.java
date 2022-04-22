@@ -19,21 +19,19 @@ import java.util.stream.Collectors;
  *
  * @author refracta
  */
-public class SchedulerExample {
+public class SchedulerExampleTest {
 
     public void printScheduleData(ScheduleData scheduleData, boolean onlyCoreSchedule) {
         List<AbstractCore> cores = new ArrayList<>(scheduleData.getSchedule().keySet());
         cores.sort(Comparator.comparingInt(AbstractCore::getId));
-        double totalPowerUsage = 0;
         for (int i = 0; i < cores.size(); i++) {
             AbstractCore currentCore = cores.get(i);
             List<DefaultProcess> coreSchedule = scheduleData.getSchedule().get(currentCore);
             double powerUsage = scheduleData.getPowerUsage(currentCore);
-            totalPowerUsage += powerUsage;
             System.out.println("Core[" + i + ":" + currentCore.getClass().getSimpleName() + "]" + ": " + "[" + coreSchedule.stream().map(AbstractProcess::getName).collect(Collectors.joining(", ")) + "]: " + powerUsage + "W");
         }
         if (!onlyCoreSchedule) {
-            System.out.println("Total power usage: " + totalPowerUsage + "W");
+            System.out.println("Total power usage: " + scheduleData.getTotalPowerUsage() + "W");
             System.out.println("Result processes:");
             System.out.println(scheduleData.getResultProcesses().stream().map(p -> "\t" + p.toString()).collect(Collectors.joining("\n")));
             System.out.println("Average response time: " + scheduleData.getAverageResponseTime());
