@@ -21,11 +21,11 @@ jobs:
 
       - name: Build project (default)
         shell: cmd
-        run: call gradle build
+        run: gradle build
 
       - name: Build project (jpackage)
         shell: cmd
-        run: call gradle jpackage
+        run: gradle jpackage
 
       - name: Build project (javadoc & version.txt)
         shell: cmd
