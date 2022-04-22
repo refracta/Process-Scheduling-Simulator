@@ -14,6 +14,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
       - name: Build project (default)
         shell: cmd
         run: call gradle build
