@@ -1,5 +1,10 @@
 name: Upload JavaDoc (main, develop)
-on: [ push ]
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - feature/javadoc-upload-test
 env:
   GRAPHVIZ_DOT: 'C:\Program Files\Graphviz\bin\dot.exe'
 
