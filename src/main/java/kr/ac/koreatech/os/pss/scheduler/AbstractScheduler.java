@@ -4,6 +4,7 @@ import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.process.impl.EmptyProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.exception.ScheduleTimeoutException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,6 +16,25 @@ import java.util.stream.Collectors;
  * @author refracta
  */
 public abstract class AbstractScheduler {
+    /**
+     *  최대 스케쥴 시간
+     */
+    private int maxTime = 65536 - 1;
+
+    /**
+     * 추상 스케줄러 클래스의 생성자
+     * @param maxTime 최대 스케줄 시간
+     */
+    public AbstractScheduler(int maxTime) {
+        this.maxTime = maxTime;
+    }
+
+    /**
+     * 추상 스케줄러 클래스의 생성자
+     */
+    public AbstractScheduler() {
+    }
+
     /**
      * 스케쥴러 클래스를 구현할 때 직접 재정의하여 구현해야하는 함수
      * 이 함수에서는 매 시간(time)마다 scheduleData.getSchedule() (Map&lt;AbstractCore, List&lt;DefaultProcess&gt;&gt;)의 value (List&lt;DefaultProcess)의 index(=time)에 프로세스를 채워 넣어야 한다. 채워 넣지 않은 경우 schedule 함수가 종료 된 후 모든 코어의 index(=time)에 EmptyProcess가 추가된다.
@@ -50,7 +70,6 @@ public abstract class AbstractScheduler {
      * @param scheduleData    스케쥴링 결과를 저장하는 데이터 객체
      */
     protected void end(List<AbstractCore> cores, List<DefaultProcess> resultProcesses, ScheduleData scheduleData) {
-
     }
 
     /**
@@ -70,6 +89,9 @@ public abstract class AbstractScheduler {
 
         init(copyCores, copyProcesses, scheduleData);
         for (int time = 0; !copyProcesses.stream().allMatch(DefaultProcess::isFinished); time++) {
+            if (maxTime <= time) {
+                throw new ScheduleTimeoutException(maxTime, copyCores, copyProcesses, scheduleData);
+            }
             schedule(time, copyCores, copyProcesses, scheduleData);
 
             Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = schedule.entrySet();
