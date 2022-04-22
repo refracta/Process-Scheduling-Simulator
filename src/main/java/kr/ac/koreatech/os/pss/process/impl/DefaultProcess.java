@@ -35,6 +35,10 @@ public class DefaultProcess extends AbstractProcess {
      * 반환 시간
      */
     private int turnaroundTime = 0;
+    /**
+     * 대기 시간
+     */
+    private int waitingTime = 0;
 
     /**
      * 기본 프로세스 클래스의 생성자
@@ -53,12 +57,37 @@ public class DefaultProcess extends AbstractProcess {
     /**
      * 기본 프로세스 클래스의 생성자
      *
+     * @param name        프로세스 이름
+     * @param arrivalTime 도착 시간
+     * @param burstTime   실행 시간
+     */
+    public DefaultProcess(String name, int arrivalTime, int burstTime) {
+        super(name);
+        this.arrivalTime = arrivalTime;
+        this.burstTime = this.leftBurstTime = burstTime;
+    }
+
+    /**
+     * 기본 프로세스 클래스의 생성자
+     *
      * @param id          프로세스 식별자
      * @param arrivalTime 도착 시간
      * @param burstTime   실행 시간
      */
     public DefaultProcess(int id, int arrivalTime, int burstTime) {
         this(id, "P" + id, arrivalTime, burstTime);
+    }
+
+    /**
+     * 기본 프로세스 클래스의 생성자
+     *
+     * @param arrivalTime 도착 시간
+     * @param burstTime   실행 시간
+     */
+    public DefaultProcess(int arrivalTime, int burstTime) {
+        this.setName("P" + getId());
+        this.arrivalTime = arrivalTime;
+        this.burstTime = this.leftBurstTime = burstTime;
     }
 
     public int getStartTime() {
@@ -102,7 +131,11 @@ public class DefaultProcess extends AbstractProcess {
     }
 
     public int getWaitingTime() {
-        return startTime - arrivalTime;
+        return waitingTime;
+    }
+
+    public void setWaitingTime(int waitingTime) {
+        this.waitingTime = waitingTime;
     }
 
     public double getNormalizedTurnaroundTime() {
@@ -160,12 +193,12 @@ public class DefaultProcess extends AbstractProcess {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         DefaultProcess that = (DefaultProcess) o;
-        return arrivalTime == that.arrivalTime && burstTime == that.burstTime && turnaroundTime == that.turnaroundTime;
+        return startTime == that.startTime && arrivalTime == that.arrivalTime && burstTime == that.burstTime && leftBurstTime == that.leftBurstTime && turnaroundTime == that.turnaroundTime && waitingTime == that.waitingTime;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), arrivalTime, burstTime, turnaroundTime);
+        return Objects.hash(super.hashCode(), startTime, arrivalTime, burstTime, leftBurstTime, turnaroundTime, waitingTime);
     }
 
     @Override
@@ -176,6 +209,7 @@ public class DefaultProcess extends AbstractProcess {
         clone.setBurstTime(burstTime);
         clone.setLeftBurstTime(leftBurstTime);
         clone.setTurnaroundTime(turnaroundTime);
+        clone.setWaitingTime(waitingTime);
         return clone;
     }
 
@@ -190,7 +224,7 @@ public class DefaultProcess extends AbstractProcess {
                 ", burstTime=" + burstTime +
                 ", leftBurstTime=" + leftBurstTime +
                 ", turnaroundTime=" + turnaroundTime +
-                ", waitingTime=" + getWaitingTime() +
+                ", waitingTime=" + waitingTime +
                 ", normalizedTurnaroundTime=" + getNormalizedTurnaroundTime() +
                 '}';
     }
