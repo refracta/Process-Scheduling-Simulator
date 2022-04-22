@@ -20,6 +20,9 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Setup graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
       - name: Build JavaDoc
         shell: sh
         run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore
