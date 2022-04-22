@@ -54,9 +54,7 @@ public class AbstractCore implements Cloneable {
      * @param standbyPower 대기 전력
      */
     public AbstractCore(int id, int performance, double runningPower, double standbyPower) {
-        if (id > idCount.intValue()) {
-            idCount.set(id - 1);
-        }
+        setId(id);
         init(performance, runningPower, standbyPower);
     }
 
@@ -76,6 +74,13 @@ public class AbstractCore implements Cloneable {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        if (id > idCount.intValue()) {
+            idCount.set(id);
+        }
+        this.id = id;
     }
 
     public int getPerformance() {
