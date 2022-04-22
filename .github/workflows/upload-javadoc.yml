@@ -20,6 +20,10 @@ jobs:
       - name: Setup graphviz
         uses: ts-graphviz/setup-graphviz@v1
 
+      - name: Build project (default)
+        shell: cmd
+        run: gradle build
+
       - name: Build JavaDoc
         shell: cmd
         run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore
