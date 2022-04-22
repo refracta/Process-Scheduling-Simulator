@@ -66,13 +66,13 @@ public abstract class AbstractScheduler {
         List<DefaultProcess> copyProcesses = List.copyOf(processes).stream().map(DefaultProcess::clone).toList();
 
         Map<AbstractCore, List<DefaultProcess>> schedule = scheduleData.getSchedule();
-        cores.forEach(c -> schedule.put(c, new ArrayList<>()));
+        copyCores.forEach(c -> schedule.put(c, new ArrayList<>()));
 
         init(copyCores, copyProcesses, scheduleData);
         for (int time = 0; !copyProcesses.stream().allMatch(DefaultProcess::isFinished); time++) {
             schedule(time, copyCores, copyProcesses, scheduleData);
 
-            Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = scheduleData.getSchedule().entrySet();
+            Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = schedule.entrySet();
             for (Map.Entry<AbstractCore, List<DefaultProcess>> e : entries) {
                 AbstractCore core = e.getKey();
                 List<DefaultProcess> tProcesses = e.getValue();
@@ -90,11 +90,11 @@ public abstract class AbstractScheduler {
                     if (dp.getLeftBurstTime() - core.getPerformance() <= 0) {
                         processFromCP.setLeftBurstTime(0);
                         processFromCP.setTurnaroundTime(t + 1 - processFromCP.getArrivalTime());
+                        int realBurstTime = (int) schedule.values().stream().mapToLong(l -> l.stream().filter(p -> p.getId() == processFromCP.getId()).count()).sum();
+                        processFromCP.setWaitingTime(processFromCP.getTurnaroundTime() - realBurstTime);
                     } else if (!processFromCP.isFinished() && t == time) {
                         processFromCP.setLeftBurstTime(processFromCP.getLeftBurstTime() - core.getPerformance());
                     }
-
-
                 }
             }
             copyProcesses = List.copyOf(copyProcesses).stream().map(DefaultProcess::clone).collect(Collectors.toList());
@@ -105,13 +105,13 @@ public abstract class AbstractScheduler {
                 }
             }
         }
-        end(copyCores, copyProcesses, scheduleData);
-        Collection<List<DefaultProcess>> schedules = scheduleData.getSchedule().values();
-        scheduleData.getResultProcesses().addAll(copyProcesses);
-        int max = schedules.stream().mapToInt(List::size).max().getAsInt();
-        for (List<DefaultProcess> s : schedules) {
+        Collection<List<DefaultProcess>> values = schedule.values();
+        int max = values.stream().mapToInt(List::size).max().getAsInt();
+        for (List<DefaultProcess> s : values) {
             s.addAll(Collections.nCopies(max - s.size(), EmptyProcess.getInstance()));
         }
+        end(copyCores, copyProcesses, scheduleData);
+        scheduleData.getResultProcesses().addAll(copyProcesses);
         return scheduleData;
     }
 
