@@ -3,40 +3,20 @@ package kr.ac.koreatech.os.test.scheduler;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
-import kr.ac.koreatech.os.pss.process.AbstractProcess;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.utils.PrintUtils;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * 스케쥴러 예제 클래스
+ * 스케줄러 예제 클래스
  *
  * @author refracta
  */
 public class SchedulerExampleTest {
-
-    public void printScheduleData(ScheduleData scheduleData, boolean onlyCoreSchedule) {
-        List<AbstractCore> cores = new ArrayList<>(scheduleData.getSchedule().keySet());
-        cores.sort(Comparator.comparingInt(AbstractCore::getId));
-        for (int i = 0; i < cores.size(); i++) {
-            AbstractCore currentCore = cores.get(i);
-            List<DefaultProcess> coreSchedule = scheduleData.getSchedule().get(currentCore);
-            double powerUsage = scheduleData.getPowerUsage(currentCore);
-            System.out.println("Core[" + i + ":" + currentCore.getClass().getSimpleName() + "]" + ": " + "[" + coreSchedule.stream().map(AbstractProcess::getName).collect(Collectors.joining(", ")) + "]: " + powerUsage + "W");
-        }
-        if (!onlyCoreSchedule) {
-            System.out.println("Total power usage: " + scheduleData.getTotalPowerUsage() + "W");
-            System.out.println("Result processes:");
-            System.out.println(scheduleData.getResultProcesses().stream().map(p -> "\t" + p.toString()).collect(Collectors.joining("\n")));
-            System.out.println("Average response time: " + scheduleData.getAverageResponseTime());
-        }
-    }
 
     @Test
     public void example1() {
@@ -67,7 +47,7 @@ public class SchedulerExampleTest {
                 }
 
                 System.out.println("Time: " + time);
-                printScheduleData(scheduleData, true);
+                PrintUtils.printScheduleData(scheduleData, true);
             }
         };
         AbstractCore[] cores = {new EfficiencyCore(), new PerformanceCore()};
@@ -79,6 +59,6 @@ public class SchedulerExampleTest {
         ScheduleData scheduleData = testScheduler.schedule(cores, processes);
         System.out.println();
         System.out.println("Result:");
-        printScheduleData(scheduleData, false);
+        PrintUtils.printScheduleData(scheduleData, false);
     }
 }
