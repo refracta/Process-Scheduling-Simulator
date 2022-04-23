@@ -13,6 +13,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/**
+ * 스케줄 시간 초과 오류를 테스트하는 클래스
+ *
+ * @author refracta
+ */
 public class SchedulerTimeoutTest {
 
     @Test
