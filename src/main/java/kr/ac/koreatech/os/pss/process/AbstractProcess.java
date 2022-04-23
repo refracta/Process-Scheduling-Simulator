@@ -12,7 +12,7 @@ public abstract class AbstractProcess implements Cloneable {
     /**
      * 프로세스의 정수 식별자(id)를 중복없이 자동 생성하기 위한 카운터
      */
-    private static final AtomicInteger idCount = new AtomicInteger(-1);
+    private static final AtomicInteger idCount = new AtomicInteger(0);
     /**
      * 프로세스를 구별하기 위한 정수 식별자 (PID)
      */
