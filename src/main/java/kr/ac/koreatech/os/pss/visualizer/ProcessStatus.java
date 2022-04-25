@@ -79,8 +79,8 @@ public class ProcessStatus extends GridPane {
      * @param scheduleData
      */
     public void init(List<AbstractCore> cores, ScheduleData scheduleData) {
-        numPCores.setText("Num P Cores: " + Integer.toString(scheduleData.getNumPerformanceCores()));
-        numECores.setText("Num E Cores: " + Integer.toString(scheduleData.getNumEfficiencyCores()));
+//        numPCores.setText("Num P Cores: " + Integer.toString(scheduleData.getNumPerformanceCores()));
+//        numECores.setText("Num E Cores: " + Integer.toString(scheduleData.getNumEfficiencyCores()));
     }
 
     public GridPane getPane() {
