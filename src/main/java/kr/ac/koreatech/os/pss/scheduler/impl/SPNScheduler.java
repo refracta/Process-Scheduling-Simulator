@@ -13,5 +13,6 @@ import java.util.Comparator;
 public class SPNScheduler extends PriorityScheduler {
     public SPNScheduler() {
         super(Comparator.comparingInt(DefaultProcess::getBurstTime));
+        // 실행 시간을 기준으로 우선순위 스케줄러의 comparator 설정
     }
 }

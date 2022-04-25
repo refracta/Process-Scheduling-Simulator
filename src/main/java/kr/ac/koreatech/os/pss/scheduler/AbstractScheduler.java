@@ -91,50 +91,77 @@ public abstract class AbstractScheduler {
     public final ScheduleData schedule(List<AbstractCore> cores, List<DefaultProcess> processes) {
         ScheduleData scheduleData = new ScheduleData();
         List<AbstractCore> copyCores = List.copyOf(cores).stream().map(AbstractCore::clone).toList();
+        // cores의 deep-copy, 원본 리스트에 영향을 주지 않기 위함
         List<DefaultProcess> copyProcesses = List.copyOf(processes).stream().map(DefaultProcess::clone).toList();
+        // process의 deep-copy, 원본 리스트에 영향을 주지 않기 위함
 
         Map<AbstractCore, List<DefaultProcess>> schedule = scheduleData.getSchedule();
         copyCores.forEach(c -> schedule.put(c, new ArrayList<>()));
+        // 스케줄 맵의 스케줄 리스트 초기화
 
         init(copyCores, copyProcesses, scheduleData);
+        // 스케줄링 전 호출되는 초기화 함수
+
         for (int time = 0; !copyProcesses.stream().allMatch(DefaultProcess::isFinished); time++) {
+            // 모든 프로세스가 끝날 때까지 time을 1씩 증가시키며 스케줄링을 계속함
             if (maxTime <= time) {
                 throw new ScheduleTimeoutException(maxTime, copyCores, copyProcesses, scheduleData);
+                // maxTime 초과하여 스케줄링하면 예외 발생 (RuntimeException)
             }
             schedule(time, copyCores, copyProcesses, scheduleData);
+            // 사용자 구현 스케줄 함수 호출
 
             Set<Map.Entry<AbstractCore, List<DefaultProcess>>> entries = schedule.entrySet();
             for (Map.Entry<AbstractCore, List<DefaultProcess>> e : entries) {
+                // 전체 스케줄 맵을 순회 Map<코어, 프로세스>
                 AbstractCore core = e.getKey();
                 List<DefaultProcess> tProcesses = e.getValue();
                 for (int t = time; t < tProcesses.size(); t++) {
+                    // getContiguousProcesses 등으로 선행 스케줄된 프로세스에 대한 처리를 위해서 (time ~ [코어 스케줄 리스트의 길이 -1])의 프로세스를 순회하여 처리함
                     DefaultProcess sp = tProcesses.get(t);
+                    // 현재 선택된 코어 스케줄 리스트의 순회 요소 (스케줄된 요소, scheduledProcess)
                     DefaultProcess cp = sp.findById(copyProcesses).get();
+                    // 순회 요소와 ID가 같은 copyProcess 요소 (최신 요소, copyProcess)
 
                     if (cp.getStartTime() == DefaultProcess.NOT_INITIALIZED) {
+                        // cp(최신 요소)의 시작 시간이 설정되지 않은 경우, 시작 시간을 설정
+                        // 현재 시간 또는 현재 시간 이후의 sp(스케줄된 요소)에 대한, cp(최신 요소)를 가져와서 설정하는 것이므로 최초로 스케줄된 시간이 cp(최신 요소)의 시간으로 설정되게 됨
                         cp.setStartTime(t);
                     }
                     if (sp.getStartTime() == DefaultProcess.NOT_INITIALIZED) {
+                        // sp(스케줄된 요소)의 시작 시간이 설정되지 않은 경우, cp(최신 요소)의 시작 시간으로 설정함
                         sp.setStartTime(cp.getStartTime());
                     }
                     if (sp.getWaitingTime() == DefaultProcess.NOT_INITIALIZED) {
+                        // sp(스케줄된 요소)의 대기 시간이 설정되지 않은 경우
                         sp.setTurnaroundTime(t + 1 - sp.getArrivalTime());
+                        // 현재 시간 + 1 - 도착 시간으로 반환 시간 설정
                         sp.setWaitingTime(sp.getTurnaroundTime() - scheduleData.getRealBurstTime(sp, t));
+                        // 반환 시간과 현재 프로세스 요소의 실행 시간을 계산하여 대기 시간 설정
                     }
 
                     if (sp.getLeftBurstTime() - core.getPerformance() <= 0) {
+                        // sp(스케줄된 요소)의 남은 시간에서 현재 코어의 처리 성능을 뺐을 때 이 값이 0보다 작으면
                         sp.setTurnaroundTime(t + 1 - sp.getArrivalTime());
                         sp.setWaitingTime(sp.getTurnaroundTime() - scheduleData.getRealBurstTime(sp, t));
 
                         cp.setLeftBurstTime(0);
                         cp.setTurnaroundTime(sp.getTurnaroundTime());
                         cp.setWaitingTime(sp.getWaitingTime());
+                        // sp와 cp를 올바르게 설정
                     } else if (!cp.isFinished() && t == time) {
+                        // cp가 끝나지 않았고, t가 현재 시간인 경우
                         cp.setLeftBurstTime(cp.getLeftBurstTime() - core.getPerformance());
+                        // cp의 남은 실행 시간에 현재 코어의 처리 성능을 빼줌
                     }
                 }
             }
+            // 1. 사용자 정의 schedule 함수에 인자로 들어가는 process 객체들은 사용자 정의 로직에 따라 코어 스케줄 리스트에 스케줄된됨
+            // 이 시점에서 코어 스케줄 리스트에 스케줄된 프로세스와 copyProcesses에 담긴 프로세스들은 동일한 객체이나, copyProcesses를 복제하여 다음 사용자 정의 schedule 함수에 매개변수로 주어짐
+            // 이 작업을 하지 않으면 사용자 정의 schedule 함수의 로직에서 프로세스를 변경할 경우 코어 스케줄 리스트에 스케줄된 모든 프로세스가 영향을 받게 되므로 복제 작업이 필요함
             copyProcesses = List.copyOf(copyProcesses).parallelStream().map(DefaultProcess::clone).collect(Collectors.toList());
+
+            // 현재 시간까지 스케줄되지 않은 리스트에 대해서 EP를 채움
             for (AbstractCore core : copyCores) {
                 List<DefaultProcess> coreSchedule = scheduleData.getSchedule().get(core);
                 if (coreSchedule.size() <= time) {
@@ -147,8 +174,12 @@ public abstract class AbstractScheduler {
         for (List<DefaultProcess> s : values) {
             s.addAll(Collections.nCopies(max - s.size(), EmptyProcess.getInstance()));
         }
+        // 코어 스케줄 맵의 코어 스케줄 리스트중 가장 긴 것의 길이를 가져와서, 이보다 짧은 리스트들을 이 길이가 될 때까지 EP로 채움
         end(copyCores, copyProcesses, scheduleData);
+        // 스케줄링 후 호출되는 종료 처리용 함수
+
         scheduleData.getResultProcesses().addAll(copyProcesses);
+        // 결과 프로세스에 copyProcesses 넣고 반환
         return scheduleData;
     }
 
