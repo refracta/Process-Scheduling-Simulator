@@ -2,6 +2,7 @@ package kr.ac.koreatech.os.pss.visualizer;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
@@ -26,12 +27,12 @@ public class ProcessStatus extends GridPane {
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Text numPCores;
+    Label numPCores;
     /**
      * 효율 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Text numECores;
+    Label numECores;
 
     /**
      * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
@@ -79,8 +80,8 @@ public class ProcessStatus extends GridPane {
      * @param scheduleData
      */
     public void init(List<AbstractCore> cores, ScheduleData scheduleData) {
-        numPCores.setText("Num P Cores: " + Integer.toString(scheduleData.getNumPerformanceCores()));
-        numECores.setText("Num E Cores: " + Integer.toString(scheduleData.getNumEfficiencyCores()));
+        numPCores.setText("NPC: " + Integer.toString(scheduleData.getNumPerformanceCores()));
+        numECores.setText("NEC: " + Integer.toString(scheduleData.getNumEfficiencyCores()));
     }
 
     public GridPane getPane() {

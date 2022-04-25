@@ -45,6 +45,7 @@ public class SchedulingVisualizer extends Application {
 
         Scene scene = new Scene(processStatus.getPane());
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
