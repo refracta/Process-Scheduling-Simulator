@@ -13,7 +13,7 @@ import java.util.List;
 public class DefaultProcessTest {
     @Test
     public void contiguousProcessesTest() {
-        DefaultProcess defaultProcess = new DefaultProcess(0, 0, 5);
+        DefaultProcess defaultProcess = new DefaultProcess(0, 5);
         List<DefaultProcess> processes = defaultProcess.getContiguousProcesses(3, 2);
         System.out.println(processes.size());
         System.out.println(processes);

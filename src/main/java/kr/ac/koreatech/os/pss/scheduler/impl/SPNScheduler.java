@@ -1,20 +1,17 @@
 package kr.ac.koreatech.os.pss.scheduler.impl;
 
-import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
-import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
-import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.PriorityScheduler;
 
-import java.util.List;
+import java.util.Comparator;
 
 /**
- * Shortest Process Next 스케쥴러 클래스 (미구현됨)
+ * Shortest Process Next 스케줄러 클래스
  *
  * @author refracta
  */
-public class SPNScheduler extends AbstractScheduler {
-    @Override
-    protected void schedule(int time, List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
-
+public class SPNScheduler extends PriorityScheduler {
+    public SPNScheduler() {
+        super(Comparator.comparingInt(DefaultProcess::getBurstTime));
     }
 }

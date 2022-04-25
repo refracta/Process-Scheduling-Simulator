@@ -1,6 +1,7 @@
 package kr.ac.koreatech.os.pss.process;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 추상 프로세스 클래스
@@ -8,6 +9,10 @@ import java.util.Objects;
  * @author refracta
  */
 public abstract class AbstractProcess implements Cloneable {
+    /**
+     * 프로세스의 정수 식별자(id)를 중복없이 자동 생성하기 위한 카운터
+     */
+    private static final AtomicInteger idCount = new AtomicInteger(0);
     /**
      * 프로세스를 구별하기 위한 정수 식별자 (PID)
      */
@@ -18,8 +23,17 @@ public abstract class AbstractProcess implements Cloneable {
     private String name;
 
     public AbstractProcess(int id, String name) {
-        this.id = id;
+        this.setId(id);
         this.name = name;
+    }
+
+    public AbstractProcess(String name) {
+        this.id = idCount.incrementAndGet();
+        this.name = name;
+    }
+
+    public AbstractProcess() {
+        this.id = idCount.incrementAndGet();
     }
 
     public int getId() {
@@ -27,6 +41,9 @@ public abstract class AbstractProcess implements Cloneable {
     }
 
     public void setId(int id) {
+        if (id > idCount.intValue()) {
+            idCount.set(id);
+        }
         this.id = id;
     }
 

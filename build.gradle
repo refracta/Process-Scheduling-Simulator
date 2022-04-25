@@ -52,14 +52,29 @@ test {
 javadoc {
     options.encoding = 'UTF-8'
     source = sourceSets.main.allJava
-    options.addStringOption('umlImageDirectory', 'uml')
     options.docletpath = configurations.umlDoclet.files.asType(List)
     options.doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
 }
 
 task versionTxt() {
-    buildDir.mkdir()
-    new File(projectDir, "build/version.txt").text = version
+    doLast {
+        buildDir.mkdir()
+        new File(projectDir, "build/version.txt").text = version
+    }
+}
+
+var backup = new File(projectDir, "build/module-info.java")
+var target = new File(projectDir, "src/main/java/module-info.java")
+task moduleInfoBackup() {
+    doLast {
+        target.renameTo(backup)
+    }
+}
+
+task moduleInfoRestore() {
+    doLast {
+        backup.renameTo(target)
+    }
 }
 
 tasks.withType(JavaCompile) {

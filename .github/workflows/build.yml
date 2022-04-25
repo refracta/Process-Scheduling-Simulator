@@ -1,5 +1,7 @@
 name: Build Project
-on: [push]
+on: [ push ]
+env:
+  GRAPHVIZ_DOT: 'C:\Program Files\Graphviz\bin\dot.exe'
 jobs:
   build_artifacts:
     name: Build Artifacts
@@ -14,17 +16,20 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
 
+      - name: Setup graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+
       - name: Build project (default)
         shell: cmd
-        run: call gradle build
+        run: gradle build
 
       - name: Build project (jpackage)
         shell: cmd
-        run: call gradle jpackage
+        run: gradle jpackage
 
       - name: Build project (javadoc & version.txt)
         shell: cmd
-        run: gradle javadoc && gradle version
+        run: gradle moduleInfoBackup && gradle javadoc && gradle moduleInfoRestore && gradle version
 
       - name: Rename build files
         shell: powershell

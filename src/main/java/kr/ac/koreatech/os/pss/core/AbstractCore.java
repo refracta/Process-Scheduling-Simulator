@@ -12,7 +12,7 @@ public class AbstractCore implements Cloneable {
     /**
      * 코어의 정수 식별자(id)를 중복없이 자동 생성하기 위한 카운터
      */
-    private static final AtomicInteger idCount = new AtomicInteger(-1);
+    private static final AtomicInteger idCount = new AtomicInteger(0);
 
     /**
      * 코어를 구별하기 위한 정수 식별자
@@ -54,9 +54,7 @@ public class AbstractCore implements Cloneable {
      * @param standbyPower 대기 전력
      */
     public AbstractCore(int id, int performance, double runningPower, double standbyPower) {
-        if (id > idCount.intValue()) {
-            idCount.set(id - 1);
-        }
+        setId(id);
         init(performance, runningPower, standbyPower);
     }
 
@@ -76,6 +74,13 @@ public class AbstractCore implements Cloneable {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        if (id > idCount.intValue()) {
+            idCount.set(id);
+        }
+        this.id = id;
     }
 
     public int getPerformance() {
