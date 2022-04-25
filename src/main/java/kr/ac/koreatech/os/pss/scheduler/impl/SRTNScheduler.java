@@ -8,7 +8,7 @@ import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 import java.util.*;
 
 /**
- * Shortest Remaining Time Next 스케줄러 클래스 (미구현됨)
+ * Shortest Remaining Time Next 스케줄러 클래스
  *
  * @author refracta
  */
