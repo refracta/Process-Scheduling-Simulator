@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author unta1337
  */
-public class ProcessStatus extends GridPane {
+public class ProcessorsStatus extends GridPane {
     /**
      * 컨트롤러 객체가 담당하고 있는 GridPane 객체
      */
@@ -27,12 +26,20 @@ public class ProcessStatus extends GridPane {
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Label numPCores;
+    Label numPerformanceCores;
     /**
      * 효율 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Label numECores;
+    Label numEfficiencyCores;
+    @FXML
+    Label performanceCorePowerUsage;
+    @FXML
+    Label efficiencyCorePowerUsage;
+    @FXML
+    Label totalElapsedUnitTime;
+    @FXML
+    Label averageTurnaroundUnitTime;
 
     /**
      * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
@@ -42,46 +49,52 @@ public class ProcessStatus extends GridPane {
      * @return
      * @throws IOException
      */
-    public static ProcessStatus getProcessStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
-        ProcessStatus controller = new ProcessStatus();
+    public static ProcessorsStatus getProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
+        ProcessorsStatus controller = new ProcessorsStatus();
         controller.init(cores, scheduleData);
         return controller;
     }
 
     /**
      * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
-     * ProcessStatus getProcessStatus(List&lt;AbstractCore&gt; cores, ScheduleData scheduleData)과 동치이다.
+     * ProcessorsStatus getProcessorsStatus(List&lt;AbstractCore&gt; cores, ScheduleData scheduleData)과 동치이다.
      *
      * @param cores
      * @param scheduleData
      * @return
      * @throws IOException
      */
-    public static ProcessStatus getProcessStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
-        return getProcessStatus(Arrays.asList(cores), scheduleData);
+    public static ProcessorsStatus getProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
+        return getProcessorsStatus(Arrays.asList(cores), scheduleData);
     }
 
     /**
-     * ProcessStatus의 생성자
+     * ProcessorsStatus의 생성자
      * 별도의 정적 메소드를 통해 객체를 생성하므로 private
      *
      * @throws IOException
      */
-    private ProcessStatus() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processStatus.fxml"));
+    private ProcessorsStatus() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processorsStatus.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
     }
 
     /**
-     * ProcessStatus 생성 후 기본 정보를 설정하기 위한 메소드
+     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
      *
      * @param cores
      * @param scheduleData
      */
     public void init(List<AbstractCore> cores, ScheduleData scheduleData) {
-        numPCores.setText("NPC: " + Integer.toString(scheduleData.getNumPerformanceCores()));
-        numECores.setText("NEC: " + Integer.toString(scheduleData.getNumEfficiencyCores()));
+        numPerformanceCores.setText(Integer.toString(scheduleData.getNumPerformanceCores()));
+        numEfficiencyCores.setText(Integer.toString(scheduleData.getNumEfficiencyCores()));
+
+        performanceCorePowerUsage.setText("45");
+        efficiencyCorePowerUsage.setText("15");
+
+        totalElapsedUnitTime.setText("10");
+        averageTurnaroundUnitTime.setText("5.5");
     }
 
     public GridPane getPane() {

@@ -41,9 +41,9 @@ public class SchedulingVisualizer extends Application {
         };
         ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
 
-        ProcessStatus processStatus = ProcessStatus.getProcessStatus(cores, scheduleData);
+        ProcessorsStatus processorsStatus = ProcessorsStatus.getProcessorsStatus(cores, scheduleData);
 
-        Scene scene = new Scene(processStatus.getPane());
+        Scene scene = new Scene(processorsStatus.getPane());
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

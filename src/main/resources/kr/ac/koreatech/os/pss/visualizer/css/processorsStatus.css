@@ -3,33 +3,33 @@
     -fx-font-family: "NanumSquare";
 }
 
-.processstatus {
+.processorsstatus {
     -fx-text-fill: white;
 }
 
-#processstatus-title {
+#processorsstatus-title {
     -fx-font-size: 20px;
     -fx-font-family: "NanumSquare Bold";
 }
 
-#processstatus-container {
+#processorsstatus-container {
     -fx-pref-width: 240px;
-    -fx-pref-height: 200px;
+    -fx-pref-height: 240px;
     -fx-background-color: #FF8C32;
 }
 
-#processstatus-details-container {
+#processorsstatus-details-container {
     -fx-background-color: #06113C;
 }
 
-#processstatus-details-numcores-cores-container {
+#processorsstatus-details-numcores-cores-container {
     -fx-alignment: center;
 }
 
-#processstatus-details-power-usage-container {
+#processorsstatus-details-power-usage-container {
     -fx-alignment: center;
 }
 
-#processstatus-details-time-times-container {
+#processorsstatus-details-time-times-container {
     -fx-alignment: center;
 }
