@@ -32,14 +32,31 @@ public class ProcessorsStatus extends GridPane {
      */
     @FXML
     Label numEfficiencyCores;
+    /**
+     * 성능 코어가 소비한 전력 총합
+     */
     @FXML
     Label performanceCorePowerUsage;
+    /**
+     * 효율 코어가 소비한 전력 총합
+     */
     @FXML
     Label efficiencyCorePowerUsage;
+    /**
+     * 처리한 프로세스 개수
+     */
+    @FXML
+    Label numProcesses;
+    /**
+     * 프로세스 처리 전체 수행 시간
+     */
     @FXML
     Label totalElapsedUnitTime;
+    /**
+     * 프로세스 평균 반환 시간
+     */
     @FXML
-    Label averageTurnaroundUnitTime;
+    Label averageResponseUnitTime;
 
     /**
      * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
@@ -90,11 +107,13 @@ public class ProcessorsStatus extends GridPane {
         numPerformanceCores.setText(Integer.toString(scheduleData.getNumPerformanceCores()));
         numEfficiencyCores.setText(Integer.toString(scheduleData.getNumEfficiencyCores()));
 
-        performanceCorePowerUsage.setText("45");
-        efficiencyCorePowerUsage.setText("15");
+        numProcesses.setText(Integer.toString(scheduleData.getNumProcesses()));
 
-        totalElapsedUnitTime.setText("10");
-        averageTurnaroundUnitTime.setText("5.5");
+        performanceCorePowerUsage.setText(Double.toString(scheduleData.getPerformaceCorePowerUsage()));
+        efficiencyCorePowerUsage.setText(Double.toString(scheduleData.getEfficiencyCorePowerUsage()));
+
+        totalElapsedUnitTime.setText(Integer.toString(scheduleData.getTotalElapsedTime()));
+        averageResponseUnitTime.setText(String.format("%.1f", scheduleData.getAverageResponseTime()));
     }
 
     public GridPane getPane() {

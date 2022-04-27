@@ -1,35 +1,22 @@
-.root {
-    -fx-font-size: 18px;
+.label {
     -fx-font-family: "NanumSquare";
-}
-
-.processorsstatus {
+    -fx-font-size: 19px;
     -fx-text-fill: white;
 }
 
-#processorsstatus-title {
-    -fx-font-size: 20px;
-    -fx-font-family: "NanumSquare Bold";
+.wattunit {
+    -fx-font-size: 15px;
 }
 
-#processorsstatus-container {
-    -fx-pref-width: 240px;
-    -fx-pref-height: 240px;
+#title-container {
     -fx-background-color: #FF8C32;
 }
 
-#processorsstatus-details-container {
+#details-container {
     -fx-background-color: #06113C;
 }
 
-#processorsstatus-details-numcores-cores-container {
-    -fx-alignment: center;
-}
-
-#processorsstatus-details-power-usage-container {
-    -fx-alignment: center;
-}
-
-#processorsstatus-details-time-times-container {
-    -fx-alignment: center;
+#title {
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 23px;
 }
