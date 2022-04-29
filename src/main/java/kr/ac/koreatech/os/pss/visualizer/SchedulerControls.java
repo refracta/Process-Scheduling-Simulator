@@ -14,11 +14,13 @@ import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
+import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-import kr.ac.koreatech.os.pss.scheduler.impl.FCFSScheduler;
+import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,6 +47,15 @@ public class SchedulerControls extends GridPane {
     private ProcessorsStatus processorsStatus;
 
     /**
+     * 성능 코어 개수
+     */
+    private int numPerformanceCore;
+    /**
+     * 효율 코어 개수
+     */
+    private int numEfficiencyCore;
+
+    /**
      * 현재 선택된 스케줄링 기법
      */
     private String currentScheduleMethod;
@@ -60,6 +71,28 @@ public class SchedulerControls extends GridPane {
      * Custom 2에서 사용할 최대 플래그 카운트
      */
     private int currentFlagLimit;
+
+    /**
+     * 성능 코어 개수 설정 텍스트 필드
+     */
+    @FXML
+    TextField numPerformanceCoreTextField;
+    /**
+     * 성능 코어 개수 설정 버튼
+     */
+    @FXML
+    JFXButton numPerformanceCoreButton;
+
+    /**
+     * 효율 코어 개수 설정 텍스트 필드
+     */
+    @FXML
+    TextField numEfficiencyCoreTextField;
+    /**
+     * 효율 코어 개수 설정 버튼
+     */
+    @FXML
+    JFXButton numEfficiencyCoreButton;
 
     /**
      * 스케줄링 메소드를 설정하는 버튼
@@ -214,21 +247,52 @@ public class SchedulerControls extends GridPane {
         }
 
         // # 임시 설정
-        // cores: 추후 ProssesorsStatus에서 받아올 예정.
         // processes: 추후 프로세스 설정 클래스에서 받아올 예정.
-        FCFSScheduler fcfsScheduler = new FCFSScheduler();
-        AbstractCore[] cores = {new EfficiencyCore(), new PerformanceCore(), new PerformanceCore()};
+        List<AbstractCore> cores = new ArrayList<AbstractCore>();
+        for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
+        for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
+
         DefaultProcess[] processes = {
-                new DefaultProcess(0, 1, 4),
-                new DefaultProcess(1, 2, 4),
-                new DefaultProcess(2, 3, 7),
-                new DefaultProcess(3, 3, 7),
-                new DefaultProcess(4, 3, 7),
-                new DefaultProcess(5, 3, 7),
+                new DefaultProcess(0, 0, 4),
+                new DefaultProcess(1, 0, 4),
+                new DefaultProcess(2, 0, 7),
+                new DefaultProcess(3, 0, 7),
+                new DefaultProcess(4, 0, 7),
+                new DefaultProcess(5, 0, 7),
         };
-        ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
+
+        AbstractScheduler scheduler = getScheduler();
+        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
 
         updateProcessorsStatus(cores, scheduleData);
+    }
+
+    /**
+     * 성능 코어 개수 갱신
+     *
+     * @param event
+     */
+    @FXML
+    private void updateNumPerformanceCore(MouseEvent event) {
+        try {
+            numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
+        } catch (NumberFormatException exception) {
+            numPerformanceCore = 0;
+        } catch (Exception exception) { }
+    }
+
+    /**
+     * 효율 코어 개수 갱신
+     *
+     * @param event
+     */
+    @FXML
+    private void updateNumEfficiencyCore(MouseEvent event) {
+        try {
+            numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
+        } catch (NumberFormatException exception) {
+            numEfficiencyCore = 0;
+        } catch (Exception exception) { }
     }
 
     /**
@@ -358,6 +422,9 @@ public class SchedulerControls extends GridPane {
      * @return 스케줄링 수행 가능 여부
      */
     private boolean isSchedulerReady() {
+        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0))
+            return false;
+
         switch (currentScheduleMethod) {
             case "RR":
                 return isRRReady();
@@ -397,6 +464,30 @@ public class SchedulerControls extends GridPane {
      */
     private boolean isCustom2Ready() {
         return currentTimeQuantum > 0 && currentFlagLimit > 0;
+    }
+
+    /**
+     * 현재 스케줄링 설정에 맞는 스케줄러 반환
+     *
+     * @return 현재 스케줄링 설정에 맞는 스케줄러
+     */
+    private AbstractScheduler getScheduler() {
+        switch (currentScheduleMethod) {
+            case "FCFS":
+                return new FCFSScheduler();
+            case "RR":
+                return new RRScheduler(currentTimeQuantum);
+            case "SRN":
+                return new SRTNScheduler();
+            case "SPNS":
+                return new SPNScheduler();
+            case "HRRN":
+                return new HRRNScheduler();
+            case "Custom 1":
+            case "Custom 2":
+        }
+
+        return new FCFSScheduler();
     }
 
     public FlowPane getRoot() throws IOException {

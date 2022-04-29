@@ -119,8 +119,8 @@ public class ProcessorsStatus extends GridPane {
 
         numProcesses.setText(Integer.toString(scheduleData.getNumProcesses()));
 
-        performanceCorePowerUsage.setText(Double.toString(scheduleData.getPerformaceCorePowerUsage()));
-        efficiencyCorePowerUsage.setText(Double.toString(scheduleData.getEfficiencyCorePowerUsage()));
+        performanceCorePowerUsage.setText(String.format("%.1f", scheduleData.getPerformaceCorePowerUsage()));
+        efficiencyCorePowerUsage.setText(String.format("%.1f", scheduleData.getEfficiencyCorePowerUsage()));
 
         totalElapsedUnitTime.setText(Integer.toString(scheduleData.getTotalElapsedTime()));
         averageResponseUnitTime.setText(String.format("%.1f", scheduleData.getAverageResponseTime()));

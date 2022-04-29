@@ -132,7 +132,6 @@ public class ScheduleData {
     }
 
     /**
-<<<<<<< HEAD
      * 모든 코어의 스케줄 맵을 기반으로 성능 코어의 전력 사용량 총계를를 더한 값을 가져온다.
      * 프로세스가 EmptyProcess이면 대기 전력이 아니면 실행 전력으로 계산이 이루어진다.
      *
@@ -171,8 +170,6 @@ public class ScheduleData {
     }
 
     /**
-=======
->>>>>>> origin/develop
      * 스케줄링이 종료된 프로세스 리스트를 저장하는 리스트를 가져온다.
      *
      * @return 스케줄링이 종료된 프로세스 리스트
@@ -205,7 +202,7 @@ public class ScheduleData {
      * @return 스케줄 요청된 프로세스들의 총 수행 시간
      */
     public int getTotalElapsedTime() {
-        return getResultProcesses().stream().mapToInt(DefaultProcess::getBurstTime).sum();
+        return getResultProcesses().stream().mapToInt(DefaultProcess::getEndTime).max().getAsInt();
     }
 
     public int size() {
