@@ -2,7 +2,7 @@ package kr.ac.koreatech.os.pss.visualizer;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 출력 창에서 Process Status GridPane을 담당하는 컨트롤러 클래스
+ * 출력 창에서 Processors Status GridPane을 담당하는 컨트롤러 클래스
  *
  * @author unta1337
  */
@@ -26,40 +26,50 @@ public class ProcessorsStatus extends GridPane {
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Label numPerformanceCores;
+    Text numPerformanceCores;
     /**
      * 효율 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
-    Label numEfficiencyCores;
+    Text numEfficiencyCores;
     /**
      * 성능 코어가 소비한 전력 총합
      */
     @FXML
-    Label performanceCorePowerUsage;
+    Text performanceCorePowerUsage;
     /**
      * 효율 코어가 소비한 전력 총합
      */
     @FXML
-    Label efficiencyCorePowerUsage;
+    Text efficiencyCorePowerUsage;
     /**
      * 처리한 프로세스 개수
      */
     @FXML
-    Label numProcesses;
+    Text numProcesses;
     /**
      * 프로세스 처리 전체 수행 시간
      */
     @FXML
-    Label totalElapsedUnitTime;
+    Text totalElapsedUnitTime;
     /**
      * 프로세스 평균 반환 시간
      */
     @FXML
-    Label averageResponseUnitTime;
+    Text averageResponseUnitTime;
 
     /**
-     * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
+     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
+     *
+     * @return
+     * @throws IOException
+     */
+    public static ProcessorsStatus getProcessorsStatus() throws IOException {
+        return new ProcessorsStatus();
+    }
+
+    /**
+     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
      *
      * @param cores
      * @param scheduleData
@@ -73,7 +83,7 @@ public class ProcessorsStatus extends GridPane {
     }
 
     /**
-     * Process Status에서 출력할 사항을 설정하여 컨트롤러로 반환
+     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
      * ProcessorsStatus getProcessorsStatus(List&lt;AbstractCore&gt; cores, ScheduleData scheduleData)과 동치이다.
      *
      * @param cores
@@ -114,6 +124,16 @@ public class ProcessorsStatus extends GridPane {
 
         totalElapsedUnitTime.setText(Integer.toString(scheduleData.getTotalElapsedTime()));
         averageResponseUnitTime.setText(String.format("%.1f", scheduleData.getAverageResponseTime()));
+    }
+
+    /**
+     * 새로운 스케줄링 작업이 들어올 때 스케줄링 실행 후 내용 반영
+     *
+     * @param cores
+     * @param scheduleData
+     */
+    public void update(List<AbstractCore> cores, ScheduleData scheduleData) {
+        init(cores, scheduleData);
     }
 
     public GridPane getPane() {
