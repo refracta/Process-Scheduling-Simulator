@@ -157,7 +157,7 @@ public class ScheduleData {
      * @return 스케쥴링에 사용된 성능 중 성능 코어의 개수
      */
     public int getNumPerformanceCores() {
-        return getSchedule().keySet().stream().mapToInt(process -> process instanceof PerformanceCore ? 1 : 0).reduce(0, (acc, e) -> acc + e);
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof PerformanceCore ? 1 : 0).sum();
     }
 
     /**
@@ -166,7 +166,7 @@ public class ScheduleData {
      * @return 스케쥴링 사용된 효율 중 성능 코어의 개수
      */
     public int getNumEfficiencyCores() {
-        return getSchedule().keySet().stream().mapToInt(process -> process instanceof EfficiencyCore ? 1 : 0).reduce(0, (acc, e) -> acc + e);
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof EfficiencyCore ? 1 : 0).sum();
     }
 
     /**

@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
@@ -15,6 +14,7 @@ import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
+import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -58,7 +58,7 @@ public class SchedulerControls extends GridPane {
     /**
      * 현재 선택된 스케줄링 기법
      */
-    private String currentScheduleMethod;
+    private ScheduleMethod currentScheduleMethod;
     /**
      * RR에서의 타임 퀀텀
      */
@@ -189,15 +189,7 @@ public class SchedulerControls extends GridPane {
         root.getChildren().add(pane);
         root.getChildren().add(processorsStatus.getPane());
 
-        scheduleMethodComboBox.getItems().add(new Label("FCFS"));
-        scheduleMethodComboBox.getItems().add(new Label("RR"));
-        scheduleMethodComboBox.getItems().add(new Label("SRN"));
-        scheduleMethodComboBox.getItems().add(new Label("SPNS"));
-        scheduleMethodComboBox.getItems().add(new Label("HRRN"));
-        scheduleMethodComboBox.getItems().add(new Label("Custom 1"));
-        scheduleMethodComboBox.getItems().add(new Label("Custom 2"));
-
-        currentScheduleMethod = "None";
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
 
         setTimeQuantumDisable();
         setQueueLimitDisable();
@@ -210,24 +202,26 @@ public class SchedulerControls extends GridPane {
      * @param event
      */
     @FXML
-    private void applySchedule(MouseEvent event) {
+    private void applyScheduleMethod(MouseEvent event) {
         try {
-            currentScheduleMethod = ((Label) scheduleMethodComboBox.getValue()).getText();
+            currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
         } catch (Exception exception) { }
+
+        if (currentScheduleMethod == null) return;
 
         setTimeQuantumDisable();
         setQueueLimitDisable();
         setFlagLimitDisable();
 
         switch (currentScheduleMethod) {
-            case "RR":
+            case RR:
                 setTimeQuantumEnable();
                 break;
-            case "Custom 1":
+            case Custom1:
                 setTimeQuantumEnable();
                 setQueueLimitEnable();
                 break;
-            case "Custom 2":
+            case Custom2:
                 setTimeQuantumEnable();
                 setFlagLimitEnable();
                 break;
@@ -422,18 +416,17 @@ public class SchedulerControls extends GridPane {
      * @return 스케줄링 수행 가능 여부
      */
     private boolean isSchedulerReady() {
+        if (currentScheduleMethod == null) return false;
         if (!(numPerformanceCore > 0 || numEfficiencyCore > 0))
             return false;
 
         switch (currentScheduleMethod) {
-            case "RR":
+            case RR:
                 return isRRReady();
-            case "Custom 1":
+            case Custom1:
                 return isCustom1Ready();
-            case "Custom 2":
+            case Custom2:
                 return isCustom2Ready();
-            case "None":
-                return false;
         }
 
         return true;
@@ -473,18 +466,18 @@ public class SchedulerControls extends GridPane {
      */
     private AbstractScheduler getScheduler() {
         switch (currentScheduleMethod) {
-            case "FCFS":
+            case FCFS:
                 return new FCFSScheduler();
-            case "RR":
+            case RR:
                 return new RRScheduler(currentTimeQuantum);
-            case "SRN":
+            case SPN:
                 return new SRTNScheduler();
-            case "SPNS":
+            case SRTN:
                 return new SPNScheduler();
-            case "HRRN":
+            case HRRN:
                 return new HRRNScheduler();
-            case "Custom 1":
-            case "Custom 2":
+            case Custom1:
+            case Custom2:
         }
 
         return new FCFSScheduler();
@@ -502,7 +495,7 @@ public class SchedulerControls extends GridPane {
         return processorsStatus.getPane();
     }
 
-    public String getCurrentScheduleMethod() {
+    public ScheduleMethod getCurrentScheduleMethod() {
         return currentScheduleMethod;
     }
 
