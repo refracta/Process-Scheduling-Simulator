@@ -29,22 +29,11 @@ public class SchedulingVisualizer extends Application {
     public void start(Stage primaryStage) throws Exception {
         preLoad();
 
-        FCFSScheduler fcfsScheduler = new FCFSScheduler();
-        AbstractCore[] cores = {new EfficiencyCore(), new PerformanceCore(), new PerformanceCore()};
-        DefaultProcess[] processes = {
-                new DefaultProcess(1, 4),
-                new DefaultProcess(2, 4),
-                new DefaultProcess(3, 7),
-                new DefaultProcess(3, 7),
-                new DefaultProcess(3, 7),
-                new DefaultProcess(3, 7),
-        };
-        ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
+        SchedulerControls schedulerControls = SchedulerControls.getSchedulerControls();
 
-        ProcessStatus processStatus = ProcessStatus.getProcessStatus(cores, scheduleData);
-
-        Scene scene = new Scene(processStatus.getPane());
+        Scene scene = new Scene(schedulerControls.getRoot());
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

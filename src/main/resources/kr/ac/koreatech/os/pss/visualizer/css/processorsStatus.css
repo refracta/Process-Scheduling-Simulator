@@ -1,0 +1,18 @@
+.text {
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 18px;
+    -fx-fill: white;
+    -fx-font-smoothing-type: gray;
+}
+
+#title-container {
+    -fx-background-color: #FF8C32;
+}
+
+#details-container {
+    -fx-background-color: #06113C;
+}
+
+#title {
+    -fx-font-size: 26px;
+}

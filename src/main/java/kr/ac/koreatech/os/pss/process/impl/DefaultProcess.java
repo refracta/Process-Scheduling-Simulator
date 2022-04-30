@@ -143,6 +143,10 @@ public class DefaultProcess extends AbstractProcess {
         return turnaroundTime / (double) burstTime;
     }
 
+    public int getEndTime() {
+        return arrivalTime + turnaroundTime;
+    }
+
     public double getResponseRatio() {
         return (burstTime + waitingTime) / (double) burstTime;
     }

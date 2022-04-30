@@ -1,6 +1,8 @@
 package kr.ac.koreatech.os.pss.scheduler.data;
 
 import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
+import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.process.impl.EmptyProcess;
 
@@ -16,6 +18,7 @@ import static java.util.stream.Collectors.toList;
  * 추가적인 결과 데이터는 dataMap에 저장한다. 내부적으로 dataMap을 위임하는 방식으로 구현되었다.
  *
  * @author refracta
+ * @author unta1337
  */
 public class ScheduleData {
     /**
@@ -129,6 +132,44 @@ public class ScheduleData {
     }
 
     /**
+     * 모든 코어의 스케줄 맵을 기반으로 성능 코어의 전력 사용량 총계를를 더한 값을 가져온다.
+     * 프로세스가 EmptyProcess이면 대기 전력이 아니면 실행 전력으로 계산이 이루어진다.
+     *
+     * @return 성능 코어의 전력 사용량
+     */
+    public double getPerformaceCorePowerUsage() {
+        return getCores().stream().filter(core -> core instanceof PerformanceCore).mapToDouble(this::getPowerUsage).sum();
+    }
+
+    /**
+     * 모든 코어의 스케줄 맵을 기반으로 효율 코어의 전력 사용량 총계를를 더한 값을 가져온다.
+     * 프로세스가 EmptyProcess이면 대기 전력이 아니면 실행 전력으로 계산이 이루어진다.
+     *
+     * @return 효율 코어의 전력 사용량
+     */
+    public double getEfficiencyCorePowerUsage() {
+        return getCores().stream().filter(core -> core instanceof EfficiencyCore).mapToDouble(this::getPowerUsage).sum();
+    }
+
+    /**
+     * 스케쥴링에 사용된 코어 중 성능 코어의 개수를 가져온다.
+     *
+     * @return 스케쥴링에 사용된 성능 중 성능 코어의 개수
+     */
+    public int getNumPerformanceCores() {
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof PerformanceCore ? 1 : 0).sum();
+    }
+
+    /**
+     * 스케쥴링에 사용된 코어 중 효율 코어의 개수를 가져온다.
+     *
+     * @return 스케쥴링 사용된 효율 중 성능 코어의 개수
+     */
+    public int getNumEfficiencyCores() {
+        return getSchedule().keySet().stream().mapToInt(process -> process instanceof EfficiencyCore ? 1 : 0).sum();
+    }
+
+    /**
      * 스케줄링이 종료된 프로세스 리스트를 저장하는 리스트를 가져온다.
      *
      * @return 스케줄링이 종료된 프로세스 리스트
@@ -144,6 +185,24 @@ public class ScheduleData {
      */
     public double getAverageResponseTime() {
         return getResultProcesses().stream().mapToDouble(DefaultProcess::getTurnaroundTime).average().getAsDouble();
+    }
+
+    /**
+     * 스케줄링을 요청한 프로세스의 개수를 가져온다.
+     *
+     * @return 스케줄링을 요청한 프로세스의 총 개수
+     */
+    public int getNumProcesses() {
+        return resultProcesses.size();
+    }
+
+    /**
+     * 스케줄 요청된 프로세스들을 수행한 총 시간을 가져온다.
+     *
+     * @return 스케줄 요청된 프로세스들의 총 수행 시간
+     */
+    public int getTotalElapsedTime() {
+        return getResultProcesses().stream().mapToInt(DefaultProcess::getEndTime).max().getAsInt();
     }
 
     public int size() {
