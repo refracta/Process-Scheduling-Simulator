@@ -13,5 +13,6 @@ import java.util.Comparator;
 public class FCFSScheduler extends PriorityScheduler {
     public FCFSScheduler() {
         super(Comparator.comparingInt(DefaultProcess::getArrivalTime));
+        // 도착 시간을 기준으로 우선순위 스케줄러의 comparator 설정
     }
 }
