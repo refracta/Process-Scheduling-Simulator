@@ -32,12 +32,12 @@ public class SchedulingVisualizer extends Application {
         FCFSScheduler fcfsScheduler = new FCFSScheduler();
         AbstractCore[] cores = {new EfficiencyCore(), new PerformanceCore(), new PerformanceCore()};
         DefaultProcess[] processes = {
-                new DefaultProcess(0, 1, 4),
-                new DefaultProcess(1, 2, 4),
-                new DefaultProcess(2, 3, 7),
-                new DefaultProcess(3, 3, 7),
-                new DefaultProcess(4, 3, 7),
-                new DefaultProcess(5, 3, 7),
+                new DefaultProcess(1, 4),
+                new DefaultProcess(2, 4),
+                new DefaultProcess(3, 7),
+                new DefaultProcess(3, 7),
+                new DefaultProcess(3, 7),
+                new DefaultProcess(3, 7),
         };
         ScheduleData scheduleData = fcfsScheduler.schedule(cores, processes);
 
