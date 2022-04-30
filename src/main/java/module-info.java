@@ -7,5 +7,5 @@ module kr.ac.koreatech.os.pss {
     requires javafx.fxml;
     requires java.logging;
 
-    opens kr.ac.koreatech.os.pss.entrypoint to javafx.graphics, javafx.fxml;
+    opens kr.ac.koreatech.os.pss.visualizer to javafx.graphics, javafx.fxml;
 }

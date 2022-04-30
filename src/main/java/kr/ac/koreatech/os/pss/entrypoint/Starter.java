@@ -1,46 +1,28 @@
 package kr.ac.koreatech.os.pss.entrypoint;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import kr.ac.koreatech.os.pss.visualizer.SchedulingVisualizer;
 
 import java.util.logging.Logger;
 
 /**
+ * 애플리케이션 엔트리 포인트
+ *
  * @author refracta
+ * @author unta1337
  */
-public class Starter extends Application {
+public class Starter {
     /**
-     * Default logger for Starter class
+     * Start 클래스를 위한 기본 로거.
      */
     private final static Logger LOGGER = Logger.getGlobal();
 
     /**
-     * Starter.java main method
+     * Starter.java 메인 메소드
      *
      * @param args String[] args
      */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
-     * Starter.java start method
-     *
-     * @param primaryStage Stage
-     * @throws Exception Application start's Exception
-     */
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hello World!");
-        Button btn = new Button();
-        btn.setText("Print 'Hello World'");
-        btn.setOnAction(event -> LOGGER.info("Hello World!"));
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        primaryStage.setScene(new Scene(root, 300, 300));
-        primaryStage.show();
+    public static void main(String[] args) throws Exception {
+        Application.launch(SchedulingVisualizer.class, args);
     }
 }
