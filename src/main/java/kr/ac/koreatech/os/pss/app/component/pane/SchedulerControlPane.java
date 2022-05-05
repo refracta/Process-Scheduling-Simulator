@@ -1,14 +1,22 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.app.component.pane;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
+import kr.ac.koreatech.os.pss.app.legacy.LProcessorsStatus;
+import kr.ac.koreatech.os.pss.app.legacy.LSchedulerControls;
+import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
+import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
@@ -20,21 +28,26 @@ import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-/**
- * 프로그램의 Controller 역할을 담당하는 컨트롤러 클래스
- * 출력 창에서 Scheduler Controls GridPane을 담당하는 컨트롤러 클래스
- *
- * @author unta1337
- */
-public class SchedulerControls extends GridPane {
+@CreatableController
+public class SchedulerControlPane extends SingleComponent {
     /**
      * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
      */
-    private FlowPane root;
+    private GridPane root;
+    /**
+     * 스케줄러 설정의 요소를 담고 있는 Pane
+     */
+    private FlowPane leftMenu;
+    /**
+     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
+     */
+    private FlowPane rightMenu;
 
     /**
      * 컨트롤러 객체가 담당하고 있는 GridPane 객체
@@ -44,7 +57,11 @@ public class SchedulerControls extends GridPane {
     /**
      * 프로세서 상태 Pane
      */
-    private ProcessorsStatus processorsStatus;
+    private LProcessorsStatus processorsStatus;
+    /**
+     * 프로세스 설정 Pane
+     */
+    private LProcessControls processControls;
 
     /**
      * 성능 코어 개수
@@ -155,39 +172,20 @@ public class SchedulerControls extends GridPane {
     JFXButton startButton;
 
     /**
-     * Scheduler Controls에 출력할 사항을 설정하여 컨트롤러로 반환
-     *
-     * @return SchedulerControls의 컨트롤러
-     * @throws IOException
-     */
-    public static SchedulerControls getSchedulerControls() throws IOException {
-        SchedulerControls controller = new SchedulerControls();
-        controller.init();
-        return controller;
-    }
-
-    /**
-     * ProcessorsStatus의 생성자
-     * 별도의 정적 메소드를 통해 객체를 생성하므로 private
-     *
-     * @throws IOException
-     */
-    private SchedulerControls() throws IOException {
-        root = FXMLLoader.load(getClass().getResource("fxml/leftMenu.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/schedulerControls.fxml"));
-        fxmlLoader.setController(this);
-        this.pane = fxmlLoader.load();
-    }
-
-    /**
      * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
      *
      */
     public void init() throws IOException {
-        processorsStatus = ProcessorsStatus.getProcessorsStatus();
+        processorsStatus = LProcessorsStatus.getProcessorsStatus();
+        processControls = LProcessControls.getProcessControls();
 
-        root.getChildren().add(pane);
-        root.getChildren().add(processorsStatus.getPane());
+        leftMenu.getChildren().add(pane);
+        leftMenu.getChildren().add(processorsStatus.getPane());
+
+        rightMenu.getChildren().add(processControls.getPane());
+
+        root.add(leftMenu, 0, 0);
+        root.add(rightMenu, 1, 0);
 
         Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
 
@@ -246,17 +244,20 @@ public class SchedulerControls extends GridPane {
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
         for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
 
-        DefaultProcess[] processes = {
-                new DefaultProcess(0, 0, 4),
-                new DefaultProcess(1, 0, 4),
-                new DefaultProcess(2, 0, 7),
-                new DefaultProcess(3, 0, 7),
-                new DefaultProcess(4, 0, 7),
-                new DefaultProcess(5, 0, 7),
-        };
+//        DefaultProcess[] processes = {
+//                new DefaultProcess(1, 0, 2),
+//                new DefaultProcess(2, 0, 3),
+//                new DefaultProcess(3, 0, 7),
+//                new DefaultProcess(4, 0, 7),
+//                new DefaultProcess(5, 0, 6),
+//                new DefaultProcess(6, 0, 5),
+//        };
+
+        List<DefaultProcess> processes = processControls.getProcesses();
 
         AbstractScheduler scheduler = getScheduler();
-        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+//        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+        ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
         updateProcessorsStatus(cores, scheduleData);
     }
@@ -482,32 +483,14 @@ public class SchedulerControls extends GridPane {
 
         return new FCFSScheduler();
     }
-
-    public FlowPane getRoot() throws IOException {
-        return root;
-    }
-
-    public GridPane getPane() {
-        return pane;
-    }
-
-    public GridPane getProcessorsStatusPane() {
-        return processorsStatus.getPane();
-    }
-
-    public ScheduleMethod getCurrentScheduleMethod() {
-        return currentScheduleMethod;
-    }
-
-    public int getCurrentTimeQuantum() {
-        return currentTimeQuantum;
-    }
-
-    public int getCurrentQueueLimit() {
-        return currentQueueLimit;
-    }
-
-    public int getCurrentFlagLimit() {
-        return currentFlagLimit;
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
+            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
+        });
+        setTimeQuantumDisable();
+        setQueueLimitDisable();
+        setFlagLimitDisable();
     }
 }

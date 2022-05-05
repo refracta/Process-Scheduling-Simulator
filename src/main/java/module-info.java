@@ -9,5 +9,10 @@ module kr.ac.koreatech.os.pss {
     requires com.jfoenix;
     requires org.kordamp.ikonli.javafx;
 
-    opens kr.ac.koreatech.os.pss.visualizer to javafx.graphics, javafx.fxml, com.jfoenix, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app to javafx.graphics, javafx.fxml, com.jfoenix, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app.legacy to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app.loader to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app.component.pane to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app.loader.annotation to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.app.loader.utils to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
 }

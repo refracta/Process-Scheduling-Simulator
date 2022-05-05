@@ -1,15 +1,9 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.app.legacy;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import kr.ac.koreatech.os.pss.core.AbstractCore;
-import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
-import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
-import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-import kr.ac.koreatech.os.pss.scheduler.impl.FCFSScheduler;
 
 /**
  * 스케쥴러 비주얼라이저 클래스
@@ -17,7 +11,7 @@ import kr.ac.koreatech.os.pss.scheduler.impl.FCFSScheduler;
  * @author unta1337
  * @author refracta
  */
-public class SchedulingVisualizer extends Application {
+public class LSchedulingVisualizer extends Application {
 
     /**
      * 비주얼라이저 Java-FX 엔트리 포인트
@@ -29,7 +23,7 @@ public class SchedulingVisualizer extends Application {
     public void start(Stage primaryStage) throws Exception {
         preLoad();
 
-        SchedulerControls schedulerControls = SchedulerControls.getSchedulerControls();
+        LSchedulerControls schedulerControls = LSchedulerControls.getSchedulerControls();
 
         Scene scene = new Scene(schedulerControls.getRoot());
         primaryStage.setScene(scene);
@@ -47,7 +41,7 @@ public class SchedulingVisualizer extends Application {
      */
     public void preLoad() {
         for (String font : FONTS) {
-            Font.loadFont(SchedulingVisualizer.class.getResourceAsStream("font" + "/" + font), -1);
+            Font.loadFont(LSchedulingVisualizer.class.getResourceAsStream("font" + "/" + font), -1);
         }
     }
 }

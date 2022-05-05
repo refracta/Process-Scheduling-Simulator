@@ -1,7 +1,7 @@
 package kr.ac.koreatech.os.pss.entrypoint;
 
 import javafx.application.Application;
-import kr.ac.koreatech.os.pss.visualizer.SchedulingVisualizer;
+import kr.ac.koreatech.os.pss.app.PSSApplication;
 
 import java.util.logging.Logger;
 
@@ -23,6 +23,6 @@ public class Starter {
      * @param args String[] args
      */
     public static void main(String[] args) throws Exception {
-        Application.launch(SchedulingVisualizer.class, args);
+        Application.launch(PSSApplication.class, args);
     }
 }
