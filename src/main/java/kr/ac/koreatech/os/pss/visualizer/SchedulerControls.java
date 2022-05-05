@@ -2,6 +2,9 @@ package kr.ac.koreatech.os.pss.visualizer;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXSlider;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -34,7 +37,15 @@ public class SchedulerControls extends GridPane {
     /**
      * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
      */
-    private FlowPane root;
+    private GridPane root;
+    /**
+     * 스케줄러 설정의 요소를 담고 있는 Pane
+     */
+    private FlowPane leftMenu;
+    /**
+     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
+     */
+    private FlowPane rightMenu;
 
     /**
      * 컨트롤러 객체가 담당하고 있는 GridPane 객체
@@ -45,6 +56,10 @@ public class SchedulerControls extends GridPane {
      * 프로세서 상태 Pane
      */
     private ProcessorsStatus processorsStatus;
+    /**
+     * 프로세스 설정 Pane
+     */
+    private ProcessControls processControls;
 
     /**
      * 성능 코어 개수
@@ -173,7 +188,10 @@ public class SchedulerControls extends GridPane {
      * @throws IOException
      */
     private SchedulerControls() throws IOException {
-        root = FXMLLoader.load(getClass().getResource("fxml/leftMenu.fxml"));
+        leftMenu = new FlowPane();
+        rightMenu = new FlowPane();
+
+        root = FXMLLoader.load(getClass().getResource("fxml/mainFrame.fxml"));
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/schedulerControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
@@ -185,9 +203,15 @@ public class SchedulerControls extends GridPane {
      */
     public void init() throws IOException {
         processorsStatus = ProcessorsStatus.getProcessorsStatus();
+        processControls = ProcessControls.getProcessControls();
 
-        root.getChildren().add(pane);
-        root.getChildren().add(processorsStatus.getPane());
+        leftMenu.getChildren().add(pane);
+        leftMenu.getChildren().add(processorsStatus.getPane());
+
+        rightMenu.getChildren().add(processControls.getPane());
+
+        root.add(leftMenu, 0, 0);
+        root.add(rightMenu, 1, 0);
 
         Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
 
@@ -246,17 +270,20 @@ public class SchedulerControls extends GridPane {
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
         for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
 
-        DefaultProcess[] processes = {
-                new DefaultProcess(0, 0, 4),
-                new DefaultProcess(1, 0, 4),
-                new DefaultProcess(2, 0, 7),
-                new DefaultProcess(3, 0, 7),
-                new DefaultProcess(4, 0, 7),
-                new DefaultProcess(5, 0, 7),
-        };
+//        DefaultProcess[] processes = {
+//                new DefaultProcess(1, 0, 2),
+//                new DefaultProcess(2, 0, 3),
+//                new DefaultProcess(3, 0, 7),
+//                new DefaultProcess(4, 0, 7),
+//                new DefaultProcess(5, 0, 6),
+//                new DefaultProcess(6, 0, 5),
+//        };
+
+        List<DefaultProcess> processes = processControls.getProcesses();
 
         AbstractScheduler scheduler = getScheduler();
-        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+//        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+        ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
         updateProcessorsStatus(cores, scheduleData);
     }
@@ -483,7 +510,7 @@ public class SchedulerControls extends GridPane {
         return new FCFSScheduler();
     }
 
-    public FlowPane getRoot() throws IOException {
+    public GridPane getRoot() throws IOException {
         return root;
     }
 

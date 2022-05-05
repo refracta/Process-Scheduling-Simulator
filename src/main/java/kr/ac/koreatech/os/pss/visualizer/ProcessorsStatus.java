@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 import java.io.IOException;

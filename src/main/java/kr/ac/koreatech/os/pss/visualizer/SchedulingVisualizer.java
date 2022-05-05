@@ -2,14 +2,9 @@ package kr.ac.koreatech.os.pss.visualizer;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import kr.ac.koreatech.os.pss.core.AbstractCore;
-import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
-import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
-import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-import kr.ac.koreatech.os.pss.scheduler.impl.FCFSScheduler;
 
 /**
  * 스케쥴러 비주얼라이저 클래스

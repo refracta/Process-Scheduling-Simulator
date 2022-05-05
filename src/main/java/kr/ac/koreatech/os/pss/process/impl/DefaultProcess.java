@@ -12,6 +12,7 @@ import java.util.Optional;
  * 프로세스 스케줄링에 필요한 요소가 구현된 프로세스 클래스이다.
  *
  * @author refracta
+ * @author unta1337
  */
 public class DefaultProcess extends AbstractProcess {
     public static final int NOT_INITIALIZED = -1;
@@ -89,6 +90,13 @@ public class DefaultProcess extends AbstractProcess {
         this.setName("P" + getId());
         this.arrivalTime = arrivalTime;
         this.burstTime = this.leftBurstTime = burstTime;
+    }
+
+    /**
+     * GUI 조작 등 외부 요인에 의해 BurstTime이 변경되었을 때 프로세스의 BurstTime을 초기화하는 메소드
+     */
+    public void resetLeftBurstTime() {
+        this.leftBurstTime = this.burstTime;
     }
 
     public int getStartTime() {
