@@ -8,7 +8,9 @@ import java.io.IOException;
 public abstract class LAbstractTimeLine extends Pane {
     protected enum ActionState {
         IDLE, EXTEND_LEFT, EXTEND_RIGHT, MOVE
-    };
+    }
+
+    ;
     protected ActionState actionState;
 
     protected LProcessControls processControls;

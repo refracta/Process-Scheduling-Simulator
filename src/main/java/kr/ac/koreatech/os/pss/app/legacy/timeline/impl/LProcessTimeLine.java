@@ -31,8 +31,11 @@ public class LProcessTimeLine extends LAbstractTimeLine {
     public void updateScale(int criteriaEndTime) {
         try {
             getChildren().remove(0, getChildren().size());
-        } catch (Exception exception) { }
-        for (int i = 0; i <= criteriaEndTime; i++) { this.getChildren().add(new Line(i * processControls.getLengthFactor(), 0, i * processControls.getLengthFactor(), 30)); }
+        } catch (Exception exception) {
+        }
+        for (int i = 0; i <= criteriaEndTime; i++) {
+            this.getChildren().add(new Line(i * processControls.getLengthFactor(), 0, i * processControls.getLengthFactor(), 30));
+        }
         this.getChildren().add(this.timeLineBar);
 
         timeLineBar.update(timeLineBar.getArrivalTime(), timeLineBar.getBurstTime(), processControls.getLengthFactor());

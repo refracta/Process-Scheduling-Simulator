@@ -3,9 +3,7 @@ package kr.ac.koreatech.os.pss.app;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import kr.ac.koreatech.os.pss.app.component.pane.SchedulerControlPane;
 import kr.ac.koreatech.os.pss.app.component.pane.VisualizerPane;
-import kr.ac.koreatech.os.pss.app.legacy.LSchedulerControls;
 import kr.ac.koreatech.os.pss.app.loader.FontLoader;
 import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
 

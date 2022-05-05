@@ -20,7 +20,8 @@ public class LProcessTimeLineIndex extends LAbstractTimeLine {
     public void updateScale(int criteriaEndTime) {
         try {
             getChildren().remove(0, getChildren().size());
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
 
         for (int i = 0; i < criteriaEndTime; i++) {
             Pane indexPane = null;
@@ -28,7 +29,8 @@ public class LProcessTimeLineIndex extends LAbstractTimeLine {
                 indexPane = FXMLLoader.load(LProcessControls.class.getResource("processID.fxml"));
                 indexPane.setLayoutX(i * processControls.getLengthFactor());
                 ((Text) indexPane.getChildren().get(0)).setText(Integer.toString(i));
-            } catch (IOException exception) { }
+            } catch (IOException exception) {
+            }
             getChildren().add(indexPane);
         }
     }
