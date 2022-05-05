@@ -17,7 +17,7 @@ public abstract class SingleComponent implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (componentMap.containsKey(getClass())) {
-            throw new RuntimeException("Only one single component instance can be created.");
+            throw new RuntimeException("Only one SingleComponent instance can be created.");
         }
         componentMap.put(getClass(), this);
     }
