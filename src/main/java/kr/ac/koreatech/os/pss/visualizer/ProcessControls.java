@@ -40,6 +40,9 @@ public class ProcessControls extends GridPane {
     @FXML
     private JFXSlider criteriaEndTimeSlider;
 
+    private double width;
+    private double height;
+
     private List<AbstractTimeLine> processTimeLines;
     private int criteriaEndTime;
     private int maxEndTime;
@@ -53,12 +56,16 @@ public class ProcessControls extends GridPane {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
+
+        this.width = 800;
+        this.height = 30;
+
         this.processTimeLines = new ArrayList<>();
         this.criteriaEndTime = 10;
-        this.lengthFactor = 800 / this.criteriaEndTime;
+        this.lengthFactor = this.width / this.criteriaEndTime;
 
         processesIDVBox.getChildren().add(FXMLLoader.load(getClass().getResource("fxml/processIDColumn.fxml")));
-        processesVBox.getChildren().add(new ProcessTimeLineIndex(criteriaEndTime, 800, 30, this));
+        processesVBox.getChildren().add(new ProcessTimeLineIndex(criteriaEndTime, this.width, this.height, this));
         processesDelVBox.getChildren().add(FXMLLoader.load(getClass().getResource("fxml/processIDColumn.fxml")));
         processTimeLines.add((AbstractTimeLine) processesVBox.getChildren().get(0));
 
@@ -82,7 +89,7 @@ public class ProcessControls extends GridPane {
         // 축적 슬라이더 조작 이벤트 핸들러.
         criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             criteriaEndTime = newValue.intValue();
-            lengthFactor = 800 / criteriaEndTime;
+            lengthFactor = this.width / criteriaEndTime;
 
             processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
         });
@@ -92,7 +99,7 @@ public class ProcessControls extends GridPane {
     private void addProcess(MouseEvent event) throws IOException {
         int currentCriteriaEndTime = criteriaEndTimeSlider.valueProperty().getValue().intValue();
         int newCriteriaEndTime = criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime;
-        ProcessTimeLine processTimeLine = new ProcessTimeLine(newCriteriaEndTime, 800, 30, this);
+        ProcessTimeLine processTimeLine = new ProcessTimeLine(newCriteriaEndTime, width, height, this);
 
         GridPane processIDPane = FXMLLoader.load(getClass().getResource("fxml/processID.fxml"));
         ((Text) (processIDPane.getChildren().get(0))).setText(processTimeLine.getProcess().getName());
@@ -151,13 +158,13 @@ public class ProcessControls extends GridPane {
     }
 
     public void updateAllScales() {
-        int temp = 0;
+        int tempMaxEndTime = 0;
         for (int i = 1; i < processTimeLines.size(); i++) {
             ProcessTimeLine ptl = (ProcessTimeLine) processTimeLines.get(i);
-            if (ptl.getProcess().getEndTime() > temp)
-                temp = ptl.getProcess().getEndTime();
+            if (ptl.getProcess().getEndTime() > tempMaxEndTime)
+                tempMaxEndTime = ptl.getProcess().getEndTime();
         }
-        maxEndTime = temp;
+        maxEndTime = tempMaxEndTime;
         processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
     }
 }
