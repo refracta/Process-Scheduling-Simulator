@@ -1,4 +1,4 @@
-package kr.ac.koreatech.os.pss.visualizer.legacy;
+package kr.ac.koreatech.os.pss.app.legacy;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LProcessControls extends GridPane {
+public class LProcessControls {
     private GridPane pane;
 
     @FXML

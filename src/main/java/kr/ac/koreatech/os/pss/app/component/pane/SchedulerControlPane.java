@@ -1,14 +1,22 @@
-package kr.ac.koreatech.os.pss.visualizer.legacy;
+package kr.ac.koreatech.os.pss.app.component.pane;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
+import kr.ac.koreatech.os.pss.app.legacy.LProcessorsStatus;
+import kr.ac.koreatech.os.pss.app.legacy.LSchedulerControls;
+import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
+import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
@@ -20,70 +28,14 @@ import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 
-/**
- * 프로그램의 Controller 역할을 담당하는 컨트롤러 클래스
- * 출력 창에서 Scheduler Controls GridPane을 담당하는 컨트롤러 클래스
- *
- * @author unta1337
- */
-public class LSchedulerControls extends GridPane {
-    /**
-     * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
-     */
-    private GridPane root;
-    /**
-     * 스케줄러 설정의 요소를 담고 있는 Pane
-     */
-    private FlowPane leftMenu;
-    /**
-     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
-     */
-    private FlowPane rightMenu;
-
-    /**
-     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
-     */
-    private GridPane pane;
-
-    /**
-     * 프로세서 상태 Pane
-     */
-    private LProcessorsStatus processorsStatus;
-    /**
-     * 프로세스 설정 Pane
-     */
-    private LProcessControls processControls;
-
-    /**
-     * 성능 코어 개수
-     */
-    private int numPerformanceCore;
-    /**
-     * 효율 코어 개수
-     */
-    private int numEfficiencyCore;
-
-    /**
-     * 현재 선택된 스케줄링 기법
-     */
-    private ScheduleMethod currentScheduleMethod;
-    /**
-     * RR에서의 타임 퀀텀
-     */
-    private int currentTimeQuantum;
-    /**
-     * Custom 1에서 실행큐에 넣을 수 있는 프로세스의 최대 개수
-     */
-    private int currentQueueLimit;
-    /**
-     * Custom 2에서 사용할 최대 플래그 카운트
-     */
-    private int currentFlagLimit;
-
+@CreatableController
+public class SchedulerControlPane extends SingleComponent {
     /**
      * 성능 코어 개수 설정 텍스트 필드
      */
@@ -167,55 +119,57 @@ public class LSchedulerControls extends GridPane {
     JFXButton startButton;
 
     /**
-     * Scheduler Controls에 출력할 사항을 설정하여 컨트롤러로 반환
-     *
-     * @return SchedulerControls의 컨트롤러
-     * @throws IOException
+     * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
      */
-    public static LSchedulerControls getSchedulerControls() throws IOException {
-        LSchedulerControls controller = new LSchedulerControls();
-        controller.init();
-        return controller;
-    }
+    private GridPane root;
+    /**
+     * 스케줄러 설정의 요소를 담고 있는 Pane
+     */
+    private FlowPane leftMenu;
+    /**
+     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
+     */
+    private FlowPane rightMenu;
 
     /**
-     * ProcessorsStatus의 생성자
-     * 별도의 정적 메소드를 통해 객체를 생성하므로 private
-     *
-     * @throws IOException
+     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
      */
-    private LSchedulerControls() throws IOException {
-        leftMenu = new FlowPane();
-        rightMenu = new FlowPane();
-
-        root = FXMLLoader.load(getClass().getResource("mainFrame.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("schedulerControls.fxml"));
-        fxmlLoader.setController(this);
-        this.pane = fxmlLoader.load();
-    }
+    private GridPane pane;
 
     /**
-     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
-     *
+     * 프로세서 상태 Pane
      */
-    public void init() throws IOException {
-        processorsStatus = LProcessorsStatus.getProcessorsStatus();
-        processControls = LProcessControls.getProcessControls();
+    private LProcessorsStatus processorsStatus;
+    /**
+     * 프로세스 설정 Pane
+     */
+    private LProcessControls processControls;
 
-        leftMenu.getChildren().add(pane);
-        leftMenu.getChildren().add(processorsStatus.getPane());
+    /**
+     * 성능 코어 개수
+     */
+    private int numPerformanceCore;
+    /**
+     * 효율 코어 개수
+     */
+    private int numEfficiencyCore;
 
-        rightMenu.getChildren().add(processControls.getPane());
-
-        root.add(leftMenu, 0, 0);
-        root.add(rightMenu, 1, 0);
-
-        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
-
-        setTimeQuantumDisable();
-        setQueueLimitDisable();
-        setFlagLimitDisable();
-    }
+    /**
+     * 현재 선택된 스케줄링 기법
+     */
+    private ScheduleMethod currentScheduleMethod;
+    /**
+     * RR에서의 타임 퀀텀
+     */
+    private int currentTimeQuantum;
+    /**
+     * Custom 1에서 실행큐에 넣을 수 있는 프로세스의 최대 개수
+     */
+    private int currentQueueLimit;
+    /**
+     * Custom 2에서 사용할 최대 플래그 카운트
+     */
+    private int currentFlagLimit;
 
     /**
      * 스케줄러 종류 선택을 적용하는 이벤트 처리기
@@ -224,10 +178,6 @@ public class LSchedulerControls extends GridPane {
      */
     @FXML
     private void applyScheduleMethod(MouseEvent event) {
-        try {
-            currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
-        } catch (Exception exception) { }
-
         if (currentScheduleMethod == null) return;
 
         setTimeQuantumDisable();
@@ -296,7 +246,8 @@ public class LSchedulerControls extends GridPane {
             numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numPerformanceCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -310,7 +261,8 @@ public class LSchedulerControls extends GridPane {
             numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numEfficiencyCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -324,7 +276,8 @@ public class LSchedulerControls extends GridPane {
             currentTimeQuantum = Integer.parseInt(timeQuantumTextField.getText());
         } catch (NumberFormatException exception) {
             currentTimeQuantum = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -338,7 +291,8 @@ public class LSchedulerControls extends GridPane {
             currentQueueLimit = Integer.parseInt(queueLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentQueueLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -352,7 +306,8 @@ public class LSchedulerControls extends GridPane {
             currentFlagLimit = Integer.parseInt(flagLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentFlagLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -441,8 +396,7 @@ public class LSchedulerControls extends GridPane {
      */
     private boolean isSchedulerReady() {
         if (currentScheduleMethod == null) return false;
-        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0))
-            return false;
+        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0)) return false;
 
         switch (currentScheduleMethod) {
             case RR:
@@ -507,31 +461,18 @@ public class LSchedulerControls extends GridPane {
         return new FCFSScheduler();
     }
 
-    public GridPane getRoot() throws IOException {
-        return root;
-    }
 
-    public GridPane getPane() {
-        return pane;
-    }
-
-    public GridPane getProcessorsStatusPane() {
-        return processorsStatus.getPane();
-    }
-
-    public ScheduleMethod getCurrentScheduleMethod() {
-        return currentScheduleMethod;
-    }
-
-    public int getCurrentTimeQuantum() {
-        return currentTimeQuantum;
-    }
-
-    public int getCurrentQueueLimit() {
-        return currentQueueLimit;
-    }
-
-    public int getCurrentFlagLimit() {
-        return currentFlagLimit;
+    /**
+     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
+            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
+        });
+        setTimeQuantumDisable();
+        setQueueLimitDisable();
+        setFlagLimitDisable();
     }
 }

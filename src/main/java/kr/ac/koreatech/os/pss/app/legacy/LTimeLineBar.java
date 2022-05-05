@@ -1,4 +1,4 @@
-package kr.ac.koreatech.os.pss.visualizer.legacy;
+package kr.ac.koreatech.os.pss.app.legacy;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;

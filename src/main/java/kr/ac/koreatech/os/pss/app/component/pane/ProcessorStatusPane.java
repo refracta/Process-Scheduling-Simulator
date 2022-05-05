@@ -1,9 +1,12 @@
-package kr.ac.koreatech.os.pss.visualizer.legacy;
+package kr.ac.koreatech.os.pss.app.component.pane;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
+import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.legacy.LProcessorsStatus;
+import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
@@ -11,17 +14,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * 출력 창에서 Processors Status GridPane을 담당하는 컨트롤러 클래스
- *
- * @author unta1337
- */
-public class LProcessorsStatus extends GridPane {
-    /**
-     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
-     */
-    private GridPane pane;
-
+@CreatableController
+public class ProcessorStatusPane extends SingleComponent {
     /**
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
@@ -59,55 +53,6 @@ public class LProcessorsStatus extends GridPane {
     Text averageResponseUnitTime;
 
     /**
-     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
-     *
-     * @return
-     * @throws IOException
-     */
-    public static LProcessorsStatus getProcessorsStatus() throws IOException {
-        return new LProcessorsStatus();
-    }
-
-    /**
-     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
-     *
-     * @param cores
-     * @param scheduleData
-     * @return
-     * @throws IOException
-     */
-    public static LProcessorsStatus getProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
-        LProcessorsStatus controller = new LProcessorsStatus();
-        controller.init(cores, scheduleData);
-        return controller;
-    }
-
-    /**
-     * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
-     * ProcessorsStatus getProcessorsStatus(List&lt;AbstractCore&gt; cores, ScheduleData scheduleData)과 동치이다.
-     *
-     * @param cores
-     * @param scheduleData
-     * @return
-     * @throws IOException
-     */
-    public static LProcessorsStatus getProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
-        return getProcessorsStatus(Arrays.asList(cores), scheduleData);
-    }
-
-    /**
-     * ProcessorsStatus의 생성자
-     * 별도의 정적 메소드를 통해 객체를 생성하므로 private
-     *
-     * @throws IOException
-     */
-    private LProcessorsStatus() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processorsStatus.fxml"));
-        fxmlLoader.setController(this);
-        this.pane = fxmlLoader.load();
-    }
-
-    /**
      * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
      *
      * @param cores
@@ -134,9 +79,5 @@ public class LProcessorsStatus extends GridPane {
      */
     public void update(List<AbstractCore> cores, ScheduleData scheduleData) {
         init(cores, scheduleData);
-    }
-
-    public GridPane getPane() {
-        return pane;
     }
 }
