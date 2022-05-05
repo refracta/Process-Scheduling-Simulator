@@ -38,7 +38,7 @@ public class ProcessTimeLine extends Pane {
     }
 
     protected ProcessTimeLine(int criteriaEndTime) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processTimeLine.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processTimeLine.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
         this.criteriaEndTime = criteriaEndTime;

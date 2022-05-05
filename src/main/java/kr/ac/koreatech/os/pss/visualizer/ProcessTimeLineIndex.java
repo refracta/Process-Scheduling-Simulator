@@ -23,7 +23,7 @@ public class ProcessTimeLineIndex extends ProcessTimeLine {
         for (int i = 0; i < criteriaEndTime; i++) {
             Pane index;
             try {
-                index = FXMLLoader.load(getClass().getResource("fxml/processID.fxml"));
+                index = FXMLLoader.load(getClass().getResource("processID.fxml"));
                 ((Text) index.getChildren().get(0)).setText(Integer.toString(i));
                 index.setLayoutX(lengthFactor * i);
                 index.setMinWidth(lengthFactor);

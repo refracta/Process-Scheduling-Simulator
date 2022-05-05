@@ -13,6 +13,6 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <JFXButton id="add-process" maxHeight="31.0" onMouseClicked="#delProcess" prefHeight="31.0" stylesheets="@../css/processControls.css" text="프로세스 제거" GridPane.halignment="CENTER" />
+      <JFXButton id="add-process" maxHeight="31.0" onMouseClicked="#delProcess" prefHeight="31.0" stylesheets="@css/processControls.css" text="프로세스 제거" GridPane.halignment="CENTER" />
    </children>
 </GridPane>

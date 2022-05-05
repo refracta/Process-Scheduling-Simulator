@@ -103,7 +103,7 @@ public class ProcessorsStatus extends GridPane {
      * @throws IOException
      */
     private ProcessorsStatus() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processorsStatus.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processorsStatus.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
     }

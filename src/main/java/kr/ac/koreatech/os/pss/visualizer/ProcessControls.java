@@ -51,17 +51,17 @@ public class ProcessControls extends GridPane {
     }
 
     private ProcessControls() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processControls.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
         this.processTimeLines = new ArrayList<ProcessTimeLine>();
         this.criteriaEndTime = 10;
 
-        processesIDVBox.getChildren().add(FXMLLoader.load(getClass().getResource("fxml/processIDColumn.fxml")));
+        processesIDVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
         ProcessTimeLineIndex temp = ProcessTimeLineIndex.getProcessTimeLineIndex();
         temp.init();
         processesVBox.getChildren().add(temp.getPane());
-        processesDelVBox.getChildren().add(FXMLLoader.load(getClass().getResource("fxml/processIDColumn.fxml")));
+        processesDelVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
 
         // 스크롤 관련 이벤트 핸들러 시작.
         processesDelScrollPane.vvalueProperty().addListener(new ChangeListener<Number>() {
@@ -106,10 +106,10 @@ public class ProcessControls extends GridPane {
         ProcessTimeLine processTimeLine = ProcessTimeLine.getProcessTimeLine(criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime);
         processTimeLine.init();
 
-        GridPane processIDPane = FXMLLoader.load(getClass().getResource("fxml/processID.fxml"));
+        GridPane processIDPane = FXMLLoader.load(getClass().getResource("processID.fxml"));
         ((Text) (processIDPane.getChildren().get(0))).setText(processTimeLine.getProcess().getName());
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/processDelButton.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processDelButton.fxml"));
         fxmlLoader.setController(this);
         Pane processDelButton = fxmlLoader.load();
         processesDelVBox.setAlignment(Pos.CENTER);

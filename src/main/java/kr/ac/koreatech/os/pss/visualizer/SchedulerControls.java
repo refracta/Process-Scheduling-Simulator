@@ -191,8 +191,8 @@ public class SchedulerControls extends GridPane {
         leftMenu = new FlowPane();
         rightMenu = new FlowPane();
 
-        root = FXMLLoader.load(getClass().getResource("fxml/mainFrame.fxml"));
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/schedulerControls.fxml"));
+        root = FXMLLoader.load(getClass().getResource("mainFrame.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("schedulerControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
     }
