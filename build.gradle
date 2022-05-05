@@ -44,8 +44,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     umlDoclet 'nl.talsmasoftware:umldoclet:2.0.15'
     implementation 'com.jfoenix:jfoenix:9.0.10'
-    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
-    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.3.1'
+//    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+//    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.3.1'
 }
 
 test {

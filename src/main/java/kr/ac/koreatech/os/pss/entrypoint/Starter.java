@@ -22,7 +22,9 @@ public class Starter {
      *
      * @param args String[] args
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
+        Logger.getGlobal().info("Hello");
         Application.launch(PSSApplication.class, args);
+        Logger.getGlobal().info("Hello2");
     }
 }

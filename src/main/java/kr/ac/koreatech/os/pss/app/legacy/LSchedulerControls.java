@@ -17,7 +17,6 @@ import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 import kr.ac.koreatech.os.pss.scheduler.impl.*;
-import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -115,8 +114,6 @@ public class LSchedulerControls extends GridPane {
     /**
      * 타임 퀀텀 아이콘
      */
-    @FXML
-    FontIcon timeQuantumIcon;
     /**
      * 타임 퀀텀 설정 텍스트 필드
      */
@@ -131,8 +128,6 @@ public class LSchedulerControls extends GridPane {
     /**
      * 실행큐 최대 프로세스 개수 아이콘
      */
-    @FXML
-    FontIcon queueLimitIcon;
     /**
      * 실행큐 최대 프로세스 개수 설정 텍스트 필드
      */
@@ -147,8 +142,6 @@ public class LSchedulerControls extends GridPane {
     /**
      * 최대 플래그 카운트 개수 아이콘
      */
-    @FXML
-    FontIcon flagLimitIcon;
     /**
      * 최대 플래그 카운트 텍스트 필드
      */
@@ -383,8 +376,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 타임 퀀텀 변수를 입력할 수 있도록 입력을 활성화
      */
     private void setTimeQuantumEnable() {
-        timeQuantumIcon.setFill(new Color(1, 1, 1, 1));
-        timeQuantumIcon.setFill(Color.WHITE);
         timeQuantumTextField.setDisable(false);
         timeQuantumButton.setDisable(false);
     }
@@ -393,7 +384,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 타임 퀀텀 변수를 입력할 수 없도록 입력을 비활성화
      */
     private void setTimeQuantumDisable() {
-        timeQuantumIcon.setFill(new Color(1, 1, 1, 0.4));
         timeQuantumTextField.setDisable(true);
         timeQuantumButton.setDisable(true);
     }
@@ -402,7 +392,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 실행큐 프로세스 최대 개수 변수를 입력할 수 있도록 입력을 활성화
      */
     private void setQueueLimitEnable() {
-        queueLimitIcon.setFill(new Color(1, 1, 1, 1));
         queueLimitTextField.setDisable(false);
         queueLimitButton.setDisable(false);
     }
@@ -411,7 +400,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 실행큐 프로세스 최대 개수 변수를 입력할 수 없도록 입력을 비활성화
      */
     private void setQueueLimitDisable() {
-        queueLimitIcon.setFill(new Color(1, 1, 1, 0.4));
         queueLimitTextField.setDisable(true);
         queueLimitButton.setDisable(true);
     }
@@ -420,7 +408,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 최대 플래그 카운트 변수를 입력할 수 있도록 입력을 활성화
      */
     private void setFlagLimitEnable() {
-        flagLimitIcon.setFill(new Color(1, 1, 1, 1));
         flagLimitTextField.setDisable(false);
         flagLimitButton.setDisable(false);
     }
@@ -429,7 +416,6 @@ public class LSchedulerControls extends GridPane {
      * 사용자가 최대 플래그 카운트 변수를 입력할 수 없도록 입력을 비활성화
      */
     private void setFlagLimitDisable() {
-        flagLimitIcon.setFill(new Color(1, 1, 1, 0.4));
         flagLimitTextField.setDisable(true);
         flagLimitButton.setDisable(true);
     }

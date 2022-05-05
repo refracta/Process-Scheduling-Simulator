@@ -9,6 +9,8 @@ import kr.ac.koreatech.os.pss.app.legacy.LSchedulerControls;
 import kr.ac.koreatech.os.pss.app.loader.FontLoader;
 import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
 
+import java.util.logging.Logger;
+
 /**
  * 스케쥴러 비주얼라이저 클래스
  *
@@ -24,8 +26,11 @@ public class PSSApplication extends Application {
      * @throws Exception Application start's Exception
      */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
+        Logger.getGlobal().info("Hello3");
+
         FontLoader.load();
+        Logger.getGlobal().info("Hello4");
 
 //        primaryStage.setScene(new Scene(LSchedulerControls.getSchedulerControls().getRoot()));
         primaryStage.setScene(new Scene(FXMLUtils.create(VisualizerPane.class)));
