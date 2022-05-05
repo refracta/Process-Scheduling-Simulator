@@ -37,6 +37,59 @@ import java.util.ResourceBundle;
 @CreatableController
 public class SchedulerControlPane extends SingleComponent {
     /**
+     * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
+     */
+    private GridPane root;
+    /**
+     * 스케줄러 설정의 요소를 담고 있는 Pane
+     */
+    private FlowPane leftMenu;
+    /**
+     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
+     */
+    private FlowPane rightMenu;
+
+    /**
+     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
+     */
+    private GridPane pane;
+
+    /**
+     * 프로세서 상태 Pane
+     */
+    private LProcessorsStatus processorsStatus;
+    /**
+     * 프로세스 설정 Pane
+     */
+    private LProcessControls processControls;
+
+    /**
+     * 성능 코어 개수
+     */
+    private int numPerformanceCore;
+    /**
+     * 효율 코어 개수
+     */
+    private int numEfficiencyCore;
+
+    /**
+     * 현재 선택된 스케줄링 기법
+     */
+    private ScheduleMethod currentScheduleMethod;
+    /**
+     * RR에서의 타임 퀀텀
+     */
+    private int currentTimeQuantum;
+    /**
+     * Custom 1에서 실행큐에 넣을 수 있는 프로세스의 최대 개수
+     */
+    private int currentQueueLimit;
+    /**
+     * Custom 2에서 사용할 최대 플래그 카운트
+     */
+    private int currentFlagLimit;
+
+    /**
      * 성능 코어 개수 설정 텍스트 필드
      */
     @FXML
@@ -119,57 +172,27 @@ public class SchedulerControlPane extends SingleComponent {
     JFXButton startButton;
 
     /**
-     * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
+     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
+     *
      */
-    private GridPane root;
-    /**
-     * 스케줄러 설정의 요소를 담고 있는 Pane
-     */
-    private FlowPane leftMenu;
-    /**
-     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
-     */
-    private FlowPane rightMenu;
+    public void init() throws IOException {
+        processorsStatus = LProcessorsStatus.getProcessorsStatus();
+        processControls = LProcessControls.getProcessControls();
 
-    /**
-     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
-     */
-    private GridPane pane;
+        leftMenu.getChildren().add(pane);
+        leftMenu.getChildren().add(processorsStatus.getPane());
 
-    /**
-     * 프로세서 상태 Pane
-     */
-    private LProcessorsStatus processorsStatus;
-    /**
-     * 프로세스 설정 Pane
-     */
-    private LProcessControls processControls;
+        rightMenu.getChildren().add(processControls.getPane());
 
-    /**
-     * 성능 코어 개수
-     */
-    private int numPerformanceCore;
-    /**
-     * 효율 코어 개수
-     */
-    private int numEfficiencyCore;
+        root.add(leftMenu, 0, 0);
+        root.add(rightMenu, 1, 0);
 
-    /**
-     * 현재 선택된 스케줄링 기법
-     */
-    private ScheduleMethod currentScheduleMethod;
-    /**
-     * RR에서의 타임 퀀텀
-     */
-    private int currentTimeQuantum;
-    /**
-     * Custom 1에서 실행큐에 넣을 수 있는 프로세스의 최대 개수
-     */
-    private int currentQueueLimit;
-    /**
-     * Custom 2에서 사용할 최대 플래그 카운트
-     */
-    private int currentFlagLimit;
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
+
+        setTimeQuantumDisable();
+        setQueueLimitDisable();
+        setFlagLimitDisable();
+    }
 
     /**
      * 스케줄러 종류 선택을 적용하는 이벤트 처리기
@@ -178,6 +201,10 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     private void applyScheduleMethod(MouseEvent event) {
+        try {
+            currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
+        } catch (Exception exception) { }
+
         if (currentScheduleMethod == null) return;
 
         setTimeQuantumDisable();
@@ -246,8 +273,7 @@ public class SchedulerControlPane extends SingleComponent {
             numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numPerformanceCore = 0;
-        } catch (Exception exception) {
-        }
+        } catch (Exception exception) { }
     }
 
     /**
@@ -261,8 +287,7 @@ public class SchedulerControlPane extends SingleComponent {
             numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numEfficiencyCore = 0;
-        } catch (Exception exception) {
-        }
+        } catch (Exception exception) { }
     }
 
     /**
@@ -276,8 +301,7 @@ public class SchedulerControlPane extends SingleComponent {
             currentTimeQuantum = Integer.parseInt(timeQuantumTextField.getText());
         } catch (NumberFormatException exception) {
             currentTimeQuantum = 0;
-        } catch (Exception exception) {
-        }
+        } catch (Exception exception) { }
     }
 
     /**
@@ -291,8 +315,7 @@ public class SchedulerControlPane extends SingleComponent {
             currentQueueLimit = Integer.parseInt(queueLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentQueueLimit = 0;
-        } catch (Exception exception) {
-        }
+        } catch (Exception exception) { }
     }
 
     /**
@@ -306,8 +329,7 @@ public class SchedulerControlPane extends SingleComponent {
             currentFlagLimit = Integer.parseInt(flagLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentFlagLimit = 0;
-        } catch (Exception exception) {
-        }
+        } catch (Exception exception) { }
     }
 
     /**
@@ -396,7 +418,8 @@ public class SchedulerControlPane extends SingleComponent {
      */
     private boolean isSchedulerReady() {
         if (currentScheduleMethod == null) return false;
-        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0)) return false;
+        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0))
+            return false;
 
         switch (currentScheduleMethod) {
             case RR:
@@ -460,11 +483,6 @@ public class SchedulerControlPane extends SingleComponent {
 
         return new FCFSScheduler();
     }
-
-
-    /**
-     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
-     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);

@@ -17,6 +17,11 @@ import java.util.List;
 @CreatableController
 public class ProcessorStatusPane extends SingleComponent {
     /**
+     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
+     */
+    private GridPane pane;
+
+    /**
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
@@ -79,5 +84,9 @@ public class ProcessorStatusPane extends SingleComponent {
      */
     public void update(List<AbstractCore> cores, ScheduleData scheduleData) {
         init(cores, scheduleData);
+    }
+
+    public GridPane getPane() {
+        return pane;
     }
 }
