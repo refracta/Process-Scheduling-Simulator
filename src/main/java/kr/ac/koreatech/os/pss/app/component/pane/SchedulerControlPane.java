@@ -3,24 +3,14 @@ package kr.ac.koreatech.os.pss.app.component.pane;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
-import kr.ac.koreatech.os.pss.app.legacy.LProcessorsStatus;
-import kr.ac.koreatech.os.pss.app.legacy.LSchedulerControls;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
-import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
@@ -36,32 +26,6 @@ import java.util.ResourceBundle;
 
 @CreatableController
 public class SchedulerControlPane extends SingleComponent {
-    /**
-     * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
-     */
-    private GridPane root;
-    /**
-     * 스케줄러 설정의 요소를 담고 있는 Pane
-     */
-    private FlowPane leftMenu;
-    /**
-     * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
-     */
-    private FlowPane rightMenu;
-
-    /**
-     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
-     */
-    private GridPane pane;
-
-    /**
-     * 프로세서 상태 Pane
-     */
-    private LProcessorsStatus processorsStatus;
-    /**
-     * 프로세스 설정 Pane
-     */
-    private LProcessControls processControls;
 
     /**
      * 성능 코어 개수
@@ -173,21 +137,11 @@ public class SchedulerControlPane extends SingleComponent {
 
     /**
      * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
-     *
      */
     public void init() throws IOException {
-        processorsStatus = LProcessorsStatus.getProcessorsStatus();
-        processControls = LProcessControls.getProcessControls();
-
-        leftMenu.getChildren().add(pane);
-        leftMenu.getChildren().add(processorsStatus.getPane());
-
-        rightMenu.getChildren().add(processControls.getPane());
-
-        root.add(leftMenu, 0, 0);
-        root.add(rightMenu, 1, 0);
-
-        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
+            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
+        });
 
         setTimeQuantumDisable();
         setQueueLimitDisable();
@@ -203,7 +157,8 @@ public class SchedulerControlPane extends SingleComponent {
     private void applyScheduleMethod(MouseEvent event) {
         try {
             currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
 
         if (currentScheduleMethod == null) return;
 
@@ -253,13 +208,13 @@ public class SchedulerControlPane extends SingleComponent {
 //                new DefaultProcess(6, 0, 5),
 //        };
 
-        List<DefaultProcess> processes = processControls.getProcesses();
+//        List<DefaultProcess> processes = processControls.getProcesses();
 
         AbstractScheduler scheduler = getScheduler();
 //        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
-        ScheduleData scheduleData = scheduler.schedule(cores, processes);
+//        ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
-        updateProcessorsStatus(cores, scheduleData);
+//        updateProcessorsStatus(cores, scheduleData);
     }
 
     /**
@@ -273,7 +228,8 @@ public class SchedulerControlPane extends SingleComponent {
             numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numPerformanceCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -287,7 +243,8 @@ public class SchedulerControlPane extends SingleComponent {
             numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numEfficiencyCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -301,7 +258,8 @@ public class SchedulerControlPane extends SingleComponent {
             currentTimeQuantum = Integer.parseInt(timeQuantumTextField.getText());
         } catch (NumberFormatException exception) {
             currentTimeQuantum = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -315,7 +273,8 @@ public class SchedulerControlPane extends SingleComponent {
             currentQueueLimit = Integer.parseInt(queueLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentQueueLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -329,9 +288,9 @@ public class SchedulerControlPane extends SingleComponent {
             currentFlagLimit = Integer.parseInt(flagLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentFlagLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
-
     /**
      * 입력된 코어와 스케줄 데이터를 통해 프로세서 상태 갱신 및 적용
      *
@@ -340,7 +299,7 @@ public class SchedulerControlPane extends SingleComponent {
      * @throws IOException
      */
     public void updateProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
-        processorsStatus.update(cores, scheduleData);
+//        processorsStatus.update(cores, scheduleData);
     }
 
 
@@ -483,6 +442,7 @@ public class SchedulerControlPane extends SingleComponent {
 
         return new FCFSScheduler();
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
