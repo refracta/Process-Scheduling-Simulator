@@ -10,4 +10,6 @@ module kr.ac.koreatech.os.pss {
     requires org.kordamp.ikonli.javafx;
 
     opens kr.ac.koreatech.os.pss.visualizer to javafx.graphics, javafx.fxml, com.jfoenix, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.visualizer.timeline to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
+    opens kr.ac.koreatech.os.pss.visualizer.timeline.impl to com.jfoenix, javafx.fxml, javafx.graphics, org.kordamp.ikonli.javafx;
 }
