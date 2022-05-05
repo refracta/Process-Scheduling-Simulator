@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="1130.0" stylesheets="@css/processControls.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/1">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="1130.0" stylesheets="@../css/processControls.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1200.0" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>

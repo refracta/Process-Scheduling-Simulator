@@ -1,4 +1,4 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.io.IOException;
 
-public class ProcessTimeLine extends Pane {
+public class LProcessTimeLine extends Pane {
     protected Pane pane;
 
     protected double height;
@@ -19,25 +19,25 @@ public class ProcessTimeLine extends Pane {
     protected double lengthFactor;
     private int actionState;
 
-    private ProcessControls processControls;
-    private TimeLineBar timeLineBar;
+    private LProcessControls processControls;
+    private LTimeLineBar timeLineBar;
 
     private DefaultProcess process;
 
-    public static ProcessTimeLine getProcessTimeLine() throws IOException {
-        return ProcessTimeLine.getProcessTimeLine(10);
+    public static LProcessTimeLine getProcessTimeLine() throws IOException {
+        return LProcessTimeLine.getProcessTimeLine(10);
     }
 
-    public static ProcessTimeLine getProcessTimeLine(int criteriaArrivalTime) throws IOException {
-        ProcessTimeLine processTimeLine = new ProcessTimeLine(criteriaArrivalTime);
+    public static LProcessTimeLine getProcessTimeLine(int criteriaArrivalTime) throws IOException {
+        LProcessTimeLine processTimeLine = new LProcessTimeLine(criteriaArrivalTime);
         return processTimeLine;
     }
 
-    protected ProcessTimeLine() throws IOException {
+    protected LProcessTimeLine() throws IOException {
         this(10);
     }
 
-    protected ProcessTimeLine(int criteriaEndTime) throws IOException {
+    protected LProcessTimeLine(int criteriaEndTime) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processTimeLine.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
@@ -47,7 +47,7 @@ public class ProcessTimeLine extends Pane {
     public void init() {
         height = 30;
         lengthFactor = 800 / criteriaEndTime;
-        timeLineBar = new TimeLineBar(0, 1, 800, height, lengthFactor);
+        timeLineBar = new LTimeLineBar(0, 1, 800, height, lengthFactor);
 
         for (int i = 0; i <= criteriaEndTime; i++) { pane.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, height)); }
         pane.getChildren().add(timeLineBar);
@@ -193,11 +193,11 @@ public class ProcessTimeLine extends Pane {
         return process.getArrivalTime() + process.getBurstTime();
     }
 
-    public TimeLineBar getTimeLineBar() {
+    public LTimeLineBar getTimeLineBar() {
         return timeLineBar;
     }
 
-    public void setProcessControls(ProcessControls processControls) {
+    public void setProcessControls(LProcessControls processControls) {
         this.processControls = processControls;
     }
 }

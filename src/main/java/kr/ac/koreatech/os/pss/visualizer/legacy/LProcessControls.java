@@ -1,4 +1,4 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessControls extends GridPane {
+public class LProcessControls extends GridPane {
     private GridPane pane;
 
     @FXML
@@ -43,22 +43,22 @@ public class ProcessControls extends GridPane {
     @FXML
     private JFXSlider criteriaEndTimeSlider;
 
-    private List<ProcessTimeLine> processTimeLines;
+    private List<LProcessTimeLine> processTimeLines;
     private int criteriaEndTime;
 
-    public static ProcessControls getProcessControls() throws IOException {
-        return new ProcessControls();
+    public static LProcessControls getProcessControls() throws IOException {
+        return new LProcessControls();
     }
 
-    private ProcessControls() throws IOException {
+    private LProcessControls() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
-        this.processTimeLines = new ArrayList<ProcessTimeLine>();
+        this.processTimeLines = new ArrayList<LProcessTimeLine>();
         this.criteriaEndTime = 10;
 
         processesIDVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
-        ProcessTimeLineIndex temp = ProcessTimeLineIndex.getProcessTimeLineIndex();
+        LProcessTimeLineIndex temp = LProcessTimeLineIndex.getProcessTimeLineIndex();
         temp.init();
         processesVBox.getChildren().add(temp.getPane());
         processesDelVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
@@ -103,7 +103,7 @@ public class ProcessControls extends GridPane {
     @FXML
     private void addProcess(MouseEvent event) throws IOException {
         int currentCriteriaEndTime = criteriaEndTimeSlider.valueProperty().getValue().intValue();
-        ProcessTimeLine processTimeLine = ProcessTimeLine.getProcessTimeLine(criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime);
+        LProcessTimeLine processTimeLine = LProcessTimeLine.getProcessTimeLine(criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime);
         processTimeLine.init();
 
         GridPane processIDPane = FXMLLoader.load(getClass().getResource("processID.fxml"));
@@ -155,7 +155,7 @@ public class ProcessControls extends GridPane {
         return processesList;
     }
 
-    public List<ProcessTimeLine> getProcessTimeLines() {
+    public List<LProcessTimeLine> getProcessTimeLines() {
         return processTimeLines;
     }
 

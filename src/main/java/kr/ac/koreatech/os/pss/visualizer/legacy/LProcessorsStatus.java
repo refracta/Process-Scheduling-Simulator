@@ -1,11 +1,10 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.List;
  *
  * @author unta1337
  */
-public class ProcessorsStatus extends GridPane {
+public class LProcessorsStatus extends GridPane {
     /**
      * 컨트롤러 객체가 담당하고 있는 GridPane 객체
      */
@@ -65,8 +64,8 @@ public class ProcessorsStatus extends GridPane {
      * @return
      * @throws IOException
      */
-    public static ProcessorsStatus getProcessorsStatus() throws IOException {
-        return new ProcessorsStatus();
+    public static LProcessorsStatus getProcessorsStatus() throws IOException {
+        return new LProcessorsStatus();
     }
 
     /**
@@ -77,8 +76,8 @@ public class ProcessorsStatus extends GridPane {
      * @return
      * @throws IOException
      */
-    public static ProcessorsStatus getProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
-        ProcessorsStatus controller = new ProcessorsStatus();
+    public static LProcessorsStatus getProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
+        LProcessorsStatus controller = new LProcessorsStatus();
         controller.init(cores, scheduleData);
         return controller;
     }
@@ -92,7 +91,7 @@ public class ProcessorsStatus extends GridPane {
      * @return
      * @throws IOException
      */
-    public static ProcessorsStatus getProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
+    public static LProcessorsStatus getProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
         return getProcessorsStatus(Arrays.asList(cores), scheduleData);
     }
 
@@ -102,7 +101,7 @@ public class ProcessorsStatus extends GridPane {
      *
      * @throws IOException
      */
-    private ProcessorsStatus() throws IOException {
+    private LProcessorsStatus() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processorsStatus.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();

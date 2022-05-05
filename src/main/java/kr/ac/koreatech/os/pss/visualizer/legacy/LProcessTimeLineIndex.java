@@ -1,4 +1,4 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.Pane;
@@ -6,13 +6,13 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 
-public class ProcessTimeLineIndex extends ProcessTimeLine {
-    public static ProcessTimeLineIndex getProcessTimeLineIndex() throws IOException {
-        ProcessTimeLineIndex processTimeLineIndex = new ProcessTimeLineIndex();
+public class LProcessTimeLineIndex extends LProcessTimeLine {
+    public static LProcessTimeLineIndex getProcessTimeLineIndex() throws IOException {
+        LProcessTimeLineIndex processTimeLineIndex = new LProcessTimeLineIndex();
         return processTimeLineIndex;
     }
 
-    private ProcessTimeLineIndex() throws IOException {
+    private LProcessTimeLineIndex() throws IOException {
         super();
     }
 

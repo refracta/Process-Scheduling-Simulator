@@ -1,10 +1,7 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXSlider;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
@@ -33,7 +30,7 @@ import java.util.List;
  *
  * @author unta1337
  */
-public class SchedulerControls extends GridPane {
+public class LSchedulerControls extends GridPane {
     /**
      * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
      */
@@ -55,11 +52,11 @@ public class SchedulerControls extends GridPane {
     /**
      * 프로세서 상태 Pane
      */
-    private ProcessorsStatus processorsStatus;
+    private LProcessorsStatus processorsStatus;
     /**
      * 프로세스 설정 Pane
      */
-    private ProcessControls processControls;
+    private LProcessControls processControls;
 
     /**
      * 성능 코어 개수
@@ -175,8 +172,8 @@ public class SchedulerControls extends GridPane {
      * @return SchedulerControls의 컨트롤러
      * @throws IOException
      */
-    public static SchedulerControls getSchedulerControls() throws IOException {
-        SchedulerControls controller = new SchedulerControls();
+    public static LSchedulerControls getSchedulerControls() throws IOException {
+        LSchedulerControls controller = new LSchedulerControls();
         controller.init();
         return controller;
     }
@@ -187,7 +184,7 @@ public class SchedulerControls extends GridPane {
      *
      * @throws IOException
      */
-    private SchedulerControls() throws IOException {
+    private LSchedulerControls() throws IOException {
         leftMenu = new FlowPane();
         rightMenu = new FlowPane();
 
@@ -202,8 +199,8 @@ public class SchedulerControls extends GridPane {
      *
      */
     public void init() throws IOException {
-        processorsStatus = ProcessorsStatus.getProcessorsStatus();
-        processControls = ProcessControls.getProcessControls();
+        processorsStatus = LProcessorsStatus.getProcessorsStatus();
+        processControls = LProcessControls.getProcessControls();
 
         leftMenu.getChildren().add(pane);
         leftMenu.getChildren().add(processorsStatus.getPane());

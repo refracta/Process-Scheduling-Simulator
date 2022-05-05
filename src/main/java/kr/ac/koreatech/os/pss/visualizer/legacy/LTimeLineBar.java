@@ -1,10 +1,10 @@
-package kr.ac.koreatech.os.pss.visualizer;
+package kr.ac.koreatech.os.pss.visualizer.legacy;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-class TimeLineBar extends Pane {
+class LTimeLineBar extends Pane {
     private int arrivalTime;
     private int burstTime;
 
@@ -14,7 +14,7 @@ class TimeLineBar extends Pane {
 
     private Color barColor;
 
-    public TimeLineBar(int arrivalTime, int burstTime, double windowWidth, double windowHeight, double lengthFactor) {
+    public LTimeLineBar(int arrivalTime, int burstTime, double windowWidth, double windowHeight, double lengthFactor) {
         this.arrivalTime = arrivalTime;
         this.burstTime = burstTime;
         this.lengthFactor = lengthFactor;

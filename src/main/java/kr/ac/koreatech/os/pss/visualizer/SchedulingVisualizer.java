@@ -2,9 +2,9 @@ package kr.ac.koreatech.os.pss.visualizer;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import kr.ac.koreatech.os.pss.visualizer.legacy.LSchedulerControls;
 
 /**
  * 스케쥴러 비주얼라이저 클래스
@@ -24,7 +24,7 @@ public class SchedulingVisualizer extends Application {
     public void start(Stage primaryStage) throws Exception {
         preLoad();
 
-        SchedulerControls schedulerControls = SchedulerControls.getSchedulerControls();
+        LSchedulerControls schedulerControls = LSchedulerControls.getSchedulerControls();
 
         Scene scene = new Scene(schedulerControls.getRoot());
         primaryStage.setScene(scene);
