@@ -102,11 +102,11 @@ public class SchedulerControlPane extends SingleComponent {
             case RR:
                 setTimeQuantumDisable(false);
                 break;
-            case Custom1:
+            case RR2Q:
                 setTimeQuantumDisable(false);
                 setQueueLimitDisable(false);
                 break;
-            case Custom2:
+            case GMRL:
                 setTimeQuantumDisable(false);
                 setFlagLimitDisable(false);
                 break;
@@ -191,9 +191,9 @@ public class SchedulerControlPane extends SingleComponent {
             switch (scheduleMethod.get()) {
                 case RR:
                     return isRRReady();
-                case Custom1:
+                case RR2Q:
                     return isCustom1Ready();
-                case Custom2:
+                case GMRL:
                     return isCustom2Ready();
                 default:
                     return true;
@@ -249,8 +249,8 @@ public class SchedulerControlPane extends SingleComponent {
                     return new SPNScheduler();
                 case HRRN:
                     return new HRRNScheduler();
-                case Custom1:
-                case Custom2:
+                case RR2Q:
+                case GMRL:
             }
         }
         return new FCFSScheduler();
