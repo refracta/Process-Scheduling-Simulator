@@ -2,12 +2,9 @@ package kr.ac.koreatech.os.pss.app.component.pane;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane;
-import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.TimelineBar;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.legacy.timeline.LAbstractTimeLine;
 import kr.ac.koreatech.os.pss.app.legacy.timeline.impl.LProcessTimeLine;
@@ -19,8 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import static kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane.ActionState;
 
 @CreatableController
 public class ProcessTimelineContainerPane extends SingleComponent {
@@ -47,6 +42,10 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     private double lengthFactor;
 
     public ProcessTimelineContainerPane() {
+    }
+
+    public ProcessTimelineContainerPane(int criteriaEndTime, double width, double height) throws IOException {
+        ProcessTimelineContainerPane processTimelineContainerPane = new ProcessTimelineContainerPane(criteriaEndTime, 800, 20);
     }
 
     @Override
@@ -76,11 +75,6 @@ public class ProcessTimelineContainerPane extends SingleComponent {
             processScrollPane.vvalueProperty().setValue(newValue.doubleValue());
         });
         // 스크롤 관련 이벤트 핸들러 끝.
-}
-
-
-    public ProcessTimelineContainerPane(int criteriaEndTime, double width, double height) throws IOException {
-        ProcessTimelineContainerPane processTimelineContainerPane = new ProcessTimelineContainerPane(criteriaEndTime, 800, 20);
     }
 
     @FXML
@@ -99,7 +93,7 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     public List<DefaultProcess> getprocess() {
         List<DefaultProcess> processList = new ArrayList<DefaultProcess>();
         for (LAbstractTimeLine p : processTimeLines) {
-            processList.add(((LProcessTimeLine)p).getProcess());
+            processList.add(((LProcessTimeLine) p).getProcess());
         }
         return processList;
     }

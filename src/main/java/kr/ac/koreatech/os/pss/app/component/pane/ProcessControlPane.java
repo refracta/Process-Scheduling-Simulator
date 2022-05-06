@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXSlider;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.TimelineBar;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
@@ -25,6 +26,9 @@ public class ProcessControlPane extends SingleComponent {
 
     @FXML
     private JFXButton delAllButton;
+
+    @FXML
+    private GridPane processTimelineContainerPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,95 +59,91 @@ public class ProcessControlPane extends SingleComponent {
 //        processesDelVBox.getChildren().add(processDelButton);
 ////        processTimeLines.add(processTimeLine);
 
-        ProcessTimelinePane timelinePane = new ProcessTimelinePane(10, 80, 30);
-        TimelineBar timelineBar = timelinePane.getTimeLineBar();
-        ProcessTimelineContainerPane containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
-        double lengthFactor = containerPane.getLengthFactor();
-        // TODO: 하향식으로 변환하기, 변수명 변경
+        ProcessTimelinePane timeline = new ProcessTimelinePane(10, 80, 30);
+        // TODO: 상수 분리할 것
+        TimelineBar bar = timeline.getTimelineBar();
+        ProcessTimelineContainerPane container = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
+        double lengthFactor = container.getLengthFactor();
 
-        timelinePane.setOnMouseMoved(e -> {
-            double processedX = e.getX() - timelineBar.getLayoutX();
+        timeline.setOnMouseMoved(e -> {
+            double processedX = e.getX() - bar.getLayoutX();
 
-            boolean leftCondition = timelineBar.isInLeft(processedX);
-            boolean rightCondition = timelineBar.isInRight(processedX, lengthFactor);
-            boolean middleCondition = timelineBar.isInMiddle(processedX, lengthFactor);
+            boolean leftCondition = bar.isInLeft(processedX);
+            boolean rightCondition = bar.isInRight(processedX, lengthFactor);
+            boolean middleCondition = bar.isInMiddle(processedX, lengthFactor);
 
             if (leftCondition || rightCondition || middleCondition) {
-                if (leftCondition || rightCondition)
-                    timelinePane.setCursor(Cursor.H_RESIZE);
-                else
-                    timelinePane.setCursor(Cursor.DEFAULT);
-                timelineBar.makeTransparent();
+                if (leftCondition || rightCondition) timeline.setCursor(Cursor.H_RESIZE);
+                else timeline.setCursor(Cursor.DEFAULT);
+                bar.makeTransparent();
             } else {
-                timelineBar.makeOpaque();
-                timelineBar.setCursor(Cursor.DEFAULT);
+                bar.makeOpaque();
+                bar.setCursor(Cursor.DEFAULT);
             }
         });
 
-        timelinePane.setOnMouseExited(e -> {
-            timelineBar.makeOpaque();
-            timelinePane.setCursor(Cursor.DEFAULT);
+        timeline.setOnMouseExited(e -> {
+            bar.makeOpaque();
+            timeline.setCursor(Cursor.DEFAULT);
         });
 
-        timelinePane.setOnMouseDragged(e -> {
-            double processedX = event.getX() - timelineBar.getLayoutX();
+        timeline.setOnMouseDragged(e -> {
+            double processedX = event.getX() - bar.getLayoutX();
 
-            switch (timelinePane.getActionState()) {
+            switch (timeline.getActionState()) {
                 case IDLE:
-                    if (timelineBar.isInMiddle(processedX, lengthFactor))
-                        timelinePane.setActionState(ProcessTimelinePane.ActionState.MOVE);
-                    else if (timelineBar.isInLeft(processedX))
-                        timelinePane.setActionState(ActionState.EXTEND_LEFT);
-                    else if (timelineBar.isInRight(processedX, lengthFactor))
-                        timelinePane.setActionState(ActionState.EXTEND_RIGHT);
+                    if (bar.isInMiddle(processedX, lengthFactor))
+                        timeline.setActionState(ProcessTimelinePane.ActionState.MOVE);
+                    else if (bar.isInLeft(processedX)) timeline.setActionState(ActionState.EXTEND_LEFT);
+                    else if (bar.isInRight(processedX, lengthFactor)) timeline.setActionState(ActionState.EXTEND_RIGHT);
                     break;
                 case EXTEND_LEFT:
-                    timelinePane.setCursor(Cursor.H_RESIZE);
-                    double newWidth = timelineBar.getLayoutX() + timelineBar.getWidth() - Math.max(0, event.getX());
-                    timelineBar.setLayoutX(Math.max(0, event.getX()));
-                    timelineBar.setWidth(newWidth);
+                    timeline.setCursor(Cursor.H_RESIZE);
+                    double newWidth = bar.getLayoutX() + bar.getWidth() - Math.max(0, event.getX());
+                    bar.setLayoutX(Math.max(0, event.getX()));
+                    bar.setWidth(newWidth);
                     break;
                 case EXTEND_RIGHT:
-                    timelinePane.setCursor(Cursor.H_RESIZE);
-                    newWidth = event.getX() - timelineBar.getLayoutX();
-                    timelineBar.setWidth(newWidth);
+                    timeline.setCursor(Cursor.H_RESIZE);
+                    newWidth = event.getX() - bar.getLayoutX();
+                    bar.setWidth(newWidth);
                     break;
                 case MOVE:
-                    timelineBar.setLayoutX(Math.max(0, event.getX() - timelineBar.getWidth() / 2));
+                    bar.setLayoutX(Math.max(0, event.getX() - bar.getWidth() / 2));
                     break;
             }
         });
 
-        timelinePane.setOnMouseReleased(e -> {
-            switch (timelinePane.getActionState()) {
+        timeline.setOnMouseReleased(e -> {
+            switch (timeline.getActionState()) {
                 case EXTEND_LEFT:
-                    int index = timelineBar.getLeftExpendedIndex(event.getX(), lengthFactor);
-                    timelineBar.update(index, timelineBar.getEndTime() - index, lengthFactor);
-                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
+                    int index = bar.getLeftExpendedIndex(event.getX(), lengthFactor);
+                    bar.update(index, bar.getEndTime() - index, lengthFactor);
+                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
                     break;
                 case EXTEND_RIGHT:
-                    index = timelineBar.getRightExpendedIndex(event.getX(), lengthFactor);
-                    timelineBar.update(timelineBar.getArrivalTime(), index - timelineBar.getArrivalTime(), lengthFactor);
+                    index = bar.getRightExpendedIndex(event.getX(), lengthFactor);
+                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), lengthFactor);
                     break;
                 case MOVE:
-                    index = timelineBar.getMovedIndex(event.getX() - timelineBar.getWidth() / 2, lengthFactor);
-                    timelineBar.update(index, timelineBar.getBurstTime(), lengthFactor);
-                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
+                    index = bar.getMovedIndex(event.getX() - bar.getWidth() / 2, lengthFactor);
+                    bar.update(index, bar.getBurstTime(), lengthFactor);
+                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
                     break;
             }
 
-            DefaultProcess process = timelinePane.getProcess();
-            process.setArrivalTime(timelineBar.getArrivalTime());
-            process.setBurstTime(timelineBar.getBurstTime());
+            DefaultProcess process = timeline.getProcess();
+            process.setArrivalTime(bar.getArrivalTime());
+            process.setBurstTime(bar.getBurstTime());
 
-            timelinePane.setCursor(Cursor.DEFAULT);
-            timelinePane.setActionState(ActionState.IDLE);
+            timeline.setCursor(Cursor.DEFAULT);
+            timeline.setActionState(ActionState.IDLE);
 
-            containerPane.updateAllScales();
+            container.updateAllScales();
         });
 
         delAllButton.setOnMouseClicked(e -> {
-            containerPane.delAllprocess();
+            container.delAllprocess();
         });
     }
 }
