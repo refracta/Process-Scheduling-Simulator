@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * 단일 생성 컴포넌트 클래스
+ * @author refracta
+ */
 public abstract class SingleComponent implements Initializable {
     private static Map<Class<?>, SingleComponent> componentMap = new ConcurrentHashMap<>();
 
