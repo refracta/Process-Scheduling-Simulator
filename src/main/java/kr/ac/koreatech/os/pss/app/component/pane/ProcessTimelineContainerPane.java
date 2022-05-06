@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.legacy.timeline.LAbstractTimeLine;
@@ -36,7 +37,7 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     private double width;
     private double height;
 
-    private List<LAbstractTimeLine> processTimeLines;
+    private List<ProcessTimelinePane> processTimeLines;
     private int criteriaEndTime;
     private int maxEndTime;
     private double lengthFactor;
@@ -92,19 +93,36 @@ public class ProcessTimelineContainerPane extends SingleComponent {
 
     public List<DefaultProcess> getprocess() {
         List<DefaultProcess> processList = new ArrayList<DefaultProcess>();
-        for (LAbstractTimeLine p : processTimeLines) {
-            processList.add(((LProcessTimeLine) p).getProcess());
+        for (ProcessTimelinePane p : processTimeLines) {
+            processList.add(((ProcessTimelinePane)p).getProcess());
         }
         return processList;
     }
 
     public void updateAllScales() {
-        maxEndTime = processTimeLines.stream().mapToInt(p -> ((LProcessTimeLine) p).getProcess().getEndTime()).max().getAsInt();
-        processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
+        maxEndTime = processTimeLines.stream().mapToInt(p -> ((ProcessTimelinePane) p).getProcess().getEndTime()).max().getAsInt();
+        processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
+    }
+
+    public void setLengthFactor(double lengthFactor) {
+        this.lengthFactor = lengthFactor;
+    }
+
+    public void setCriteriaEndTime(int criteriaEndTime) {
+        this.criteriaEndTime = criteriaEndTime;
+        this.lengthFactor = width / criteriaEndTime;
     }
 
     public double getLengthFactor() {
         return lengthFactor;
+    }
+
+    public int getMaxEndTime() {
+        return maxEndTime;
+    }
+
+    public int getCriteriaEndTime() {
+        return criteriaEndTime;
     }
 
     public void delAllprocess() {
@@ -114,5 +132,21 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         processTimeLines.clear();
 
         updateAllScales();
+    }
+
+    public VBox getProcessIDVBox() {
+        return processIDVBox;
+    }
+
+    public VBox getProcessVBox() {
+        return processVBox;
+    }
+
+    public VBox getProcessDelVBox() {
+        return processDelVBox;
+    }
+
+    public List<ProcessTimelinePane> getProcessTimeLInes() {
+        return processTimeLines;
     }
 }

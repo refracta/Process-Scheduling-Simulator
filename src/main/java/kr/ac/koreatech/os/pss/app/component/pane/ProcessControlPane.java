@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXSlider;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.TimelineBar;
@@ -26,47 +27,47 @@ public class ProcessControlPane extends SingleComponent {
 
     @FXML
     private JFXButton delAllButton;
-
+    
     @FXML
     private GridPane processTimelineContainerPane;
+
+    private ProcessTimelineContainerPane containerPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
 
+        containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
+
         // 축적 슬라이더 이벤트 핸들러.
         criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            // update Scale하는 거 함수로 빼서 설정할 것.
-//            processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
+            containerPane.setCriteriaEndTime(newValue.intValue());
+            containerPane.updateAllScales();
         });
     }
 
     @FXML
     private void addProcess(MouseEvent event) throws IOException {
-//        int newCriteriaEndTime = criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime;
-////        LProcessTimeLine processTimeLine = new LProcessTimeLine(newCriteriaEndTime, width, height, this);
-//
-//        GridPane processIDPane = FXMLLoader.load(getClass().getResource("processID.fxml"));
-////        ((Text) (processIDPane.getChildren().get(0))).setText(processTimeLine.getProcess().getName());
-//
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processDelButton.fxml"));
-//        fxmlLoader.setController(this);
-//        Pane processDelButton = fxmlLoader.load();
-//        processesDelVBox.setAlignment(Pos.CENTER);
-//
-//        processesIDVBox.getChildren().add(processIDPane);
-////        processesVBox.getChildren().add(processTimeLine);
-//        processesDelVBox.getChildren().add(processDelButton);
-////        processTimeLines.add(processTimeLine);
+        ProcessTimelinePane timelinePane = new ProcessTimelinePane(10, 80, 30);
+        TimelineBar timelineBar = timelinePane.getTimeLineBar();
+        ProcessTimelineContainerPane containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
+        double lengthFactor = containerPane.getLengthFactor();
+        // TODO: 변수명 변경, 상수 분리할 것.
 
-        ProcessTimelinePane timeline = new ProcessTimelinePane(10, 80, 30);
-        // TODO: 상수 분리할 것
-        TimelineBar bar = timeline.getTimelineBar();
-        ProcessTimelineContainerPane container = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
-        double lengthFactor = container.getLengthFactor();
+        /* WrapperPane 이용해 추가하기.
+        containerPane.getProcessIDVBox().getChildren().add();
+        containerPane.getProcessDelVBox().getChildren().add();
+         */
 
-        timeline.setOnMouseMoved(e -> {
-            double processedX = e.getX() - bar.getLayoutX();
+        // 임시 Rectangle 객체 삽입.
+        containerPane.getProcessIDVBox().getChildren().add(new Rectangle(100, 31));
+        containerPane.getProcessDelVBox().getChildren().add(new Rectangle(200, 31));
+        containerPane.getProcessVBox().getChildren().add(timelinePane);
+        containerPane.getProcessTimeLInes().add(timelinePane);
+
+        // 이벤트 핸들러 매핑.
+        timelinePane.setOnMouseMoved(e -> {
+            double processedX = e.getX() - timelineBar.getLayoutX();
 
             boolean leftCondition = bar.isInLeft(processedX);
             boolean rightCondition = bar.isInRight(processedX, lengthFactor);
@@ -87,8 +88,8 @@ public class ProcessControlPane extends SingleComponent {
             timeline.setCursor(Cursor.DEFAULT);
         });
 
-        timeline.setOnMouseDragged(e -> {
-            double processedX = event.getX() - bar.getLayoutX();
+        timelinePane.setOnMouseDragged(e -> {
+            double processedX = e.getX() - timelineBar.getLayoutX();
 
             switch (timeline.getActionState()) {
                 case IDLE:
@@ -98,18 +99,18 @@ public class ProcessControlPane extends SingleComponent {
                     else if (bar.isInRight(processedX, lengthFactor)) timeline.setActionState(ActionState.EXTEND_RIGHT);
                     break;
                 case EXTEND_LEFT:
-                    timeline.setCursor(Cursor.H_RESIZE);
-                    double newWidth = bar.getLayoutX() + bar.getWidth() - Math.max(0, event.getX());
-                    bar.setLayoutX(Math.max(0, event.getX()));
-                    bar.setWidth(newWidth);
+                    timelinePane.setCursor(Cursor.H_RESIZE);
+                    double newWidth = timelineBar.getLayoutX() + timelineBar.getWidth() - Math.max(0, e.getX());
+                    timelineBar.setLayoutX(Math.max(0, e.getX()));
+                    timelineBar.setWidth(newWidth);
                     break;
                 case EXTEND_RIGHT:
-                    timeline.setCursor(Cursor.H_RESIZE);
-                    newWidth = event.getX() - bar.getLayoutX();
-                    bar.setWidth(newWidth);
+                    timelinePane.setCursor(Cursor.H_RESIZE);
+                    newWidth = e.getX() - timelineBar.getLayoutX();
+                    timelineBar.setWidth(newWidth);
                     break;
                 case MOVE:
-                    bar.setLayoutX(Math.max(0, event.getX() - bar.getWidth() / 2));
+                    timelineBar.setLayoutX(Math.max(0, e.getX() - timelineBar.getWidth() / 2));
                     break;
             }
         });
@@ -117,18 +118,18 @@ public class ProcessControlPane extends SingleComponent {
         timeline.setOnMouseReleased(e -> {
             switch (timeline.getActionState()) {
                 case EXTEND_LEFT:
-                    int index = bar.getLeftExpendedIndex(event.getX(), lengthFactor);
-                    bar.update(index, bar.getEndTime() - index, lengthFactor);
-                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
+                    int index = timelineBar.getLeftExpendedIndex(e.getX(), lengthFactor);
+                    timelineBar.update(index, timelineBar.getEndTime() - index, lengthFactor);
+                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
                     break;
                 case EXTEND_RIGHT:
-                    index = bar.getRightExpendedIndex(event.getX(), lengthFactor);
-                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), lengthFactor);
+                    index = timelineBar.getRightExpendedIndex(e.getX(), lengthFactor);
+                    timelineBar.update(timelineBar.getArrivalTime(), index - timelineBar.getArrivalTime(), lengthFactor);
                     break;
                 case MOVE:
-                    index = bar.getMovedIndex(event.getX() - bar.getWidth() / 2, lengthFactor);
-                    bar.update(index, bar.getBurstTime(), lengthFactor);
-                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
+                    index = timelineBar.getMovedIndex(e.getX() - timelineBar.getWidth() / 2, lengthFactor);
+                    timelineBar.update(index, timelineBar.getBurstTime(), lengthFactor);
+                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
                     break;
             }
 
