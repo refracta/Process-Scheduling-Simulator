@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-
-<?import javafx.scene.layout.Pane?>
-<Pane xmlns:fx="http://javafx.com/fxml/1" fx:id="timeLine" maxHeight="-Infinity" maxWidth="-Infinity"
-      onMouseDragged="#onMouseDragged" onMouseExited="#onMouseExited" onMouseMoved="#onMouseMoved"
-      onMouseReleased="#onMouseReleased" xmlns="http://javafx.com/javafx/17"/>
