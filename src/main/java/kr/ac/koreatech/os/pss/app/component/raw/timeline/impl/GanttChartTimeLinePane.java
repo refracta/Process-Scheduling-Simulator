@@ -7,6 +7,7 @@ import kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.ArrayList;
@@ -47,7 +48,9 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
 
         for (DefaultProcess process : processes) {
             if (process.getId() == -1) continue;
-            int currentTime = process.getArrivalTime() + process.getWaitingTime() + process.getBurstTime() - process.getLeftBurstTime();
+            int currentTime = process.getArrivalTime() + process.getWaitingTime() + (process.getBurstTime() - process.getLeftBurstTime()) / (core instanceof PerformanceCore ? 2 : 1);
+            System.out.println(currentTime);
+            System.out.println(process.getStartTime());
             TimelineBar ganttCharTimeLineBar = new TimelineBar(process.getArrivalTime(), 1, lengthFactor, 30 - 1);
             ganttCharTimeLineBar.setLayoutX(currentTime * lengthFactor);
             ganttCharTimeLineBar.setColor(processColor.get(process.getName()));
