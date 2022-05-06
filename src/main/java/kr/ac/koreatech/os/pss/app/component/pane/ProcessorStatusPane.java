@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
-import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-
-import java.util.List;
 
 @CreatableController
 public class ProcessorStatusPane extends SingleComponent {
@@ -52,7 +49,7 @@ public class ProcessorStatusPane extends SingleComponent {
      *
      * @param scheduleData
      */
-    public void init(ScheduleData scheduleData) {
+    public void setInformation(ScheduleData scheduleData) {
         numPerformanceCores.setText(String.valueOf(scheduleData.getNumPerformanceCores()));
         numEfficiencyCores.setText(String.valueOf(scheduleData.getNumEfficiencyCores()));
 
