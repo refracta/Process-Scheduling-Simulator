@@ -25,18 +25,18 @@ import static kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTime
 @CreatableController
 public class ProcessTimelineContainerPane extends SingleComponent {
     @FXML
-    private VBox processesIDVBox;
+    private VBox processIDVBox;
     @FXML
-    private VBox processesVBox;
+    private VBox processVBox;
     @FXML
-    private VBox processesDelVBox;
+    private VBox processDelVBox;
 
     @FXML
-    private ScrollPane processesIDScrollPane;
+    private ScrollPane processIDScrollPane;
     @FXML
-    private ScrollPane processesScrollPane;
+    private ScrollPane processScrollPane;
     @FXML
-    private ScrollPane processesDelScrollPane;
+    private ScrollPane processDelScrollPane;
 
     private double width;
     private double height;
@@ -45,6 +45,9 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     private int criteriaEndTime;
     private int maxEndTime;
     private double lengthFactor;
+
+    public ProcessTimelineContainerPane() {
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -58,19 +61,19 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         this.lengthFactor = this.width / this.criteriaEndTime;
 
         // 스크롤 관련 이벤트 핸들러 시작.
-        processesIDScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+        processIDScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            processScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+            processDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
         });
 
-        processesScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+        processScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            processIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+            processDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
         });
 
-        processesDelScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+        processDelScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
+            processIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
+            processScrollPane.vvalueProperty().setValue(newValue.doubleValue());
         });
         // 스크롤 관련 이벤트 핸들러 끝.
 }
@@ -85,20 +88,20 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         JFXButton target = (JFXButton) event.getSource();
         int index = ((VBox) target.getParent().getParent()).getChildren().indexOf(target.getParent());
 
-        processesIDVBox.getChildren().remove(index);
-        processesVBox.getChildren().remove(index);
-        processesDelVBox.getChildren().remove(index);
+        processIDVBox.getChildren().remove(index);
+        processVBox.getChildren().remove(index);
+        processDelVBox.getChildren().remove(index);
         processTimeLines.remove(index);
 
         updateAllScales();
     }
 
-    public List<DefaultProcess> getProcesses() {
-        List<DefaultProcess> processesList = new ArrayList<DefaultProcess>();
+    public List<DefaultProcess> getprocess() {
+        List<DefaultProcess> processList = new ArrayList<DefaultProcess>();
         for (LAbstractTimeLine p : processTimeLines) {
-            processesList.add(((LProcessTimeLine)p).getProcess());
+            processList.add(((LProcessTimeLine)p).getProcess());
         }
-        return processesList;
+        return processList;
     }
 
     public void updateAllScales() {
@@ -110,10 +113,10 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         return lengthFactor;
     }
 
-    public void delAllProcesses() {
-        processesIDVBox.getChildren().clear();
-        processesVBox.getChildren().clear();
-        processesDelVBox.getChildren().clear();
+    public void delAllprocess() {
+        processIDVBox.getChildren().clear();
+        processVBox.getChildren().clear();
+        processDelVBox.getChildren().clear();
         processTimeLines.clear();
 
         updateAllScales();

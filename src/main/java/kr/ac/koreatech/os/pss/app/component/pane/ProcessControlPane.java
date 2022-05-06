@@ -59,7 +59,7 @@ public class ProcessControlPane extends SingleComponent {
         TimelineBar timelineBar = timelinePane.getTimeLineBar();
         ProcessTimelineContainerPane containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
         double lengthFactor = containerPane.getLengthFactor();
-        // TODO: 하향식으로 변환하기.
+        // TODO: 하향식으로 변환하기, 변수명 변경
 
         timelinePane.setOnMouseMoved(e -> {
             double processedX = e.getX() - timelineBar.getLayoutX();
@@ -143,7 +143,7 @@ public class ProcessControlPane extends SingleComponent {
         });
 
         delAllButton.setOnMouseClicked(e -> {
-            containerPane.delAllProcesses();
+            containerPane.delAllprocess();
         });
     }
 }

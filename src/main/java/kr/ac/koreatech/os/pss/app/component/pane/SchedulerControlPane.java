@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
@@ -78,7 +79,7 @@ public class SchedulerControlPane extends SingleComponent {
     TextField flagLimitTextField;
 
     @FXML
-    Pane processTimelineContainerPane;
+    GridPane processTimelineContainerPane;
 
     /**
      * 스케줄링 시작 버튼
