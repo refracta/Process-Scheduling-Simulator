@@ -3,7 +3,6 @@ package kr.ac.koreatech.os.pss.scheduler.impl;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-import kr.ac.koreatech.os.pss.scheduler.utils.PrintUtils;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -41,10 +40,6 @@ public class RR2QScheduler extends RRScheduler {
                 processRunQueue.add(filteredList.pollFirst());
             }
         }
-        System.out.println("Time: " + time);
-        System.out.println("processRunQueue: " + processRunQueue.stream().map(p -> p.getName()).toList());
-        PrintUtils.printScheduleData(scheduleData, true);
-        System.out.println("====================================================");
         super.schedule(time, cores, processRunQueue, scheduleData);
         for (int i = 0; i < processRunQueue.size(); i++) {
             processRunQueue.set(i, processRunQueue.get(i).findById(processes).get());
