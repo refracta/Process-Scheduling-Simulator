@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:controller="kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="820.0" minWidth="820.0" prefWidth="820.0" />
@@ -18,17 +18,17 @@
    <children>
       <ScrollPane fx:id="processIDScrollPane" hbarPolicy="NEVER" prefHeight="210.0" prefWidth="100.0" vbarPolicy="NEVER" GridPane.halignment="CENTER">
          <content>
-            <VBox fx:id="processesIDVBox" style="-fx-background-color: #F4F4F4F4;" />
+            <VBox fx:id="processIDVBox" style="-fx-background-color: #F4F4F4F4;" />
          </content>
       </ScrollPane>
       <ScrollPane fx:id="processScrollPane" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1">
          <content>
-            <VBox fx:id="processesVBox" />
+            <VBox fx:id="processVBox" />
          </content>
       </ScrollPane>
       <ScrollPane fx:id="processDelScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.halignment="CENTER">
          <content>
-            <VBox fx:id="processesDelVBox" alignment="TOP_CENTER" minWidth="200.0" style="-fx-background-color: #F4F4F4;" />
+            <VBox fx:id="processDelVBox" alignment="TOP_CENTER" minWidth="200.0" style="-fx-background-color: #F4F4F4;" />
          </content>
       </ScrollPane>
    </children>
