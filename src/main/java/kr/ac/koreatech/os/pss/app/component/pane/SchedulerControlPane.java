@@ -145,10 +145,10 @@ public class SchedulerControlPane extends SingleComponent {
         ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
-        SingleComponent.getInstance(ScheduleResultPane.class).printResultConsole(scheduleData);
-
-        // 테스트용
+        SingleComponent.getInstance(ScheduleResultPane.class).generateResultTable(scheduleData);
         SingleComponent.getInstance(GanttChartContainerPane.class).generateGanttChart(scheduleData);
+
+        AbstractCore.resetCoreID();
     }
 
     /**

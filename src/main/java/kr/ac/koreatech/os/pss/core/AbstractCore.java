@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author refracta
  */
-public class AbstractCore implements Cloneable {
+public class AbstractCore implements Cloneable, Comparable<AbstractCore> {
     /**
      * 코어의 정수 식별자(id)를 중복없이 자동 생성하기 위한 카운터
      */
@@ -107,6 +107,10 @@ public class AbstractCore implements Cloneable {
         this.standbyPower = standbyPower;
     }
 
+    public static void resetCoreID() {
+        AbstractCore.idCount.set(0);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -142,5 +146,10 @@ public class AbstractCore implements Cloneable {
             e.printStackTrace();
         }
         return clone;
+    }
+
+    @Override
+    public int compareTo(AbstractCore o) {
+        return Integer.compare(id, o.getId());
     }
 }

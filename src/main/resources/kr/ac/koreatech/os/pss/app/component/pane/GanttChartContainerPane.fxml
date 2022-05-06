@@ -13,10 +13,10 @@
    </columnConstraints>
    <rowConstraints>
       <RowConstraints maxHeight="35.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <ScrollPane fx:id="processTimelineIndexScrollPane" hbarPolicy="NEVER" maxWidth="1030.0" vbarPolicy="NEVER" GridPane.columnIndex="1">
+      <ScrollPane fx:id="ganttChartIndexScrollPane" hbarPolicy="NEVER" maxWidth="1030.0" vbarPolicy="NEVER" GridPane.columnIndex="1">
          <content>
             <VBox fx:id="ganttChartIndexVBox" />
          </content>
@@ -26,9 +26,9 @@
             <VBox fx:id="processNameVBox" style="-fx-background-color: #F4F4F4F4;" />
          </content>
       </ScrollPane>
-      <ScrollPane fx:id="processTimeLineScrollPane" maxWidth="1030.0" vbarPolicy="NEVER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <ScrollPane fx:id="ganttChartTimelineScrollPane" maxWidth="1030.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <content>
-            <VBox fx:id="ganttChartTimeLineVBox" />
+            <VBox fx:id="ganttChartTimelineVBox" />
          </content>
       </ScrollPane>
    </children>
