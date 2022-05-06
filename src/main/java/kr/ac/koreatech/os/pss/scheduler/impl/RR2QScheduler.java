@@ -5,6 +5,7 @@ import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 import kr.ac.koreatech.os.pss.scheduler.utils.PrintUtils;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class RR2QScheduler extends RRScheduler {
         processRunQueue.addAll(filteredRunQueue);
 
         if (processRunQueue.size() < runQueueLimit) {
-            LinkedList<DefaultProcess> filteredList = new LinkedList<>(processes.stream().filter(p -> !p.isFinished() && p.getArrivalTime() <= time && !p.isIncludedIn(processRunQueue)).toList());
+            LinkedList<DefaultProcess> filteredList = new LinkedList<>(processes.stream().filter(p -> !p.isFinished() && p.getArrivalTime() <= time && !p.isIncludedIn(processRunQueue)).sorted(Comparator.comparingInt(DefaultProcess::getArrivalTime)).toList());
             while (!filteredList.isEmpty() && processRunQueue.size() < runQueueLimit) {
                 processRunQueue.add(filteredList.pollFirst());
             }
