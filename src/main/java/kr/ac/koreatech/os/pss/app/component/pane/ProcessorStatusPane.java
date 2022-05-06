@@ -3,10 +3,9 @@ package kr.ac.koreatech.os.pss.app.component.pane;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
-@CreatableController
+
 public class ProcessorStatusPane extends SingleComponent {
     /**
      * 성능 코어의 개수를 출력하는 FXML 요소

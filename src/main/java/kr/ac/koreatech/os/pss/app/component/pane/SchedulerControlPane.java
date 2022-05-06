@@ -9,7 +9,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
-import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-@CreatableController
 public class SchedulerControlPane extends SingleComponent {
 
     private static final Color ICON_ENABLE_COLOR = Color.WHITE;

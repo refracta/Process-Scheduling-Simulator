@@ -6,12 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@CreatableController
 public class ProcessControlPane extends SingleComponent {
     @FXML
     private JFXSlider criteriaEndTimeSlider;
