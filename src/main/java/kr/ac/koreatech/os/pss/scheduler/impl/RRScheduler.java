@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class RRScheduler extends AbstractScheduler {
     private static final String PROCESS_QUEUE = "processQueue";
-    private final int timeQuantum;
+    protected final int timeQuantum;
 
     public RRScheduler(int timeQuantum) {
         this.timeQuantum = timeQuantum;
