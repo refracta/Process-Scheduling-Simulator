@@ -3,7 +3,7 @@ package kr.ac.koreatech.os.pss.scheduler;
 import java.util.Arrays;
 
 public enum ScheduleMethod {
-    FCFS("FCFS"), RR("RR"), SPN("SPN"), SRTN("SRTN"), HRRN("HRRN"), Custom1("Custom 1"), Custom2("Custom 2");
+    FCFS("FCFS (First Come First Service)"), RR("RR (Round Robin)"), SPN("SPN (Shortest Process Next)"), SRTN("SRTN (Shortest Remaining Time Next)"), HRRN("HRRN (High Response Ratio Next)"), RR2Q("RR2Q (RR with Run-Ready Queue)"), GMRL("GMRL (Give More Rice cake to Loser)");
 
     private final String value;
 

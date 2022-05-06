@@ -6,13 +6,13 @@ import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 public class ProcessTimelinePane extends Pane implements ScaleHandler {
-    private ActionState actionState;
     private final DefaultProcess process;
     private final TimelineBar timeLineBar;
+    private ActionState actionState;
 
 
     public ProcessTimelinePane() {
-        this(10, 80, 30);
+        this(10, 90, 30);
     }
 
     public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) {
@@ -27,8 +27,8 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
     @Override
     public void updateScale(int maxEndTime, double lengthFactor) {
         getChildren().clear();
-        for (int i = 0; i <= maxEndTime; i++)
-            this.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30));
+        for (int i = 0; i < maxEndTime; i++)
+            this.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30 - 1));
 
         this.getChildren().add(this.timeLineBar);
 

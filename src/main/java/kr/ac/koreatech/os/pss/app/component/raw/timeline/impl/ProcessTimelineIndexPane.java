@@ -1,12 +1,12 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
-import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
-import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
-
-import java.io.IOException;
+import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
+import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 
 public class ProcessTimelineIndexPane extends Pane implements ScaleHandler {
 
@@ -16,20 +16,15 @@ public class ProcessTimelineIndexPane extends Pane implements ScaleHandler {
 
     @Override
     public void updateScale(int maxEndTime, double lengthFactor) {
-        try {
-            getChildren().remove(0, getChildren().size());
-        } catch (Exception exception) {
-        }
-
+        getChildren().clear();
         for (int i = 0; i < maxEndTime; i++) {
-            Pane indexPane = null;
-            try {
-                indexPane = FXMLLoader.load(LProcessControls.class.getResource("processID.fxml"));
-                indexPane.setLayoutX(i * lengthFactor);
-                ((Text) indexPane.getChildren().get(0)).setText(Integer.toString(i));
-            } catch (IOException exception) {
-            }
-            getChildren().add(indexPane);
+            Text index = TextUtils.getDefaultText(Integer.toString(i), 20);
+            GridPane indexGridPane = GridPaneUtils.wrap(index);
+            indexGridPane.setAlignment(Pos.CENTER_LEFT);
+            indexGridPane.setPrefWidth(lengthFactor);
+            indexGridPane.setPrefHeight(30);
+            indexGridPane.setLayoutX(i * lengthFactor);
+            getChildren().add(indexGridPane);
         }
     }
 }

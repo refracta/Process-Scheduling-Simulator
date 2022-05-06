@@ -14,7 +14,7 @@ import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import java.util.Objects;
 
 public class UnionTimeline {
-    private ProcessTimelineContainerPane container;
+    private final ProcessTimelineContainerPane container;
     private Text idText;
     private ProcessTimelinePane timeline;
     private JFXButton deleteButton;
@@ -26,54 +26,17 @@ public class UnionTimeline {
         this.deleteButton = deleteButton;
     }
 
-    public Text getIdText() {
-        return idText;
-    }
-
-    public GridPane getWrappedIdText() {
-        GridPane wrap = GridPaneUtils.wrap(idText);
-        wrap.setPrefWidth(100);
-        wrap.setPrefHeight(30);
-        return wrap;
-    }
-
-    public void setIdText(Text idText) {
-        this.idText = idText;
-    }
-
-    public ProcessTimelinePane getTimeline() {
-        return timeline;
-    }
-
-    public void setTimeline(ProcessTimelinePane timeline) {
-        this.timeline = timeline;
-    }
-
-    public JFXButton getDeleteButton() {
-        return deleteButton;
-    }
-
-    public GridPane getWrappedDeleteButton() {
-        GridPane wrap = GridPaneUtils.wrap(deleteButton);
-        wrap.setMinWidth(114);
-        return wrap;
-    }
-
-    public void setDeleteButton(JFXButton deleteButton) {
-        this.deleteButton = deleteButton;
-    }
-
-    public static UnionTimeline create(ProcessTimelineContainerPane container, double lengthFactor) {
+    public static UnionTimeline create(ProcessTimelineContainerPane container) {
         ProcessTimelinePane timeline = new ProcessTimelinePane();
+        timeline.updateScale(Math.max(container.getCriteriaEndTime(), container.getMaxEndTime()), container.getLengthFactor());
         TimelineBar bar = timeline.getTimelineBar();
-
 
         timeline.setOnMouseMoved(e -> {
             double processedX = e.getX() - bar.getLayoutX();
 
             boolean leftCondition = bar.isInLeft(processedX);
-            boolean rightCondition = bar.isInRight(processedX, lengthFactor);
-            boolean middleCondition = bar.isInMiddle(processedX, lengthFactor);
+            boolean rightCondition = bar.isInRight(processedX, container.getLengthFactor());
+            boolean middleCondition = bar.isInMiddle(processedX, container.getLengthFactor());
 
             if (leftCondition || rightCondition || middleCondition) {
                 if (leftCondition || rightCondition) timeline.setCursor(Cursor.H_RESIZE);
@@ -95,11 +58,11 @@ public class UnionTimeline {
 
             switch (timeline.getActionState()) {
                 case IDLE:
-                    if (bar.isInMiddle(processedX, lengthFactor))
+                    if (bar.isInMiddle(processedX, container.getLengthFactor()))
                         timeline.setActionState(ProcessTimelinePane.ActionState.MOVE);
                     else if (bar.isInLeft(processedX))
                         timeline.setActionState(ProcessTimelinePane.ActionState.EXTEND_LEFT);
-                    else if (bar.isInRight(processedX, lengthFactor))
+                    else if (bar.isInRight(processedX, container.getLengthFactor()))
                         timeline.setActionState(ProcessTimelinePane.ActionState.EXTEND_RIGHT);
                     break;
                 case EXTEND_LEFT:
@@ -122,18 +85,18 @@ public class UnionTimeline {
         timeline.setOnMouseReleased(e -> {
             switch (timeline.getActionState()) {
                 case EXTEND_LEFT:
-                    int index = bar.getLeftExpendedIndex(e.getX(), lengthFactor);
-                    bar.update(index, bar.getEndTime() - index, lengthFactor);
-                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
+                    int index = bar.getLeftExpendedIndex(e.getX(), container.getLengthFactor());
+                    bar.update(index, bar.getEndTime() - index, container.getLengthFactor());
+                    bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
                 case EXTEND_RIGHT:
-                    index = bar.getRightExpendedIndex(e.getX(), lengthFactor);
-                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), lengthFactor);
+                    index = bar.getRightExpendedIndex(e.getX(), container.getLengthFactor());
+                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), container.getLengthFactor());
                     break;
                 case MOVE:
-                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2, lengthFactor);
-                    bar.update(index, bar.getBurstTime(), lengthFactor);
-                    bar.setLayoutX(bar.getArrivalTime() * lengthFactor);
+                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2, container.getLengthFactor());
+                    bar.update(index, bar.getBurstTime(), container.getLengthFactor());
+                    bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
             }
 
@@ -152,6 +115,43 @@ public class UnionTimeline {
             container.deleteTimeline(unionTimeline);
         });
         return unionTimeline;
+    }
+
+    public Text getIdText() {
+        return idText;
+    }
+
+    public void setIdText(Text idText) {
+        this.idText = idText;
+    }
+
+    public GridPane getWrappedIdText() {
+        GridPane wrap = GridPaneUtils.wrap(idText);
+        wrap.setPrefWidth(100);
+        wrap.setPrefHeight(30);
+        return wrap;
+    }
+
+    public ProcessTimelinePane getTimeline() {
+        return timeline;
+    }
+
+    public void setTimeline(ProcessTimelinePane timeline) {
+        this.timeline = timeline;
+    }
+
+    public JFXButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(JFXButton deleteButton) {
+        this.deleteButton = deleteButton;
+    }
+
+    public GridPane getWrappedDeleteButton() {
+        GridPane wrap = GridPaneUtils.wrap(deleteButton);
+        wrap.setMinWidth(114);
+        return wrap;
     }
 
     @Override

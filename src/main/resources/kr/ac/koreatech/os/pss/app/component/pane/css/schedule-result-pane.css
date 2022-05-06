@@ -4,12 +4,12 @@
     -fx-font-smoothing-type: gray;
 }
 
-.scroll-pane {
-    -fx-background-color: transparent;
-}
-
 #details-container {
     -fx-background-color: white;
+}
+
+#process-name-column {
+    -fx-alignment: CENTER;
 }
 
 #title-container {
@@ -19,11 +19,4 @@
 #title {
     -fx-font-family: "NanumSquare Bold";
     -fx-font-size: 26px;
-}
-
-#add-process {
-    -fx-font-family: "NanumSquare";
-    -fx-background-color: #06113C;
-    -fx-background-radius: 1px;
-    -fx-text-fill: white;
 }
