@@ -10,8 +10,8 @@ import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import java.io.IOException;
 
 public class LProcessTimeLine extends LAbstractTimeLine {
-    private DefaultProcess process;
-    private LTimeLineBar timeLineBar;
+    private final DefaultProcess process;
+    private final LTimeLineBar timeLineBar;
 
     public LProcessTimeLine(int criteriaEndTime, double width, double height, LProcessControls processControls) throws IOException {
         super(width, height, processControls);

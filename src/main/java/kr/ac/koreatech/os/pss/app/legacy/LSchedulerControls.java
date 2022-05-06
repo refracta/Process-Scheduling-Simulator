@@ -32,23 +32,96 @@ import java.util.List;
  */
 public class LSchedulerControls extends GridPane {
     /**
+     * 성능 코어 개수 설정 텍스트 필드
+     */
+    @FXML
+    TextField numPerformanceCoreTextField;
+    /**
+     * 성능 코어 개수 설정 버튼
+     */
+    @FXML
+    JFXButton numPerformanceCoreButton;
+    /**
+     * 효율 코어 개수 설정 텍스트 필드
+     */
+    @FXML
+    TextField numEfficiencyCoreTextField;
+    /**
+     * 효율 코어 개수 설정 버튼
+     */
+    @FXML
+    JFXButton numEfficiencyCoreButton;
+    /**
+     * 스케줄링 메소드를 설정하는 버튼
+     */
+    @FXML
+    JFXComboBox scheduleMethodComboBox;
+    /**
+     * 타임 퀀텀 아이콘
+     */
+    @FXML
+    FontIcon timeQuantumIcon;
+    /**
+     * 타임 퀀텀 설정 텍스트 필드
+     */
+    @FXML
+    TextField timeQuantumTextField;
+    /**
+     * 타임 퀀텀 설정 버튼
+     */
+    @FXML
+    JFXButton timeQuantumButton;
+    /**
+     * 실행큐 최대 프로세스 개수 아이콘
+     */
+    @FXML
+    FontIcon queueLimitIcon;
+    /**
+     * 실행큐 최대 프로세스 개수 설정 텍스트 필드
+     */
+    @FXML
+    TextField queueLimitTextField;
+    /**
+     * 실행큐 최대 프로세스 개수 설정 버튼
+     */
+    @FXML
+    JFXButton queueLimitButton;
+    /**
+     * 최대 플래그 카운트 개수 아이콘
+     */
+    @FXML
+    FontIcon flagLimitIcon;
+    /**
+     * 최대 플래그 카운트 텍스트 필드
+     */
+    @FXML
+    TextField flagLimitTextField;
+    /**
+     * 최대 플래그 카운트 설정 버튼
+     */
+    @FXML
+    JFXButton flagLimitButton;
+    /**
+     * 스케줄링 시작 버튼
+     */
+    @FXML
+    JFXButton startButton;
+    /**
      * 스케줄러 시각화의 모든 요소를 담고 있는 루트 Pane
      */
-    private GridPane root;
+    private final GridPane root;
     /**
      * 스케줄러 설정의 요소를 담고 있는 Pane
      */
-    private FlowPane leftMenu;
+    private final FlowPane leftMenu;
     /**
      * 프로세스 설정과 간트 차트 요소를 담고 있는 Pane
      */
-    private FlowPane rightMenu;
-
+    private final FlowPane rightMenu;
     /**
      * 컨트롤러 객체가 담당하고 있는 GridPane 객체
      */
-    private GridPane pane;
-
+    private final GridPane pane;
     /**
      * 프로세서 상태 Pane
      */
@@ -57,7 +130,6 @@ public class LSchedulerControls extends GridPane {
      * 프로세스 설정 Pane
      */
     private LProcessControls processControls;
-
     /**
      * 성능 코어 개수
      */
@@ -66,7 +138,6 @@ public class LSchedulerControls extends GridPane {
      * 효율 코어 개수
      */
     private int numEfficiencyCore;
-
     /**
      * 현재 선택된 스케줄링 기법
      */
@@ -85,100 +156,6 @@ public class LSchedulerControls extends GridPane {
     private int currentFlagLimit;
 
     /**
-     * 성능 코어 개수 설정 텍스트 필드
-     */
-    @FXML
-    TextField numPerformanceCoreTextField;
-    /**
-     * 성능 코어 개수 설정 버튼
-     */
-    @FXML
-    JFXButton numPerformanceCoreButton;
-
-    /**
-     * 효율 코어 개수 설정 텍스트 필드
-     */
-    @FXML
-    TextField numEfficiencyCoreTextField;
-    /**
-     * 효율 코어 개수 설정 버튼
-     */
-    @FXML
-    JFXButton numEfficiencyCoreButton;
-
-    /**
-     * 스케줄링 메소드를 설정하는 버튼
-     */
-    @FXML
-    JFXComboBox scheduleMethodComboBox;
-
-    /**
-     * 타임 퀀텀 아이콘
-     */
-    @FXML
-    FontIcon timeQuantumIcon;
-    /**
-     * 타임 퀀텀 설정 텍스트 필드
-     */
-    @FXML
-    TextField timeQuantumTextField;
-    /**
-     * 타임 퀀텀 설정 버튼
-     */
-    @FXML
-    JFXButton timeQuantumButton;
-
-    /**
-     * 실행큐 최대 프로세스 개수 아이콘
-     */
-    @FXML
-    FontIcon queueLimitIcon;
-    /**
-     * 실행큐 최대 프로세스 개수 설정 텍스트 필드
-     */
-    @FXML
-    TextField queueLimitTextField;
-    /**
-     * 실행큐 최대 프로세스 개수 설정 버튼
-     */
-    @FXML
-    JFXButton queueLimitButton;
-
-    /**
-     * 최대 플래그 카운트 개수 아이콘
-     */
-    @FXML
-    FontIcon flagLimitIcon;
-    /**
-     * 최대 플래그 카운트 텍스트 필드
-     */
-    @FXML
-    TextField flagLimitTextField;
-    /**
-     * 최대 플래그 카운트 설정 버튼
-     */
-    @FXML
-    JFXButton flagLimitButton;
-
-    /**
-     * 스케줄링 시작 버튼
-     */
-    @FXML
-    JFXButton startButton;
-
-    /**
-     * Scheduler Controls에 출력할 사항을 설정하여 컨트롤러로 반환
-     *
-     * @return SchedulerControls의 컨트롤러
-     * @throws IOException
-     */
-    public static LSchedulerControls getSchedulerControls() throws IOException {
-        LSchedulerControls controller = new LSchedulerControls();
-        controller.init();
-        return controller;
-    }
-
-    /**
      * ProcessorsStatus의 생성자
      * 별도의 정적 메소드를 통해 객체를 생성하므로 private
      *
@@ -192,6 +169,18 @@ public class LSchedulerControls extends GridPane {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("schedulerControls.fxml"));
         fxmlLoader.setController(this);
         this.pane = fxmlLoader.load();
+    }
+
+    /**
+     * Scheduler Controls에 출력할 사항을 설정하여 컨트롤러로 반환
+     *
+     * @return SchedulerControls의 컨트롤러
+     * @throws IOException
+     */
+    public static LSchedulerControls getSchedulerControls() throws IOException {
+        LSchedulerControls controller = new LSchedulerControls();
+        controller.init();
+        return controller;
     }
 
     /**

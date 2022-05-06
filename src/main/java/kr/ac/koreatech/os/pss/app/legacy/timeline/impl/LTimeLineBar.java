@@ -7,8 +7,8 @@ public class LTimeLineBar extends Rectangle {
     private int arrivalTime;
     private int burstTime;
 
-    private Color opaqueColor;
-    private Color transparentColor;
+    private final Color opaqueColor;
+    private final Color transparentColor;
 
     public LTimeLineBar(int arrivalTime, int burstTime, double width, double height) {
         this.arrivalTime = arrivalTime;

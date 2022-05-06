@@ -9,8 +9,9 @@ import java.io.IOException;
 
 public class ProcessTimelinePane extends Pane implements ScaleHandler {
     private ActionState actionState;
-    private DefaultProcess process;
-    private TimelineBar timeLineBar;
+    private final DefaultProcess process;
+    private final TimelineBar timeLineBar;
+
     public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) throws IOException {
         this.actionState = ActionState.IDLE;
 
@@ -48,7 +49,7 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
         this.actionState = actionState;
     }
 
-    public static enum ActionState {
+    public enum ActionState {
         IDLE, EXTEND_LEFT, EXTEND_RIGHT, MOVE
     }
 }

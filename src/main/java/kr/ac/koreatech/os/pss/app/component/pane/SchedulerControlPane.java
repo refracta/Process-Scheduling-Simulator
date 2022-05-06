@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
@@ -28,6 +27,8 @@ import java.util.*;
 @CreatableController
 public class SchedulerControlPane extends SingleComponent {
 
+    private static final Color ICON_ENABLE_COLOR = Color.WHITE;
+    private static final Color ICON_DISABLE_COLOR = new Color(1, 1, 1, 0.4);
     /**
      * 성능 코어 개수 설정 텍스트 필드
      */
@@ -38,13 +39,11 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField numEfficiencyCoreTextField;
-
     /**
      * 스케줄링 메소드를 설정하는 버튼
      */
     @FXML
     JFXComboBox scheduleMethodComboBox;
-
     /**
      * 타임 퀀텀 아이콘
      */
@@ -55,7 +54,6 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField timeQuantumTextField;
-
     /**
      * 실행큐 최대 프로세스 개수 아이콘
      */
@@ -66,7 +64,6 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField queueLimitTextField;
-
     /**
      * 최대 플래그 카운트 개수 아이콘
      */
@@ -77,10 +74,8 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField flagLimitTextField;
-
     @FXML
     GridPane processTimelineContainerPane;
-
     /**
      * 스케줄링 시작 버튼
      */
@@ -161,9 +156,6 @@ public class SchedulerControlPane extends SingleComponent {
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
     }
-
-    private static final Color ICON_ENABLE_COLOR = Color.WHITE;
-    private static final Color ICON_DISABLE_COLOR = new Color(1, 1, 1, 0.4);
 
     /**
      * 사용자가 타임 퀀텀 변수를 입력할 수 있도록 입력을 활성화
