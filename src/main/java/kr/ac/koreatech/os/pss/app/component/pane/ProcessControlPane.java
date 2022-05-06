@@ -8,10 +8,8 @@ import javafx.scene.layout.GridPane;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 @CreatableController
 public class ProcessControlPane extends SingleComponent {
@@ -48,5 +46,4 @@ public class ProcessControlPane extends SingleComponent {
     private void deleteProcess(MouseEvent event) {
         containerPane.deleteAllTimeline();
     }
-
 }

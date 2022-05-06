@@ -12,7 +12,7 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
 
 
     public ProcessTimelinePane() {
-        this(10, 80, 30);
+        this(10, 90, 30);
     }
 
     public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) {
@@ -27,7 +27,7 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
     @Override
     public void updateScale(int maxEndTime, double lengthFactor) {
         getChildren().clear();
-        for (int i = 0; i <= maxEndTime; i++)
+        for (int i = 0; i < maxEndTime; i++)
             this.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30));
 
         this.getChildren().add(this.timeLineBar);

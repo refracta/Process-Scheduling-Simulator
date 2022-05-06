@@ -20,7 +20,6 @@ import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
@@ -40,7 +39,7 @@ public class SchedulerControlPane extends SingleComponent {
     @FXML
     TextField numEfficiencyCoreTextField;
     /**
-     * 스케줄링 메소드를 설정하는 버튼
+     * 스케줄링 메소드를 설정하는 콤보 박스
      */
     @FXML
     JFXComboBox scheduleMethodComboBox;
@@ -91,20 +90,14 @@ public class SchedulerControlPane extends SingleComponent {
     }
 
     /**
-     * 스케줄러 종류 선택을 적용하는 이벤트 처리기
-     *
-     * @param event
+     * schedulerMethodComboBox에서 메소드 변경 시 필드 활성 및 비활성화.
      */
-    @FXML
-    private void applyScheduleMethod(MouseEvent event) {
-        Optional<ScheduleMethod> scheduleMethod = getCurrentScheduleMethod();
-        if (scheduleMethod.isEmpty()) {
-            return;
-        }
+    private void applyScheduleMethod(ScheduleMethod method) {
         setTimeQuantumDisable(true);
         setQueueLimitDisable(true);
         setFlagLimitDisable(true);
-        switch (scheduleMethod.get()) {
+
+        switch (method) {
             case RR:
                 setTimeQuantumDisable(false);
                 break;
@@ -131,8 +124,6 @@ public class SchedulerControlPane extends SingleComponent {
             return;
         }
 
-        // # 임시 설정
-        // processes: 추후 프로세스 설정 클래스에서 받아올 예정.
         List<AbstractCore> cores = new ArrayList<AbstractCore>();
         int numPerformanceCore = TextFieldUtils.getNumericValue(numPerformanceCoreTextField, 0);
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
@@ -140,19 +131,20 @@ public class SchedulerControlPane extends SingleComponent {
         int numEfficiencyCore = TextFieldUtils.getNumericValue(numEfficiencyCoreTextField, 0);
         for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
 
-        DefaultProcess[] processes = {
-                new DefaultProcess(1, 0, 2),
-                new DefaultProcess(2, 0, 3),
-                new DefaultProcess(3, 0, 7),
-                new DefaultProcess(4, 0, 7),
-                new DefaultProcess(5, 0, 6),
-                new DefaultProcess(6, 0, 5),
-        };
+//        DefaultProcess[] processes = {
+//                new DefaultProcess(1, 0, 2),
+//                new DefaultProcess(2, 0, 3),
+//                new DefaultProcess(3, 0, 7),
+//                new DefaultProcess(4, 0, 7),
+//                new DefaultProcess(5, 0, 6),
+//                new DefaultProcess(6, 0, 5),
+//        };
 
-//        List<DefaultProcess> processes = processControls.getProcesses();
+        List<DefaultProcess> processes = SingleComponent.getInstance(ProcessTimelineContainerPane.class).getProcessList();
 
         AbstractScheduler scheduler = getConfiguredScheduler();
-        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+//        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
+        ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
     }
@@ -268,10 +260,13 @@ public class SchedulerControlPane extends SingleComponent {
         for (ScheduleMethod method : ScheduleMethod.values()) {
             scheduleMethodComboBox.getItems().add(method.getValue());
         }
+
+        scheduleMethodComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            applyScheduleMethod(ScheduleMethod.getEnum(newValue.toString()));
+        });
+
         setTimeQuantumDisable(true);
         setQueueLimitDisable(true);
         setFlagLimitDisable(true);
-
-
     }
 }

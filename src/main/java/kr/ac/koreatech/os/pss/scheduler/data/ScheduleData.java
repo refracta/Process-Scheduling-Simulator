@@ -202,7 +202,8 @@ public class ScheduleData {
      * @return 스케줄 요청된 프로세스들의 총 수행 시간
      */
     public int getTotalElapsedTime() {
-        return getResultProcesses().stream().mapToInt(DefaultProcess::getEndTime).max().getAsInt();
+        int maxEndTime = getResultProcesses().stream().mapToInt(DefaultProcess::getEndTime).max().getAsInt();
+        return maxEndTime;
     }
 
     public int size() {
