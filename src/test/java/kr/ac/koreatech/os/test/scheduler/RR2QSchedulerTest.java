@@ -25,7 +25,18 @@ public class RR2QSchedulerTest {
     }
 
     @Test
-    public void test2WithTQ2AndRQ2() {
+    public void test2WithTQ2AndRQN3() {
+        TestScheduleUtils.runWithEasyLevelRandomTestSet(new RR2QScheduler(2, 3), System.currentTimeMillis());
+    }
+
+    @Test
+    public void test3WithTQ2AndRQN3() {
+        TestScheduleUtils.runWithHardLevelRandomTestSet(new RR2QScheduler(2, 3), System.currentTimeMillis());
+    }
+
+
+    @Test
+    public void test4WithTQ2AndRQ2() {
         List<AbstractCore> cores = TestSetUtils.getRandomTestCores(2);
         List<DefaultProcess> processes = TestSetUtils.getRandomTestProcesses(15, 6, 15);
         ScheduleData scheduleData = new RR2QScheduler(2, 2).schedule(cores, processes);
@@ -33,7 +44,7 @@ public class RR2QSchedulerTest {
     }
 
     @Test
-    public void test3WithTQ2AndRQ2() {
+    public void test5WithTQ2AndRQ2() {
         List<AbstractCore> cores = Arrays.asList(new AbstractCore[]{new EfficiencyCore(), new EfficiencyCore()});
         List<DefaultProcess> processes = Arrays.asList(new DefaultProcess[]
                 {
