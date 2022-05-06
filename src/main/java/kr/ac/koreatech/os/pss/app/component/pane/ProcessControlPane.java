@@ -3,165 +3,147 @@ package kr.ac.koreatech.os.pss.app.component.pane;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane;
+import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.TimelineBar;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.legacy.timeline.LAbstractTimeLine;
-import kr.ac.koreatech.os.pss.app.legacy.timeline.impl.LProcessTimeLine;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
+
+import static kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane.ActionState;
+
 
 @CreatableController
 public class ProcessControlPane extends SingleComponent {
     @FXML
-    private VBox processesIDVBox;
-    @FXML
-    private VBox processesVBox;
-    @FXML
-    private VBox processesDelVBox;
-
-    @FXML
-    private ScrollPane processesIDScrollPane;
-    @FXML
-    private ScrollPane processesScrollPane;
-    @FXML
-    private ScrollPane processesDelScrollPane;
-
-    @FXML
     private JFXSlider criteriaEndTimeSlider;
 
-    private double width;
-    private double height;
-
-    private List<LAbstractTimeLine> processTimeLines;
-    private int criteriaEndTime;
-    private int maxEndTime;
-    private double lengthFactor;
-
+    @FXML
+    private JFXButton delAllButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-/*        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processControls.fxml"));
-        fxmlLoader.setController(this);
-        this.pane = fxmlLoader.load();
 
-        this.width = 800;
-        this.height = 30;
-
-        this.processTimeLines = new ArrayList<>();
-        this.criteriaEndTime = 10;
-        this.lengthFactor = this.width / this.criteriaEndTime;
-
-        processesIDVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
-        processesVBox.getChildren().add(new LProcessTimeLineIndex(criteriaEndTime, this.width, this.height, this));
-        processesDelVBox.getChildren().add(FXMLLoader.load(getClass().getResource("processIDColumn.fxml")));
-        processTimeLines.add((LAbstractTimeLine) processesVBox.getChildren().get(0));
-
-        // 스크롤 관련 이벤트 핸들러 시작.
-        processesIDScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-        });
-
-        processesScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesDelScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-        });
-
-        processesDelScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processesIDScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-            processesScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-        });
-        // 스크롤 관련 이벤트 핸들러 끝.
-
-        // 축적 슬라이더 조작 이벤트 핸들러.
+        // 축적 슬라이더 이벤트 핸들러.
         criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            criteriaEndTime = newValue.intValue();
-            lengthFactor = this.width / criteriaEndTime;
-
-            processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
-        });*/
+            // update Scale하는 거 함수로 빼서 설정할 것.
+//            processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
+        });
     }
-
 
     @FXML
     private void addProcess(MouseEvent event) throws IOException {
-        int currentCriteriaEndTime = criteriaEndTimeSlider.valueProperty().getValue().intValue();
-        int newCriteriaEndTime = criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime;
-//        LProcessTimeLine processTimeLine = new LProcessTimeLine(newCriteriaEndTime, width, height, this);
+//        int newCriteriaEndTime = criteriaEndTime > currentCriteriaEndTime ? criteriaEndTime : currentCriteriaEndTime;
+////        LProcessTimeLine processTimeLine = new LProcessTimeLine(newCriteriaEndTime, width, height, this);
+//
+//        GridPane processIDPane = FXMLLoader.load(getClass().getResource("processID.fxml"));
+////        ((Text) (processIDPane.getChildren().get(0))).setText(processTimeLine.getProcess().getName());
+//
+//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processDelButton.fxml"));
+//        fxmlLoader.setController(this);
+//        Pane processDelButton = fxmlLoader.load();
+//        processesDelVBox.setAlignment(Pos.CENTER);
+//
+//        processesIDVBox.getChildren().add(processIDPane);
+////        processesVBox.getChildren().add(processTimeLine);
+//        processesDelVBox.getChildren().add(processDelButton);
+////        processTimeLines.add(processTimeLine);
 
-        GridPane processIDPane = FXMLLoader.load(getClass().getResource("processID.fxml"));
-//        ((Text) (processIDPane.getChildren().get(0))).setText(processTimeLine.getProcess().getName());
+        ProcessTimelinePane timelinePane = new ProcessTimelinePane(10, 80, 30);
+        TimelineBar timelineBar = timelinePane.getTimeLineBar();
+        ProcessTimelineContainerPane containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
+        double lengthFactor = containerPane.getLengthFactor();
+        // TODO: 하향식으로 변환하기.
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processDelButton.fxml"));
-        fxmlLoader.setController(this);
-        Pane processDelButton = fxmlLoader.load();
-        processesDelVBox.setAlignment(Pos.CENTER);
+        timelinePane.setOnMouseMoved(e -> {
+            double processedX = e.getX() - timelineBar.getLayoutX();
 
-        processesIDVBox.getChildren().add(processIDPane);
-//        processesVBox.getChildren().add(processTimeLine);
-        processesDelVBox.getChildren().add(processDelButton);
-//        processTimeLines.add(processTimeLine);
-    }
+            boolean leftCondition = timelineBar.isInLeft(processedX);
+            boolean rightCondition = timelineBar.isInRight(processedX, lengthFactor);
+            boolean middleCondition = timelineBar.isInMiddle(processedX, lengthFactor);
 
-    @FXML
-    private void delProcess(MouseEvent event) throws IOException {
-        JFXButton target = (JFXButton) event.getSource();
-        int index = ((VBox) target.getParent().getParent()).getChildren().indexOf(target.getParent());
+            if (leftCondition || rightCondition || middleCondition) {
+                if (leftCondition || rightCondition)
+                    timelinePane.setCursor(Cursor.H_RESIZE);
+                else
+                    timelinePane.setCursor(Cursor.DEFAULT);
+                timelineBar.makeTransparent();
+            } else {
+                timelineBar.makeOpaque();
+                timelineBar.setCursor(Cursor.DEFAULT);
+            }
+        });
 
-        processesIDVBox.getChildren().remove(index);
-        processesVBox.getChildren().remove(index);
-        processesDelVBox.getChildren().remove(index);
-        processTimeLines.remove(index);
+        timelinePane.setOnMouseExited(e -> {
+            timelineBar.makeOpaque();
+            timelinePane.setCursor(Cursor.DEFAULT);
+        });
 
-        updateAllScales();
-    }
+        timelinePane.setOnMouseDragged(e -> {
+            double processedX = event.getX() - timelineBar.getLayoutX();
 
-    @FXML
-    private void delAllProcesses(MouseEvent event) {
-        while (processesVBox.getChildren().size() > 1) {
-            processesIDVBox.getChildren().remove(1);
-            processesVBox.getChildren().remove(1);
-            processesDelVBox.getChildren().remove(1);
-            processTimeLines.remove(1);
-        }
+            switch (timelinePane.getActionState()) {
+                case IDLE:
+                    if (timelineBar.isInMiddle(processedX, lengthFactor))
+                        timelinePane.setActionState(ProcessTimelinePane.ActionState.MOVE);
+                    else if (timelineBar.isInLeft(processedX))
+                        timelinePane.setActionState(ActionState.EXTEND_LEFT);
+                    else if (timelineBar.isInRight(processedX, lengthFactor))
+                        timelinePane.setActionState(ActionState.EXTEND_RIGHT);
+                    break;
+                case EXTEND_LEFT:
+                    timelinePane.setCursor(Cursor.H_RESIZE);
+                    double newWidth = timelineBar.getLayoutX() + timelineBar.getWidth() - Math.max(0, event.getX());
+                    timelineBar.setLayoutX(Math.max(0, event.getX()));
+                    timelineBar.setWidth(newWidth);
+                    break;
+                case EXTEND_RIGHT:
+                    timelinePane.setCursor(Cursor.H_RESIZE);
+                    newWidth = event.getX() - timelineBar.getLayoutX();
+                    timelineBar.setWidth(newWidth);
+                    break;
+                case MOVE:
+                    timelineBar.setLayoutX(Math.max(0, event.getX() - timelineBar.getWidth() / 2));
+                    break;
+            }
+        });
 
-        updateAllScales();
-    }
+        timelinePane.setOnMouseReleased(e -> {
+            switch (timelinePane.getActionState()) {
+                case EXTEND_LEFT:
+                    int index = timelineBar.getLeftExpendedIndex(event.getX(), lengthFactor);
+                    timelineBar.update(index, timelineBar.getEndTime() - index, lengthFactor);
+                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
+                    break;
+                case EXTEND_RIGHT:
+                    index = timelineBar.getRightExpendedIndex(event.getX(), lengthFactor);
+                    timelineBar.update(timelineBar.getArrivalTime(), index - timelineBar.getArrivalTime(), lengthFactor);
+                    break;
+                case MOVE:
+                    index = timelineBar.getMovedIndex(event.getX() - timelineBar.getWidth() / 2, lengthFactor);
+                    timelineBar.update(index, timelineBar.getBurstTime(), lengthFactor);
+                    timelineBar.setLayoutX(timelineBar.getArrivalTime() * lengthFactor);
+                    break;
+            }
 
-    public List<DefaultProcess> getProcesses() {
-        List<DefaultProcess> processesList = new ArrayList<DefaultProcess>();
-        for (int i = 1; i < processTimeLines.size(); i++) {
-            LProcessTimeLine p = (LProcessTimeLine) processTimeLines.get(i);
-            processesList.add(p.getProcess());
-        }
-        return processesList;
-    }
+            DefaultProcess process = timelinePane.getProcess();
+            process.setArrivalTime(timelineBar.getArrivalTime());
+            process.setBurstTime(timelineBar.getBurstTime());
 
-    public double getLengthFactor() {
-        return lengthFactor;
-    }
+            timelinePane.setCursor(Cursor.DEFAULT);
+            timelinePane.setActionState(ActionState.IDLE);
 
-    public void updateAllScales() {
-        int tempMaxEndTime = 0;
-        for (int i = 1; i < processTimeLines.size(); i++) {
-            LProcessTimeLine ptl = (LProcessTimeLine) processTimeLines.get(i);
-            if (ptl.getProcess().getEndTime() > tempMaxEndTime)
-                tempMaxEndTime = ptl.getProcess().getEndTime();
-        }
-        maxEndTime = tempMaxEndTime;
-        processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
+            containerPane.updateAllScales();
+        });
+
+        delAllButton.setOnMouseClicked(e -> {
+            containerPane.delAllProcesses();
+        });
     }
 }

@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
@@ -12,6 +13,7 @@ import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
+import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
@@ -31,21 +33,10 @@ public class SchedulerControlPane extends SingleComponent {
     @FXML
     TextField numPerformanceCoreTextField;
     /**
-     * 성능 코어 개수 설정 버튼
-     */
-    @FXML
-    JFXButton numPerformanceCoreButton;
-
-    /**
      * 효율 코어 개수 설정 텍스트 필드
      */
     @FXML
     TextField numEfficiencyCoreTextField;
-    /**
-     * 효율 코어 개수 설정 버튼
-     */
-    @FXML
-    JFXButton numEfficiencyCoreButton;
 
     /**
      * 스케줄링 메소드를 설정하는 버튼
@@ -63,11 +54,6 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField timeQuantumTextField;
-    /**
-     * 타임 퀀텀 설정 버튼
-     */
-    @FXML
-    JFXButton timeQuantumButton;
 
     /**
      * 실행큐 최대 프로세스 개수 아이콘
@@ -79,11 +65,6 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField queueLimitTextField;
-    /**
-     * 실행큐 최대 프로세스 개수 설정 버튼
-     */
-    @FXML
-    JFXButton queueLimitButton;
 
     /**
      * 최대 플래그 카운트 개수 아이콘
@@ -95,11 +76,9 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField flagLimitTextField;
-    /**
-     * 최대 플래그 카운트 설정 버튼
-     */
+
     @FXML
-    JFXButton flagLimitButton;
+    Pane processTimelineContainerPane;
 
     /**
      * 스케줄링 시작 버튼
@@ -165,22 +144,21 @@ public class SchedulerControlPane extends SingleComponent {
         int numEfficiencyCore = TextFieldUtils.getNumericValue(numEfficiencyCoreTextField, 0);
         for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
 
-//        DefaultProcess[] processes = {
-//                new DefaultProcess(1, 0, 2),
-//                new DefaultProcess(2, 0, 3),
-//                new DefaultProcess(3, 0, 7),
-//                new DefaultProcess(4, 0, 7),
-//                new DefaultProcess(5, 0, 6),
-//                new DefaultProcess(6, 0, 5),
-//        };
+        DefaultProcess[] processes = {
+                new DefaultProcess(1, 0, 2),
+                new DefaultProcess(2, 0, 3),
+                new DefaultProcess(3, 0, 7),
+                new DefaultProcess(4, 0, 7),
+                new DefaultProcess(5, 0, 6),
+                new DefaultProcess(6, 0, 5),
+        };
 
 //        List<DefaultProcess> processes = processControls.getProcesses();
 
         AbstractScheduler scheduler = getConfiguredScheduler();
-//        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
-//        ScheduleData scheduleData = scheduler.schedule(cores, processes);
+        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
 
-//        updateProcessorsStatus(cores, scheduleData);
+        SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
     }
 
     private static final Color ICON_ENABLE_COLOR = Color.WHITE;
@@ -192,7 +170,6 @@ public class SchedulerControlPane extends SingleComponent {
     private void setTimeQuantumDisable(boolean value) {
         timeQuantumIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
         timeQuantumTextField.setDisable(value);
-        timeQuantumButton.setDisable(value);
     }
 
     /**
@@ -201,7 +178,6 @@ public class SchedulerControlPane extends SingleComponent {
     private void setQueueLimitDisable(boolean value) {
         queueLimitIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
         queueLimitTextField.setDisable(value);
-        queueLimitButton.setDisable(value);
     }
 
 
@@ -211,7 +187,6 @@ public class SchedulerControlPane extends SingleComponent {
     private void setFlagLimitDisable(boolean value) {
         flagLimitIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
         flagLimitTextField.setDisable(value);
-        flagLimitButton.setDisable(value);
     }
 
     /**
@@ -303,5 +278,7 @@ public class SchedulerControlPane extends SingleComponent {
         setTimeQuantumDisable(true);
         setQueueLimitDisable(true);
         setFlagLimitDisable(true);
+
+
     }
 }
