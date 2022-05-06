@@ -25,17 +25,24 @@
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
+         <children>
+              <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="프로세스 관리" GridPane.halignment="LEFT">
+                  <GridPane.margin>
+                      <Insets left="20.0" />
+                  </GridPane.margin>
+              </Text>
+              <JFXButton id="add-process" onMouseClicked="#addProcess" text="프로세스 추가" GridPane.halignment="RIGHT">
+                  <GridPane.margin>
+                      <Insets right="25.0" />
+                  </GridPane.margin>
+              </JFXButton>
+            <JFXButton id="add-process" onMouseClicked="#addRandomProcess" text="무작위 프로세스 추가" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="160.0" />
+               </GridPane.margin>
+            </JFXButton>
+         </children>
         </GridPane>
-        <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="프로세스 관리" GridPane.halignment="LEFT">
-            <GridPane.margin>
-                <Insets left="20.0" />
-            </GridPane.margin>
-        </Text>
-        <JFXButton id="add-process" onMouseClicked="#addProcess" text="프로세스 추가" GridPane.halignment="RIGHT">
-            <GridPane.margin>
-                <Insets right="25.0" />
-            </GridPane.margin>
-        </JFXButton>
         <fx:include fx:id="processTimelineContainerPane" source="ProcessTimelineContrainerPane.fxml" GridPane.rowIndex="1" />
         <GridPane GridPane.rowIndex="2">
             <columnConstraints>

@@ -43,6 +43,11 @@ public class ProcessControlPane extends SingleComponent {
     }
 
     @FXML
+    private void addRandomProcess(MouseEvent event) {
+        // TODO: 무작위 프로세스 추가 로직.
+    }
+
+    @FXML
     private void deleteProcess(MouseEvent event) {
         containerPane.deleteAllTimeline();
     }
