@@ -1,6 +1,6 @@
 package kr.ac.koreatech.os.pss.app.component.pane;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +57,8 @@ public class ScheduleResultPane extends SingleComponent {
         resultTable.setItems(scheduleResultList);
     }
 
-    public record ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime, int turnaroundTime, double normalizedTurnaroundTime) {
+    public record ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime,
+                                      int turnaroundTime, double normalizedTurnaroundTime) {
         public ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime, int turnaroundTime, double normalizedTurnaroundTime) {
             this.processName = processName;
             this.arrivalTime = arrivalTime;

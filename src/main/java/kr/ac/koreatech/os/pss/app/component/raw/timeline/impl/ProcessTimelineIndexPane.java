@@ -1,6 +1,5 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -8,9 +7,6 @@ import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
-import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
-
-import java.io.IOException;
 
 public class ProcessTimelineIndexPane extends Pane implements ScaleHandler {
 

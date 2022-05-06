@@ -21,7 +21,10 @@ import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 @CreatableController
 public class SchedulerControlPane extends SingleComponent {

@@ -132,17 +132,12 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         processTimeLines.forEach(t -> t.getTimeline().updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
     }
 
-    public void setCriteriaEndTime(int criteriaEndTime) {
-        this.criteriaEndTime = criteriaEndTime;
-        this.lengthFactor = width / criteriaEndTime;
+    public double getLengthFactor() {
+        return lengthFactor;
     }
 
     public void setLengthFactor(double lengthFactor) {
         this.lengthFactor = lengthFactor;
-    }
-
-    public double getLengthFactor() {
-        return lengthFactor;
     }
 
     public int getMaxEndTime() {
@@ -151,6 +146,11 @@ public class ProcessTimelineContainerPane extends SingleComponent {
 
     public int getCriteriaEndTime() {
         return criteriaEndTime;
+    }
+
+    public void setCriteriaEndTime(int criteriaEndTime) {
+        this.criteriaEndTime = criteriaEndTime;
+        this.lengthFactor = width / criteriaEndTime;
     }
 
     public VBox getProcessNameVBox() {

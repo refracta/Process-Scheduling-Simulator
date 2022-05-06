@@ -14,7 +14,7 @@ import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import java.util.Objects;
 
 public class UnionTimeline {
-    private ProcessTimelineContainerPane container;
+    private final ProcessTimelineContainerPane container;
     private Text idText;
     private ProcessTimelinePane timeline;
     private JFXButton deleteButton;
@@ -23,43 +23,6 @@ public class UnionTimeline {
         this.container = container;
         this.idText = idText;
         this.timeline = timeline;
-        this.deleteButton = deleteButton;
-    }
-
-    public Text getIdText() {
-        return idText;
-    }
-
-    public GridPane getWrappedIdText() {
-        GridPane wrap = GridPaneUtils.wrap(idText);
-        wrap.setPrefWidth(100);
-        wrap.setPrefHeight(30);
-        return wrap;
-    }
-
-    public void setIdText(Text idText) {
-        this.idText = idText;
-    }
-
-    public ProcessTimelinePane getTimeline() {
-        return timeline;
-    }
-
-    public void setTimeline(ProcessTimelinePane timeline) {
-        this.timeline = timeline;
-    }
-
-    public JFXButton getDeleteButton() {
-        return deleteButton;
-    }
-
-    public GridPane getWrappedDeleteButton() {
-        GridPane wrap = GridPaneUtils.wrap(deleteButton);
-        wrap.setMinWidth(114);
-        return wrap;
-    }
-
-    public void setDeleteButton(JFXButton deleteButton) {
         this.deleteButton = deleteButton;
     }
 
@@ -127,13 +90,13 @@ public class UnionTimeline {
                     bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
                 case EXTEND_RIGHT:
-                    index = bar.getRightExpendedIndex(e.getX(),  container.getLengthFactor());
-                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(),  container.getLengthFactor());
+                    index = bar.getRightExpendedIndex(e.getX(), container.getLengthFactor());
+                    bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), container.getLengthFactor());
                     break;
                 case MOVE:
-                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2,  container.getLengthFactor());
-                    bar.update(index, bar.getBurstTime(),  container.getLengthFactor());
-                    bar.setLayoutX(bar.getArrivalTime() *  container.getLengthFactor());
+                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2, container.getLengthFactor());
+                    bar.update(index, bar.getBurstTime(), container.getLengthFactor());
+                    bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
             }
 
@@ -152,6 +115,43 @@ public class UnionTimeline {
             container.deleteTimeline(unionTimeline);
         });
         return unionTimeline;
+    }
+
+    public Text getIdText() {
+        return idText;
+    }
+
+    public void setIdText(Text idText) {
+        this.idText = idText;
+    }
+
+    public GridPane getWrappedIdText() {
+        GridPane wrap = GridPaneUtils.wrap(idText);
+        wrap.setPrefWidth(100);
+        wrap.setPrefHeight(30);
+        return wrap;
+    }
+
+    public ProcessTimelinePane getTimeline() {
+        return timeline;
+    }
+
+    public void setTimeline(ProcessTimelinePane timeline) {
+        this.timeline = timeline;
+    }
+
+    public JFXButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public void setDeleteButton(JFXButton deleteButton) {
+        this.deleteButton = deleteButton;
+    }
+
+    public GridPane getWrappedDeleteButton() {
+        GridPane wrap = GridPaneUtils.wrap(deleteButton);
+        wrap.setMinWidth(114);
+        return wrap;
     }
 
     @Override
