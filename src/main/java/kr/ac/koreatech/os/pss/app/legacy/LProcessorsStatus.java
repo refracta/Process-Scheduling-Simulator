@@ -18,11 +18,6 @@ import java.util.List;
  */
 public class LProcessorsStatus extends GridPane {
     /**
-     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
-     */
-    private GridPane pane;
-
-    /**
      * 성능 코어의 개수를 출력하는 FXML 요소
      */
     @FXML
@@ -57,6 +52,22 @@ public class LProcessorsStatus extends GridPane {
      */
     @FXML
     Text averageResponseUnitTime;
+    /**
+     * 컨트롤러 객체가 담당하고 있는 GridPane 객체
+     */
+    private final GridPane pane;
+
+    /**
+     * ProcessorsStatus의 생성자
+     * 별도의 정적 메소드를 통해 객체를 생성하므로 private
+     *
+     * @throws IOException
+     */
+    private LProcessorsStatus() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processorsStatus.fxml"));
+        fxmlLoader.setController(this);
+        this.pane = fxmlLoader.load();
+    }
 
     /**
      * Processors Status에서 출력할 사항을 설정하여 컨트롤러로 반환
@@ -93,18 +104,6 @@ public class LProcessorsStatus extends GridPane {
      */
     public static LProcessorsStatus getProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
         return getProcessorsStatus(Arrays.asList(cores), scheduleData);
-    }
-
-    /**
-     * ProcessorsStatus의 생성자
-     * 별도의 정적 메소드를 통해 객체를 생성하므로 private
-     *
-     * @throws IOException
-     */
-    private LProcessorsStatus() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processorsStatus.fxml"));
-        fxmlLoader.setController(this);
-        this.pane = fxmlLoader.load();
     }
 
     /**

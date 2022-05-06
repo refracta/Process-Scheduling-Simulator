@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+
 <?import com.jfoenix.controls.JFXButton?>
-
-
-<JFXButton maxHeight="31.0" prefHeight="31.0" style="-fx-font-family: NanumSquare; -fx-background-color: #06113C; -fx-background-radius: 1px; -fx-text-fill: white;" text="프로세스 제거" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" />
+<JFXButton xmlns:fx="http://javafx.com/fxml/1" maxHeight="31.0"
+           prefHeight="31.0"
+           style="-fx-font-family: NanumSquare; -fx-background-color: #06113C; -fx-background-radius: 1px; -fx-text-fill: white;" text="프로세스 제거" xmlns="http://javafx.com/javafx/18"/>

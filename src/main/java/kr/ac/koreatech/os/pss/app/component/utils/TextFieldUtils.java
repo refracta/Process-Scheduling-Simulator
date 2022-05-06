@@ -4,6 +4,7 @@ import javafx.scene.control.TextField;
 
 /**
  * 텍스트 필드 유틸리티
+ *
  * @author refracta
  */
 public class TextFieldUtils {

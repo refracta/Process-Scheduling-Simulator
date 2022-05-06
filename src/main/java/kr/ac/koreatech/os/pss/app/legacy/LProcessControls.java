@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LProcessControls extends GridPane {
-    private GridPane pane;
+    private final GridPane pane;
 
     @FXML
     private VBox processesIDVBox;
@@ -40,17 +40,13 @@ public class LProcessControls extends GridPane {
     @FXML
     private JFXSlider criteriaEndTimeSlider;
 
-    private double width;
-    private double height;
+    private final double width;
+    private final double height;
 
-    private List<LAbstractTimeLine> processTimeLines;
+    private final List<LAbstractTimeLine> processTimeLines;
     private int criteriaEndTime;
     private int maxEndTime;
     private double lengthFactor;
-
-    public static LProcessControls getProcessControls() throws IOException {
-        return new LProcessControls();
-    }
 
     private LProcessControls() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("processControls.fxml"));
@@ -93,6 +89,10 @@ public class LProcessControls extends GridPane {
 
             processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime)));
         });
+    }
+
+    public static LProcessControls getProcessControls() throws IOException {
+        return new LProcessControls();
     }
 
     @FXML

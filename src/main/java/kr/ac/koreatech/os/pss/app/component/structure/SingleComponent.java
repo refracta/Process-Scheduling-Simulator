@@ -9,10 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 단일 생성 컴포넌트 클래스
+ *
  * @author refracta
  */
 public abstract class SingleComponent implements Initializable {
-    private static Map<Class<?>, SingleComponent> componentMap = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, SingleComponent> componentMap = new ConcurrentHashMap<>();
 
     public static <T> T getInstance(Class<T> type) {
         return (T) componentMap.get(type);
