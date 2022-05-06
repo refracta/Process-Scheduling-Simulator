@@ -196,7 +196,6 @@ public class LSchedulerControls extends GridPane {
 
     /**
      * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
-     *
      */
     public void init() throws IOException {
         processorsStatus = LProcessorsStatus.getProcessorsStatus();
@@ -210,7 +209,9 @@ public class LSchedulerControls extends GridPane {
         root.add(leftMenu, 0, 0);
         root.add(rightMenu, 1, 0);
 
-        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> { scheduleMethodComboBox.getItems().add(schedulerMethod.getValue()); });
+        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
+            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
+        });
 
         setTimeQuantumDisable();
         setQueueLimitDisable();
@@ -226,7 +227,8 @@ public class LSchedulerControls extends GridPane {
     private void applyScheduleMethod(MouseEvent event) {
         try {
             currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
 
         if (currentScheduleMethod == null) return;
 
@@ -296,7 +298,8 @@ public class LSchedulerControls extends GridPane {
             numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numPerformanceCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -310,7 +313,8 @@ public class LSchedulerControls extends GridPane {
             numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
         } catch (NumberFormatException exception) {
             numEfficiencyCore = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -324,7 +328,8 @@ public class LSchedulerControls extends GridPane {
             currentTimeQuantum = Integer.parseInt(timeQuantumTextField.getText());
         } catch (NumberFormatException exception) {
             currentTimeQuantum = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -338,7 +343,8 @@ public class LSchedulerControls extends GridPane {
             currentQueueLimit = Integer.parseInt(queueLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentQueueLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**
@@ -352,7 +358,8 @@ public class LSchedulerControls extends GridPane {
             currentFlagLimit = Integer.parseInt(flagLimitTextField.getText());
         } catch (NumberFormatException exception) {
             currentFlagLimit = 0;
-        } catch (Exception exception) { }
+        } catch (Exception exception) {
+        }
     }
 
     /**

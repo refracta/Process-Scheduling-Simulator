@@ -10,12 +10,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.legacy.LProcessControls;
 import kr.ac.koreatech.os.pss.app.legacy.timeline.LAbstractTimeLine;
 import kr.ac.koreatech.os.pss.app.legacy.timeline.impl.LProcessTimeLine;
-import kr.ac.koreatech.os.pss.app.legacy.timeline.impl.LProcessTimeLineIndex;
+import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.io.IOException;
@@ -24,9 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@CreatableController
 public class ProcessControlPane extends SingleComponent {
-    private GridPane pane;
-
     @FXML
     private VBox processesIDVBox;
     @FXML
@@ -122,7 +119,7 @@ public class ProcessControlPane extends SingleComponent {
     @FXML
     private void delProcess(MouseEvent event) throws IOException {
         JFXButton target = (JFXButton) event.getSource();
-        int index = ((VBox)target.getParent().getParent()).getChildren().indexOf(target.getParent());
+        int index = ((VBox) target.getParent().getParent()).getChildren().indexOf(target.getParent());
 
         processesIDVBox.getChildren().remove(index);
         processesVBox.getChildren().remove(index);
@@ -151,10 +148,6 @@ public class ProcessControlPane extends SingleComponent {
             processesList.add(p.getProcess());
         }
         return processesList;
-    }
-
-    public GridPane getPane() {
-        return pane;
     }
 
     public double getLengthFactor() {

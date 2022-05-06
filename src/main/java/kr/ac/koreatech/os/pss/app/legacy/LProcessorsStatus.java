@@ -2,8 +2,8 @@ package kr.ac.koreatech.os.pss.app.legacy;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.text.Text;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 

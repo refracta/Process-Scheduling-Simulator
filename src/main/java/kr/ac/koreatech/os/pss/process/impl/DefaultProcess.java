@@ -158,6 +158,7 @@ public class DefaultProcess extends AbstractProcess {
     public double getResponseRatio() {
         return (burstTime + waitingTime) / (double) burstTime;
     }
+
     /**
      * 프로세스가 종료된 프로세스인지의 여부를 반환한다. 남은 실행 시간이 0 이하가 되면 참(true)을 반환한다.
      *

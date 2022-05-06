@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-<GridPane maxHeight="-Infinity" minHeight="31.0" prefHeight="31.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: NanumSquare Bold; -fx-font-size: 20px;" text="-" GridPane.halignment="CENTER">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin></Text>
-   </children>
+<GridPane maxHeight="-Infinity" minHeight="31.0" prefHeight="31.0" xmlns="http://javafx.com/javafx/17"
+          xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: NanumSquare Bold; -fx-font-size: 20px;"
+              text="-" GridPane.halignment="CENTER">
+            <GridPane.margin>
+                <Insets/>
+            </GridPane.margin>
+        </Text>
+    </children>
 </GridPane>

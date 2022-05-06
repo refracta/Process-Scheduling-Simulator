@@ -4,80 +4,85 @@
 <?import com.jfoenix.controls.JFXSlider?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-
-<GridPane fx:controller="kr.ac.koreatech.os.pss.app.component.pane.ProcessControlPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="1130.0" stylesheets="@css/process-control-pane.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/1">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="1200.0" minWidth="10.0" prefWidth="100.0" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="230.0" minHeight="150.0" prefHeight="230.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <GridPane id="title-container">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-      </GridPane>
-      <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="프로세스 관리" GridPane.halignment="LEFT">
-         <GridPane.margin>
-            <Insets left="20.0" />
-         </GridPane.margin>
-      </Text>
-      <JFXButton id="add-process" onMouseClicked="#addProcess" text="프로세스 추가" GridPane.halignment="RIGHT">
-         <GridPane.margin>
-            <Insets right="20.0" />
-         </GridPane.margin>
-      </JFXButton>
-      <GridPane GridPane.rowIndex="1">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="820.0" minWidth="820.0" prefWidth="820.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <ScrollPane fx:id="processesIDScrollPane" hbarPolicy="NEVER" prefHeight="210.0" prefWidth="100.0" vbarPolicy="NEVER" GridPane.halignment="CENTER">
-               <content>
-                  <VBox fx:id="processesIDVBox" style="-fx-background-color: #F4F4F4F4;" />
-               </content>
-            </ScrollPane>
-            <ScrollPane fx:id="processesScrollPane" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER" GridPane.columnIndex="1">
-               <content>
-                  <VBox fx:id="processesVBox" />
-               </content>
-            </ScrollPane>
-            <ScrollPane fx:id="processesDelScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.halignment="CENTER">
-               <content>
-                  <VBox fx:id="processesDelVBox" alignment="TOP_CENTER" minWidth="200.0" style="-fx-background-color: #F4F4F4;" />
-               </content>
-            </ScrollPane>
-         </children>
-      </GridPane>
-      <GridPane GridPane.rowIndex="2">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <JFXButton id="add-process" onMouseClicked="#delAllProcesses" text="전체 제거" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <JFXSlider fx:id="criteriaEndTimeSlider" blockIncrement="1.0" max="50.0" min="10.0" style="-fx-custom-color: black;" value="10.0" GridPane.columnIndex="1" />
-         </children>
-      </GridPane>
-   </children>
+<GridPane fx:controller="kr.ac.koreatech.os.pss.app.component.pane.ProcessControlPane" maxHeight="-Infinity"
+          maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="310.0" prefWidth="1130.0"
+          stylesheets="@css/process-control-pane.css" xmlns="http://javafx.com/javafx/17"
+          xmlns:fx="http://javafx.com/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1200.0" minWidth="10.0" prefWidth="100.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="230.0" minHeight="150.0" prefHeight="230.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <GridPane id="title-container">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+        </GridPane>
+        <Text id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="프로세스 관리" GridPane.halignment="LEFT">
+            <GridPane.margin>
+                <Insets left="20.0"/>
+            </GridPane.margin>
+        </Text>
+        <JFXButton id="add-process" onMouseClicked="#addProcess" text="프로세스 추가" GridPane.halignment="RIGHT">
+            <GridPane.margin>
+                <Insets right="20.0"/>
+            </GridPane.margin>
+        </JFXButton>
+        <GridPane GridPane.rowIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="110.0" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="820.0" minWidth="820.0" prefWidth="820.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <ScrollPane fx:id="processesIDScrollPane" hbarPolicy="NEVER" prefHeight="210.0" prefWidth="100.0"
+                            vbarPolicy="NEVER" GridPane.halignment="CENTER">
+                    <content>
+                        <VBox fx:id="processesIDVBox" style="-fx-background-color: #F4F4F4F4;"/>
+                    </content>
+                </ScrollPane>
+                <ScrollPane fx:id="processesScrollPane" prefHeight="200.0" prefWidth="200.0" vbarPolicy="NEVER"
+                            GridPane.columnIndex="1">
+                    <content>
+                        <VBox fx:id="processesVBox"/>
+                    </content>
+                </ScrollPane>
+                <ScrollPane fx:id="processesDelScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0"
+                            GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                    <content>
+                        <VBox fx:id="processesDelVBox" alignment="TOP_CENTER" minWidth="200.0"
+                              style="-fx-background-color: #F4F4F4;"/>
+                    </content>
+                </ScrollPane>
+            </children>
+        </GridPane>
+        <GridPane GridPane.rowIndex="2">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <children>
+                <JFXButton id="add-process" onMouseClicked="#delAllProcesses" text="전체 제거" GridPane.columnIndex="2"
+                           GridPane.halignment="CENTER"/>
+                <JFXSlider fx:id="criteriaEndTimeSlider" blockIncrement="1.0" max="50.0" min="10.0"
+                           style="-fx-custom-color: black;" value="10.0" GridPane.columnIndex="1"/>
+            </children>
+        </GridPane>
+    </children>
 </GridPane>

@@ -1,9 +1,7 @@
 package kr.ac.koreatech.os.pss.app.loader.utils;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import kr.ac.koreatech.os.pss.app.PSSApplication;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 
 import java.io.IOException;
