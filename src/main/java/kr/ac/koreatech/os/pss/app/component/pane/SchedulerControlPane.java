@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
 import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
@@ -19,39 +20,10 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @CreatableController
 public class SchedulerControlPane extends SingleComponent {
-
-    /**
-     * 성능 코어 개수
-     */
-    private int numPerformanceCore;
-    /**
-     * 효율 코어 개수
-     */
-    private int numEfficiencyCore;
-
-    /**
-     * 현재 선택된 스케줄링 기법
-     */
-    private ScheduleMethod currentScheduleMethod;
-    /**
-     * RR에서의 타임 퀀텀
-     */
-    private int currentTimeQuantum;
-    /**
-     * Custom 1에서 실행큐에 넣을 수 있는 프로세스의 최대 개수
-     */
-    private int currentQueueLimit;
-    /**
-     * Custom 2에서 사용할 최대 플래그 카운트
-     */
-    private int currentFlagLimit;
 
     /**
      * 성능 코어 개수 설정 텍스트 필드
@@ -135,17 +107,12 @@ public class SchedulerControlPane extends SingleComponent {
     @FXML
     JFXButton startButton;
 
-    /**
-     * ProcessorsStatus 생성 후 기본 정보를 설정하기 위한 메소드
-     */
-    public void init() throws IOException {
-        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
-            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
-        });
-
-        setTimeQuantumDisable();
-        setQueueLimitDisable();
-        setFlagLimitDisable();
+    public Optional<ScheduleMethod> getCurrentScheduleMethod() {
+        try {
+            return Optional.of(ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString()));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
     /**
@@ -155,28 +122,24 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     private void applyScheduleMethod(MouseEvent event) {
-        try {
-            currentScheduleMethod = ScheduleMethod.getEnum(scheduleMethodComboBox.getValue().toString());
-        } catch (Exception exception) {
+        Optional<ScheduleMethod> scheduleMethod = getCurrentScheduleMethod();
+        if (scheduleMethod.isEmpty()) {
+            return;
         }
-
-        if (currentScheduleMethod == null) return;
-
-        setTimeQuantumDisable();
-        setQueueLimitDisable();
-        setFlagLimitDisable();
-
-        switch (currentScheduleMethod) {
+        setTimeQuantumDisable(true);
+        setQueueLimitDisable(true);
+        setFlagLimitDisable(true);
+        switch (scheduleMethod.get()) {
             case RR:
-                setTimeQuantumEnable();
+                setTimeQuantumDisable(false);
                 break;
             case Custom1:
-                setTimeQuantumEnable();
-                setQueueLimitEnable();
+                setTimeQuantumDisable(false);
+                setQueueLimitDisable(false);
                 break;
             case Custom2:
-                setTimeQuantumEnable();
-                setFlagLimitEnable();
+                setTimeQuantumDisable(false);
+                setFlagLimitDisable(false);
                 break;
         }
     }
@@ -196,7 +159,10 @@ public class SchedulerControlPane extends SingleComponent {
         // # 임시 설정
         // processes: 추후 프로세스 설정 클래스에서 받아올 예정.
         List<AbstractCore> cores = new ArrayList<AbstractCore>();
+        int numPerformanceCore = TextFieldUtils.getNumericValue(numPerformanceCoreTextField, 0);
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
+
+        int numEfficiencyCore = TextFieldUtils.getNumericValue(numEfficiencyCoreTextField, 0);
         for (int i = 0; i < numEfficiencyCore; i++) cores.add(new EfficiencyCore());
 
 //        DefaultProcess[] processes = {
@@ -210,164 +176,42 @@ public class SchedulerControlPane extends SingleComponent {
 
 //        List<DefaultProcess> processes = processControls.getProcesses();
 
-        AbstractScheduler scheduler = getScheduler();
+        AbstractScheduler scheduler = getConfiguredScheduler();
 //        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
 //        ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
 //        updateProcessorsStatus(cores, scheduleData);
     }
 
-    /**
-     * 성능 코어 개수 갱신
-     *
-     * @param event
-     */
-    @FXML
-    private void updateNumPerformanceCore(MouseEvent event) {
-        try {
-            numPerformanceCore = Integer.parseInt(numPerformanceCoreTextField.getText());
-        } catch (NumberFormatException exception) {
-            numPerformanceCore = 0;
-        } catch (Exception exception) {
-        }
-    }
-
-    /**
-     * 효율 코어 개수 갱신
-     *
-     * @param event
-     */
-    @FXML
-    private void updateNumEfficiencyCore(MouseEvent event) {
-        try {
-            numEfficiencyCore = Integer.parseInt(numEfficiencyCoreTextField.getText());
-        } catch (NumberFormatException exception) {
-            numEfficiencyCore = 0;
-        } catch (Exception exception) {
-        }
-    }
-
-    /**
-     * 타임 퀀텀 변수 갱신
-     *
-     * @param event
-     */
-    @FXML
-    private void updateTimeQuantum(MouseEvent event) {
-        try {
-            currentTimeQuantum = Integer.parseInt(timeQuantumTextField.getText());
-        } catch (NumberFormatException exception) {
-            currentTimeQuantum = 0;
-        } catch (Exception exception) {
-        }
-    }
-
-    /**
-     * 실행큐 최대 프로세스 개수 변수 갱신
-     *
-     * @param event
-     */
-    @FXML
-    private void updateQueueLimit(MouseEvent event) {
-        try {
-            currentQueueLimit = Integer.parseInt(queueLimitTextField.getText());
-        } catch (NumberFormatException exception) {
-            currentQueueLimit = 0;
-        } catch (Exception exception) {
-        }
-    }
-
-    /**
-     * 최대 플래그 카운트 변수 갱신
-     *
-     * @param event
-     */
-    @FXML
-    private void updateFlagLimit(MouseEvent event) {
-        try {
-            currentFlagLimit = Integer.parseInt(flagLimitTextField.getText());
-        } catch (NumberFormatException exception) {
-            currentFlagLimit = 0;
-        } catch (Exception exception) {
-        }
-    }
-    /**
-     * 입력된 코어와 스케줄 데이터를 통해 프로세서 상태 갱신 및 적용
-     *
-     * @param cores
-     * @param scheduleData
-     * @throws IOException
-     */
-    public void updateProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
-//        processorsStatus.update(cores, scheduleData);
-    }
-
-
-    /**
-     * 입력된 코어와 스케줄 데이터를 통해 프로세서 상태 갱신 및 적용
-     * void updateProcessorsStatus(List&lt;AbstractCore&gt; cores, ScheduleData scheduleData)과 동치이다.
-     *
-     * @param cores
-     * @param scheduleData
-     * @throws IOException
-     */
-    public void updateProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
-        updateProcessorsStatus(Arrays.asList(cores), scheduleData);
-    }
+    private static final Color ICON_ENABLE_COLOR = Color.WHITE;
+    private static final Color ICON_DISABLE_COLOR = new Color(1, 1, 1, 0.4);
 
     /**
      * 사용자가 타임 퀀텀 변수를 입력할 수 있도록 입력을 활성화
      */
-    private void setTimeQuantumEnable() {
-        timeQuantumIcon.setFill(new Color(1, 1, 1, 1));
-        timeQuantumIcon.setFill(Color.WHITE);
-        timeQuantumTextField.setDisable(false);
-        timeQuantumButton.setDisable(false);
-    }
-
-    /**
-     * 사용자가 타임 퀀텀 변수를 입력할 수 없도록 입력을 비활성화
-     */
-    private void setTimeQuantumDisable() {
-        timeQuantumIcon.setFill(new Color(1, 1, 1, 0.4));
-        timeQuantumTextField.setDisable(true);
-        timeQuantumButton.setDisable(true);
-    }
-
-    /**
-     * 사용자가 실행큐 프로세스 최대 개수 변수를 입력할 수 있도록 입력을 활성화
-     */
-    private void setQueueLimitEnable() {
-        queueLimitIcon.setFill(new Color(1, 1, 1, 1));
-        queueLimitTextField.setDisable(false);
-        queueLimitButton.setDisable(false);
+    private void setTimeQuantumDisable(boolean value) {
+        timeQuantumIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
+        timeQuantumTextField.setDisable(value);
+        timeQuantumButton.setDisable(value);
     }
 
     /**
      * 사용자가 실행큐 프로세스 최대 개수 변수를 입력할 수 없도록 입력을 비활성화
      */
-    private void setQueueLimitDisable() {
-        queueLimitIcon.setFill(new Color(1, 1, 1, 0.4));
-        queueLimitTextField.setDisable(true);
-        queueLimitButton.setDisable(true);
+    private void setQueueLimitDisable(boolean value) {
+        queueLimitIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
+        queueLimitTextField.setDisable(value);
+        queueLimitButton.setDisable(value);
     }
 
-    /**
-     * 사용자가 최대 플래그 카운트 변수를 입력할 수 있도록 입력을 활성화
-     */
-    private void setFlagLimitEnable() {
-        flagLimitIcon.setFill(new Color(1, 1, 1, 1));
-        flagLimitTextField.setDisable(false);
-        flagLimitButton.setDisable(false);
-    }
 
     /**
      * 사용자가 최대 플래그 카운트 변수를 입력할 수 없도록 입력을 비활성화
      */
-    private void setFlagLimitDisable() {
-        flagLimitIcon.setFill(new Color(1, 1, 1, 0.4));
-        flagLimitTextField.setDisable(true);
-        flagLimitButton.setDisable(true);
+    private void setFlagLimitDisable(boolean value) {
+        flagLimitIcon.setFill(value ? ICON_DISABLE_COLOR : ICON_ENABLE_COLOR);
+        flagLimitTextField.setDisable(value);
+        flagLimitButton.setDisable(value);
     }
 
     /**
@@ -376,20 +220,25 @@ public class SchedulerControlPane extends SingleComponent {
      * @return 스케줄링 수행 가능 여부
      */
     private boolean isSchedulerReady() {
-        if (currentScheduleMethod == null) return false;
-        if (!(numPerformanceCore > 0 || numEfficiencyCore > 0))
+        Optional<ScheduleMethod> scheduleMethod = getCurrentScheduleMethod();
+        int numPerformanceCore = TextFieldUtils.getNumericValue(numPerformanceCoreTextField, 0);
+        int numEfficiencyCore = TextFieldUtils.getNumericValue(numEfficiencyCoreTextField, 0);
+        if (scheduleMethod.isPresent()) {
+            if (!(numPerformanceCore > 0 || numEfficiencyCore > 0)) return false;
+
+            switch (scheduleMethod.get()) {
+                case RR:
+                    return isRRReady();
+                case Custom1:
+                    return isCustom1Ready();
+                case Custom2:
+                    return isCustom2Ready();
+                default:
+                    return true;
+            }
+        } else {
             return false;
-
-        switch (currentScheduleMethod) {
-            case RR:
-                return isRRReady();
-            case Custom1:
-                return isCustom1Ready();
-            case Custom2:
-                return isCustom2Ready();
         }
-
-        return true;
     }
 
     /**
@@ -398,7 +247,7 @@ public class SchedulerControlPane extends SingleComponent {
      * @return RR 스케줄링 수행 가능 여부
      */
     private boolean isRRReady() {
-        return currentTimeQuantum > 0;
+        return TextFieldUtils.getNumericValue(timeQuantumTextField, 0) > 0;
     }
 
     /**
@@ -407,7 +256,7 @@ public class SchedulerControlPane extends SingleComponent {
      * @return Custom 1 스케줄링 수행 가능 여부
      */
     private boolean isCustom1Ready() {
-        return currentTimeQuantum > 0 && currentQueueLimit > 0;
+        return isRRReady() && TextFieldUtils.getNumericValue(queueLimitTextField, 0) > 0;
     }
 
     /**
@@ -416,7 +265,7 @@ public class SchedulerControlPane extends SingleComponent {
      * @return Custom 2 스케줄링 수행 가능 여부
      */
     private boolean isCustom2Ready() {
-        return currentTimeQuantum > 0 && currentFlagLimit > 0;
+        return isRRReady() && TextFieldUtils.getNumericValue(flagLimitTextField, 0) > 0;
     }
 
     /**
@@ -424,33 +273,35 @@ public class SchedulerControlPane extends SingleComponent {
      *
      * @return 현재 스케줄링 설정에 맞는 스케줄러
      */
-    private AbstractScheduler getScheduler() {
-        switch (currentScheduleMethod) {
-            case FCFS:
-                return new FCFSScheduler();
-            case RR:
-                return new RRScheduler(currentTimeQuantum);
-            case SPN:
-                return new SRTNScheduler();
-            case SRTN:
-                return new SPNScheduler();
-            case HRRN:
-                return new HRRNScheduler();
-            case Custom1:
-            case Custom2:
+    public AbstractScheduler getConfiguredScheduler() {
+        Optional<ScheduleMethod> method = getCurrentScheduleMethod();
+        if (method.isPresent()) {
+            switch (method.get()) {
+                case FCFS:
+                    return new FCFSScheduler();
+                case RR:
+                    return new RRScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1));
+                case SPN:
+                    return new SRTNScheduler();
+                case SRTN:
+                    return new SPNScheduler();
+                case HRRN:
+                    return new HRRNScheduler();
+                case Custom1:
+                case Custom2:
+            }
         }
-
         return new FCFSScheduler();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        Arrays.stream(ScheduleMethod.values()).forEach((schedulerMethod) -> {
-            scheduleMethodComboBox.getItems().add(schedulerMethod.getValue());
-        });
-        setTimeQuantumDisable();
-        setQueueLimitDisable();
-        setFlagLimitDisable();
+        for (ScheduleMethod method : ScheduleMethod.values()) {
+            scheduleMethodComboBox.getItems().add(method.getValue());
+        }
+        setTimeQuantumDisable(true);
+        setQueueLimitDisable(true);
+        setFlagLimitDisable(true);
     }
 }
