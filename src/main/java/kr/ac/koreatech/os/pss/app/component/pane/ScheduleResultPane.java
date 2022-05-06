@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
@@ -16,9 +15,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ScheduleResultPane extends SingleComponent {
-    @FXML
-    private VBox tempVBox;
-
     @FXML
     private TableView<ScheduleResultModel> resultTable;
 

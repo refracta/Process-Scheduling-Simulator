@@ -103,6 +103,7 @@ public class UnionTimeline {
             DefaultProcess process = timeline.getProcess();
             process.setArrivalTime(bar.getArrivalTime());
             process.setBurstTime(bar.getBurstTime());
+            process.setLeftBurstTime(bar.getBurstTime());
 
             timeline.setCursor(Cursor.DEFAULT);
             timeline.setActionState(ProcessTimelinePane.ActionState.IDLE);

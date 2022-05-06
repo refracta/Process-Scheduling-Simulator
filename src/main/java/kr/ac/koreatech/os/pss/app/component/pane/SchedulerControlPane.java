@@ -20,10 +20,7 @@ import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SchedulerControlPane extends SingleComponent {
 
@@ -149,6 +146,9 @@ public class SchedulerControlPane extends SingleComponent {
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
         SingleComponent.getInstance(ScheduleResultPane.class).printResultConsole(scheduleData);
+
+        // 테스트용
+        SingleComponent.getInstance(GanttChartContainerPane.class).generateGanttChart(scheduleData);
     }
 
     /**

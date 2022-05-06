@@ -39,7 +39,7 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     private List<UnionTimeline> processTimeLines;
 
     private int criteriaEndTime;
-    private int maxEndTime;
+    private int maxEndTime;;
     private double lengthFactor;
 
     public ProcessTimelineContainerPane() {
