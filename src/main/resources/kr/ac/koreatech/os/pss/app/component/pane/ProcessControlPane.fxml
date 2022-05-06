@@ -48,7 +48,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <JFXButton id="add-process" fx:id="delAllButton" text="전체 제거" GridPane.columnIndex="2"
+                <JFXButton id="add-process" fx:id="delAllButton" onMouseClicked="#deleteProcess" text="전체 제거" GridPane.columnIndex="2"
                            GridPane.halignment="CENTER"/>
                 <JFXSlider fx:id="criteriaEndTimeSlider" blockIncrement="1.0" max="50.0" min="10.0"
                            style="-fx-custom-color: black;" value="10.0" GridPane.columnIndex="1"/>

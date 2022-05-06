@@ -5,14 +5,17 @@ import javafx.scene.shape.Line;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
-import java.io.IOException;
-
 public class ProcessTimelinePane extends Pane implements ScaleHandler {
     private ActionState actionState;
     private final DefaultProcess process;
     private final TimelineBar timeLineBar;
 
-    public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) throws IOException {
+
+    public ProcessTimelinePane() {
+        this(10, 80, 30);
+    }
+
+    public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) {
         this.actionState = ActionState.IDLE;
 
         this.process = new DefaultProcess(0, 1);

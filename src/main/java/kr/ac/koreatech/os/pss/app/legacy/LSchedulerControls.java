@@ -356,9 +356,8 @@ public class LSchedulerControls extends GridPane {
      *
      * @param cores
      * @param scheduleData
-     * @throws IOException
      */
-    public void updateProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) throws IOException {
+    public void updateProcessorsStatus(List<AbstractCore> cores, ScheduleData scheduleData) {
         processorsStatus.update(cores, scheduleData);
     }
 
@@ -369,9 +368,8 @@ public class LSchedulerControls extends GridPane {
      *
      * @param cores
      * @param scheduleData
-     * @throws IOException
      */
-    public void updateProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) throws IOException {
+    public void updateProcessorsStatus(AbstractCore[] cores, ScheduleData scheduleData) {
         updateProcessorsStatus(Arrays.asList(cores), scheduleData);
     }
 
@@ -503,7 +501,7 @@ public class LSchedulerControls extends GridPane {
         return new FCFSScheduler();
     }
 
-    public GridPane getRoot() throws IOException {
+    public GridPane getRoot() {
         return root;
     }
 

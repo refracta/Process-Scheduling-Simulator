@@ -126,7 +126,7 @@ public class SchedulerControlPane extends SingleComponent {
      * @param event
      */
     @FXML
-    private void startSchedule(MouseEvent event) throws IOException {
+    private void startSchedule(MouseEvent event) {
         if (!isSchedulerReady()) {
             return;
         }

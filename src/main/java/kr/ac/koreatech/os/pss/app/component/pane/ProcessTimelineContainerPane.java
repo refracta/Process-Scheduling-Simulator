@@ -1,31 +1,24 @@
 package kr.ac.koreatech.os.pss.app.component.pane;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.UnionTimeline;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
-import kr.ac.koreatech.os.pss.app.legacy.timeline.LAbstractTimeLine;
-import kr.ac.koreatech.os.pss.app.legacy.timeline.impl.LProcessTimeLine;
-import kr.ac.koreatech.os.pss.app.loader.annotation.CreatableController;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@CreatableController
 public class ProcessTimelineContainerPane extends SingleComponent {
     @FXML
-    private VBox processIDVBox;
+    private VBox processNameVBox;
     @FXML
-    private VBox processVBox;
+    private VBox processTimelineVBox;
     @FXML
-    private VBox processDelVBox;
+    private VBox processDeleteVBox;
 
     @FXML
     private ScrollPane processIDScrollPane;
@@ -37,23 +30,21 @@ public class ProcessTimelineContainerPane extends SingleComponent {
     private double width;
     private double height;
 
-    private List<ProcessTimelinePane> processTimeLines;
+    private List<UnionTimeline> processTimeLines;
+
     private int criteriaEndTime;
     private int maxEndTime;
     private double lengthFactor;
 
-    public ProcessTimelineContainerPane() {
-    }
 
-    public ProcessTimelineContainerPane(int criteriaEndTime, double width, double height) throws IOException {
-        ProcessTimelineContainerPane processTimelineContainerPane = new ProcessTimelineContainerPane(criteriaEndTime, 800, 20);
+    public ProcessTimelineContainerPane() {
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
 
-        this.width = 800;
+        this.width = 850;
         this.height = 30;
 
         this.processTimeLines = new ArrayList<>();
@@ -78,39 +69,53 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         // 스크롤 관련 이벤트 핸들러 끝.
     }
 
-    @FXML
-    public void delProcess(MouseEvent event) throws IOException {
-        JFXButton target = (JFXButton) event.getSource();
-        int index = ((VBox) target.getParent().getParent()).getChildren().indexOf(target.getParent());
+    public void addTimeline() {
+        UnionTimeline unionTimeline = UnionTimeline.create(this, lengthFactor);
+        processNameVBox.getChildren().add(unionTimeline.getWrappedIdText());
+        processDeleteVBox.getChildren().add(unionTimeline.getWrappedDeleteButton());
+        processTimelineVBox.getChildren().add(unionTimeline.getTimeline());
+        processTimeLines.add(unionTimeline);
+    }
 
-        processIDVBox.getChildren().remove(index);
-        processVBox.getChildren().remove(index);
-        processDelVBox.getChildren().remove(index);
+    public void deleteTimeline(UnionTimeline unionTimeline) {
+        int index = processTimeLines.indexOf(unionTimeline);
+        processNameVBox.getChildren().remove(index);
+        processTimelineVBox.getChildren().remove(index);
+        processDeleteVBox.getChildren().remove(index);
         processTimeLines.remove(index);
-
         updateAllScales();
     }
 
-    public List<DefaultProcess> getprocess() {
+    public void deleteAllTimeline() {
+        processNameVBox.getChildren().clear();
+        processTimelineVBox.getChildren().clear();
+        processDeleteVBox.getChildren().clear();
+        processTimeLines.clear();
+        updateAllScales();
+    }
+
+    public List<DefaultProcess> getProcessList() {
         List<DefaultProcess> processList = new ArrayList<DefaultProcess>();
-        for (ProcessTimelinePane p : processTimeLines) {
-            processList.add(((ProcessTimelinePane)p).getProcess());
+        for (UnionTimeline t : processTimeLines) {
+            processList.add(t.getTimeline().getProcess());
         }
         return processList;
     }
 
-    public void updateAllScales() {
-        maxEndTime = processTimeLines.stream().mapToInt(p -> ((ProcessTimelinePane) p).getProcess().getEndTime()).max().getAsInt();
-        processTimeLines.forEach(p -> p.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
-    }
 
-    public void setLengthFactor(double lengthFactor) {
-        this.lengthFactor = lengthFactor;
+    public void updateAllScales() {
+        if (processTimeLines.isEmpty()) return;
+        maxEndTime = getProcessList().stream().mapToInt(DefaultProcess::getEndTime).max().getAsInt();
+        processTimeLines.forEach(t -> t.getTimeline().updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
     }
 
     public void setCriteriaEndTime(int criteriaEndTime) {
         this.criteriaEndTime = criteriaEndTime;
         this.lengthFactor = width / criteriaEndTime;
+    }
+
+    public void setLengthFactor(double lengthFactor) {
+        this.lengthFactor = lengthFactor;
     }
 
     public double getLengthFactor() {
@@ -125,28 +130,19 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         return criteriaEndTime;
     }
 
-    public void delAllprocess() {
-        processIDVBox.getChildren().clear();
-        processVBox.getChildren().clear();
-        processDelVBox.getChildren().clear();
-        processTimeLines.clear();
-
-        updateAllScales();
+    public VBox getProcessNameVBox() {
+        return processNameVBox;
     }
 
-    public VBox getProcessIDVBox() {
-        return processIDVBox;
+    public VBox getProcessTimelineVBox() {
+        return processTimelineVBox;
     }
 
-    public VBox getProcessVBox() {
-        return processVBox;
+    public VBox getProcessDeleteVBox() {
+        return processDeleteVBox;
     }
 
-    public VBox getProcessDelVBox() {
-        return processDelVBox;
-    }
-
-    public List<ProcessTimelinePane> getProcessTimeLInes() {
+    public List<UnionTimeline> getProcessTimelines() {
         return processTimeLines;
     }
 }

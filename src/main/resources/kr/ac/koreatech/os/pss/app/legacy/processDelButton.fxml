@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="31.0" minWidth="200.0" xmlns="http://javafx.com/javafx/17">
+<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="30.0" minWidth="200.0" xmlns="http://javafx.com/javafx/17">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
     </columnConstraints>
@@ -12,7 +12,7 @@
         <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <JFXButton id="add-process" maxHeight="31.0" onMouseClicked="#delProcess" prefHeight="31.0"
+        <JFXButton id="add-process" maxHeight="30.0" onMouseClicked="#delProcess" prefHeight="30.0"
                    stylesheets="@../css/processControls.css" text="프로세스 제거" GridPane.halignment="CENTER"/>
     </children>
 </GridPane>

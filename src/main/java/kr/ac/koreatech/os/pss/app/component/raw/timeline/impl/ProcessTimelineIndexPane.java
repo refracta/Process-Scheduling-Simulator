@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class ProcessTimelineIndexPane extends Pane implements ScaleHandler {
 
-    public ProcessTimelineIndexPane(int maxEndTime, double lengthFactor, double width, double height) throws IOException {
+    public ProcessTimelineIndexPane(int maxEndTime, double lengthFactor, double width, double height) {
         updateScale(maxEndTime, lengthFactor);
     }
 

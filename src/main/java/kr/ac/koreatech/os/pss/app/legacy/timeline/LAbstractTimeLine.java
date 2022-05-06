@@ -10,7 +10,7 @@ public abstract class LAbstractTimeLine extends Pane {
 
     protected LProcessControls processControls;
 
-    protected LAbstractTimeLine(double width, double height, LProcessControls processControls) throws IOException {
+    protected LAbstractTimeLine(double width, double height, LProcessControls processControls) {
         super();
 
         this.actionState = ActionState.IDLE;

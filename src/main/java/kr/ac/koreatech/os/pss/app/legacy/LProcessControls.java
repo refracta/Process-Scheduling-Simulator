@@ -116,7 +116,7 @@ public class LProcessControls extends GridPane {
     }
 
     @FXML
-    private void delProcess(MouseEvent event) throws IOException {
+    private void delProcess(MouseEvent event) {
         JFXButton target = (JFXButton) event.getSource();
         int index = ((VBox) target.getParent().getParent()).getChildren().indexOf(target.getParent());
 
