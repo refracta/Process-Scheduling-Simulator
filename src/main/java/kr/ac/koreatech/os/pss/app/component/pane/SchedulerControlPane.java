@@ -168,7 +168,8 @@ public class SchedulerControlPane extends SingleComponent {
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
         SingleComponent.getInstance(ScheduleResultPane.class).generateResultTable(scheduleData);
-        SingleComponent.getInstance(GanttChartContainerPane.class).generateGanttChart(scheduleData);
+        SingleComponent.getInstance(GanttChartContainerPane.class).getnGanttChart().schedule(scheduleData);
+        SingleComponent.getInstance(GanttChartContainerPane.class).getnGanttChart().getScalerPane().setScale(0, 0.1);
 
         AbstractCore.resetCoreIdCount();
         AbstractProcess.resetCoreIdCount();

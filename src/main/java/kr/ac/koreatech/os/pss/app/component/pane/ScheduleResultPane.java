@@ -43,10 +43,6 @@ public class ScheduleResultPane extends SingleComponent {
 
         containerPane = SingleComponent.getInstance(GanttChartContainerPane.class);
 
-        criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            containerPane.setCriteriaEndTime(newValue.intValue());
-            containerPane.updateAllScales();
-        });
     }
 
     public void generateResultTable(ScheduleData scheduleData) {

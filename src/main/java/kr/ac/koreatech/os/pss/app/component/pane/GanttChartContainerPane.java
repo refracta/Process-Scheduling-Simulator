@@ -1,116 +1,32 @@
 package kr.ac.koreatech.os.pss.app.component.pane;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
-import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelineIndexPane;
-import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.UnionGanttChartTimeline;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import kr.ac.koreatech.os.pss.app.component.raw.n.timeline.NGanttChart;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class GanttChartContainerPane extends SingleComponent {
     @FXML
-    private VBox ganttChartIndexVBox;
-    @FXML
-    private VBox processNameVBox;
-    @FXML
-    private VBox ganttChartTimelineVBox;
+    StackPane pane;
 
-    @FXML
-    private ScrollPane ganttChartIndexScrollPane;
-    @FXML
-    private ScrollPane processNameScrollPane;
-    @FXML
-    private ScrollPane ganttChartTimelineScrollPane;
+    private NGanttChart nGanttChart;
 
-    private double width;
-    private double height;
+    public NGanttChart getnGanttChart() {
+        return nGanttChart;
+    }
 
-    private ProcessTimelineIndexPane ganttCharIndex;
-    private List<UnionGanttChartTimeline> ganttChartTimelines;
-
-    private int criteriaEndTime;
-    private int maxEndTime;
-    private double lengthFactor;
-
-    public void generateGanttChart(ScheduleData scheduleData) {
-        ganttChartTimelines.clear();
-        processNameVBox.getChildren().clear();
-        ganttChartTimelineVBox.getChildren().clear();
-
-        scheduleData.getSchedule().forEach((k, v) -> {
-            UnionGanttChartTimeline unionGanttChartTimeline = UnionGanttChartTimeline.create(this, scheduleData, k);
-            ganttChartTimelines.add(unionGanttChartTimeline);
-            processNameVBox.getChildren().add(unionGanttChartTimeline.getWrappedIdText());
-            ganttChartTimelineVBox.getChildren().add(unionGanttChartTimeline.getGanttChartTimeLine());
-        });
-
-        updateAllScales();
+    public void setnGanttChart(NGanttChart nGanttChart) {
+        this.nGanttChart = nGanttChart;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-
-        this.width = 1030;
-        this.height = 30;
-
-        this.ganttChartTimelines = new ArrayList<>();
-        this.criteriaEndTime = 10;
-        this.lengthFactor = this.width / this.criteriaEndTime;
-
-        this.ganttCharIndex = new ProcessTimelineIndexPane(criteriaEndTime, lengthFactor, width, height);
-
-        ganttChartIndexVBox.getChildren().add(ganttCharIndex);
-
-        processNameScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) ->
-            ganttChartTimelineScrollPane.vvalueProperty().setValue(newValue.doubleValue())
-        );
-
-        ganttChartTimelineScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) ->
-            processNameScrollPane.vvalueProperty().setValue(newValue.doubleValue())
-        );
-
-        ganttChartIndexScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) ->
-            ganttChartTimelineScrollPane.hvalueProperty().setValue(newValue.doubleValue())
-        );
-
-        ganttChartTimelineScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) ->
-            ganttChartIndexScrollPane.hvalueProperty().setValue(newValue.doubleValue())
-        );
-    }
-
-    public void updateAllScales() {
-        ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
-        if (ganttChartTimelines.isEmpty()) return;
-        maxEndTime = ganttChartTimelines.stream().mapToInt(UnionGanttChartTimeline::getEndTime).max().getAsInt();
-        ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
-        ganttChartTimelines.forEach(t -> t.getGanttChartTimeLine().updateScale(getGreatEndTime(), lengthFactor));
-    }
-
-    public int getGreatEndTime() {
-        return Math.max(criteriaEndTime, maxEndTime);
-    }
-
-    public int getMaxEndTime() {
-        return maxEndTime;
-    }
-
-    public double getLengthFactor() {
-        return lengthFactor;
-    }
-
-    public int getCriteriaEndTime() {
-        return criteriaEndTime;
-    }
-
-    public void setCriteriaEndTime(int criteriaEndTime) {
-        this.criteriaEndTime = criteriaEndTime;
-        this.lengthFactor = width / criteriaEndTime;
+        pane.getChildren().add(this.nGanttChart = new NGanttChart());
     }
 }

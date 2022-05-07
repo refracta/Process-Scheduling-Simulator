@@ -24,7 +24,6 @@ public class UnionGanttChartTimeline {
 
     public static UnionGanttChartTimeline create(GanttChartContainerPane container, ScheduleData scheduleData, AbstractCore core) {
         GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(scheduleData, core);
-        ganttChartTimeLine.updateScale(container.getGreatEndTime(), container.getLengthFactor());
 
         String coreType = core instanceof PerformanceCore ? " (성능)" : " (효율)";
         Text coreName = TextUtils.getDefaultText(core.getId() + coreType, 20);
