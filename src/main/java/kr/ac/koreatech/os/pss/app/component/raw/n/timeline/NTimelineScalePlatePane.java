@@ -13,6 +13,7 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
 
     protected int MAX_HEIGHT = 40;
     protected int SCALE_HEIGHT = 10;
+//    protected int LEFT
 
     public NTimelineScalePlatePane() {
         setMinHeight(MAX_HEIGHT);
@@ -37,9 +38,11 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
         double rangeValue = range * endpoint;
         double endValue = startValue + rangeValue;
 
-        int samplingInterval = 3;
+        int samplingInterval = 1;
+
         double firstSamplingPoint = Math.ceil(startValue / samplingInterval) * samplingInterval;
         double endSamplingPoint = Math.floor(endValue / samplingInterval) * samplingInterval;
+
 
     }
 }
