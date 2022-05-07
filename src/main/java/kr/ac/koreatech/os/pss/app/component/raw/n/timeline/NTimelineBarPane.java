@@ -7,7 +7,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
 
 public class NTimelineBarPane extends Pane {
     public enum ActionState {
@@ -22,6 +24,8 @@ public class NTimelineBarPane extends Pane {
 
     protected double fullWidth;
     protected double minWidth = 10;
+
+    protected Optional<BiConsumer<Double, Double>> scaleUpdateListener = Optional.empty();
 
     private Line getVerticalOutline() {
         Line line = new Line(0, 0, 0, innerRectangle.getHeight() - 2);
@@ -50,6 +54,7 @@ public class NTimelineBarPane extends Pane {
             innerRectangle.setWidth(width);
             innerRectangle.setX(left);
             fitOutline();
+            scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
         }
     }
 
@@ -64,6 +69,8 @@ public class NTimelineBarPane extends Pane {
         }
         innerRectangle.setX(moveX);
         fitOutline();
+        scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
+
     }
 
     public void setBoxRight(double right) {
@@ -72,6 +79,7 @@ public class NTimelineBarPane extends Pane {
         if (isValidWidth(width) && width >= minWidth) {
             innerRectangle.setWidth(width);
             fitOutline();
+            scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
         }
     }
 
@@ -145,5 +153,13 @@ public class NTimelineBarPane extends Pane {
 
     public double range() {
         return innerRectangle.getWidth() / fullWidth;
+    }
+
+    public BiConsumer<Double, Double> getScaleUpdateListener() {
+        return scaleUpdateListener.get();
+    }
+
+    public void setScaleUpdateListener(BiConsumer<Double, Double> scaleUpdateListener) {
+        this.scaleUpdateListener = Optional.of(scaleUpdateListener);
     }
 }

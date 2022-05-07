@@ -10,28 +10,31 @@ public class NTimelineWidget extends BorderPane {
         init();
     }
 
+    private NTimelineScalePlatePane scalePlatePane;
+    private VBox timelineVBox;
+    private ScrollPane timelineScrollPane;
+    private NTimelineScalerPane scalerPane;
+
     public void init() {
         getChildren().clear();
 
-        NTimelinePane pane1 = new NTimelinePane();
-        setTop(pane1);
+        scalePlatePane = new NTimelineScalePlatePane();
+        setTop(scalePlatePane);
 
-        NTimelineScalerPane pane2 = new NTimelineScalerPane(240, 12);
-        setBottom(pane2);
+        scalerPane = new NTimelineScalerPane(240, 12);
+        setBottom(scalerPane);
 
-        VBox pane = new VBox();
-        pane.getChildren().add(new NTimelinePane());
-        pane.getChildren().add(new NTimelinePane());
-        pane.getChildren().add(new NTimelinePane());
-        pane.getChildren().add(new NTimelinePane());
-        pane.getChildren().add(new NTimelinePane());
-        ScrollPane scrollPane = new ScrollPane(pane);
+        timelineVBox = new VBox();
 
-        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        scrollPane.setFitToWidth(true);
+        timelineScrollPane = new ScrollPane(timelineVBox);
+        timelineScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        timelineScrollPane.setFitToWidth(true);
+        timelineScrollPane.getStyleClass().add("edge-to-edge");
+        setCenter(timelineScrollPane);
+    }
 
-        scrollPane.getStyleClass().add("edge-to-edge");
-        setCenter(scrollPane);
+    public void addTimeline() {
+        timelineVBox.getChildren().add(new NTimelinePane());
     }
 
     public void bindToTargetPaneHeight(Pane target) {

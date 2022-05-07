@@ -1,6 +1,9 @@
 package kr.ac.koreatech.os.pss.app.component.raw.n.timeline;
 
 import javafx.animation.FillTransition;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -16,7 +19,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class NTimelinePane extends NTimelineComponent {
     protected final List<NTimelineElement> elements;
     protected final String name;
-
 
     protected Text label;
     protected Shape outline;
@@ -118,7 +120,17 @@ public class NTimelinePane extends NTimelineComponent {
             outlineTransition.stop();
             deleteButtonTransition.stop();
             deleteButton.setFill(outlineColor);
+
             outline.setFill(outlineColor);
         });
     }
+
+    public void removeEventHandlerAtDeleteButton(EventType<? super Event> eventType, EventHandler<? super Event> eventFilter) {
+        deleteButton.removeEventHandler(eventType, eventFilter);
+    }
+
+    public void addEventHandlerAtDeleteButton(EventType<? super Event> eventType, EventHandler<? super Event> eventFilter) {
+        deleteButton.addEventHandler(eventType, eventFilter);
+    }
+
 }

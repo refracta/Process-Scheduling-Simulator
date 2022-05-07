@@ -1,5 +1,8 @@
 package kr.ac.koreatech.os.pss.app.component.raw.n.timeline;
 
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -135,4 +138,11 @@ public class NTimelineScalerPane extends NTimelineComponent {
         }
     }
 
+    public void removeEventHandlerAtSearchButtonPane(EventType<? super Event> eventType, EventHandler<? super Event> eventFilter) {
+        searchButtonPane.removeEventHandler(eventType, eventFilter);
+    }
+
+    public void addEventHandlerAtSearchButtonPane(EventType<? super Event> eventType, EventHandler<? super Event> eventFilter) {
+        searchButtonPane.addEventHandler(eventType, eventFilter);
+    }
 }
