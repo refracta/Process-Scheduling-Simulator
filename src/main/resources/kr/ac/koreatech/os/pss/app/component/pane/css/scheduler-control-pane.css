@@ -42,6 +42,14 @@
     -fx-background-radius: 1px;
 }
 
+#random-core-button {
+    -fx-font-family: "NanumSquare";
+    -fx-background-color: white;
+    -fx-background-radius: 1px;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+}
+
 #title-container {
     -fx-background-color: #FF8C32;
 }

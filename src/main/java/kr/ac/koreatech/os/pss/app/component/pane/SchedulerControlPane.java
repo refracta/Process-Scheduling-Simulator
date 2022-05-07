@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.component.utils.RandomUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
@@ -37,6 +38,12 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField numEfficiencyCoreTextField;
+
+    @FXML
+    TextField randomNumPerformanceCoreTextField;
+    @FXML
+    TextField randomNumEfficiencyCoreTextField;
+
     /**
      * 스케줄링 메소드를 설정하는 콤보 박스
      */
@@ -74,6 +81,10 @@ public class SchedulerControlPane extends SingleComponent {
     TextField flagLimitTextField;
     @FXML
     GridPane processTimelineContainerPane;
+
+    @FXML
+    JFXButton randomCoreButton;
+
     /**
      * 스케줄링 시작 버튼
      */
@@ -109,6 +120,16 @@ public class SchedulerControlPane extends SingleComponent {
                 setFlagLimitDisable(false);
                 break;
         }
+    }
+
+    @FXML
+    private void setRandomCore(MouseEvent event) {
+        int numPerformanceBound = TextFieldUtils.getNumericValue(randomNumPerformanceCoreTextField, 0) + 1;
+        int numEfficiencyBound = TextFieldUtils.getNumericValue(randomNumEfficiencyCoreTextField, 0) + 1;
+
+        RandomUtils.setRandomWithCurrentTime();
+        numPerformanceCoreTextField.setText("" + RandomUtils.random.nextInt(numPerformanceBound));
+        numEfficiencyCoreTextField.setText("" + RandomUtils.random.nextInt(numEfficiencyBound));
     }
 
     /**
