@@ -1,13 +1,16 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.component.utils.TooltipUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
+import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,17 +20,19 @@ import java.util.Map;
 public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
     private List<TimelineBar> partedScheduleTimeLineBar;
 
+    private ScheduleData scheduleData;
     private AbstractCore core;
     private List<DefaultProcess> processes;
 
-    public GanttChartTimeLinePane(AbstractCore core, List<DefaultProcess> processes) {
-        this(10, 103, 30, core, processes);
+    public GanttChartTimeLinePane(ScheduleData scheduleData, AbstractCore core) {
+        this(10, 103, 30, scheduleData, core);
     }
 
-    public GanttChartTimeLinePane(int maxEndTime, double lengthFactor, double height, AbstractCore core, List<DefaultProcess> processes) {
+    public GanttChartTimeLinePane(int maxEndTime, double lengthFactor, double height, ScheduleData scheduleData, AbstractCore core) {
         this.partedScheduleTimeLineBar = new ArrayList<>();
+        this.scheduleData = scheduleData;
         this.core = core;
-        this.processes = processes;
+        this.processes = scheduleData.getCoreSchedule(core);
 
         updateScale(maxEndTime, lengthFactor);
     }
@@ -56,7 +61,17 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
             partedScheduleTimeLineBar.add(ganttCharTimeLineBar);
             getChildren().add(ganttCharTimeLineBar);
 
+            Tooltip timelineBarTooltip = TooltipUtils.getDefaultTooltip(ganttCharTimeLineBar);
+
             int timelineBarIndex = partedScheduleTimeLineBar.size() - 1;
+
+            ganttCharTimeLineBar.setOnMouseEntered(event -> timelineBarTooltip.setText(
+                    "프로세스 이름: " + process.getName() + "\n" +
+                    "남은 Burst Time: " + process.getLeftBurstTime() + "\n" +
+                    "대기 시간: " + process.getWaitingTime() + "\n" +
+                    "응답 시간: " + String.format("%.1f", process.getResponseRatio())
+            ));
+
             ganttCharTimeLineBar.setOnMouseMoved(event -> makeAllRelatedTimelineBarTransparent(timelineBarIndex));
             ganttCharTimeLineBar.setOnMouseExited(event -> makeAllRelatedTimelineBarOpaque(timelineBarIndex));
         }

@@ -1,8 +1,10 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
+import kr.ac.koreatech.os.pss.app.component.utils.TooltipUtils;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,6 +31,13 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
         this.actionState = ActionState.IDLE;
 
         this.timeLineBar = new TimelineBar(0, 1, lengthFactor, height);
+
+        Tooltip tooltip = TooltipUtils.getDefaultTooltip(this.timeLineBar);
+        this.timeLineBar.setOnMouseMoved(event -> tooltip.setText(
+                "프로세스 이름: " + "P" + this.id + "\n" +
+                "Arrival Time: " + this.timeLineBar.getArrivalTime() + "\n" +
+                "Burst Time: " + this.timeLineBar.getBurstTime()
+        ));
 
         updateScale(maxEndTime, lengthFactor);
     }

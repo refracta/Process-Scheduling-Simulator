@@ -123,7 +123,7 @@ public class SchedulerControlPane extends SingleComponent {
             return;
         }
 
-        List<AbstractCore> cores = new ArrayList<AbstractCore>();
+        List<AbstractCore> cores = new ArrayList<>();
         int numPerformanceCore = TextFieldUtils.getNumericValue(numPerformanceCoreTextField, 0);
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
 
@@ -140,8 +140,6 @@ public class SchedulerControlPane extends SingleComponent {
 //        };
 
         List<DefaultProcess> processes = SingleComponent.getInstance(ProcessTimelineContainerPane.class).getProcessList();
-
-        processes.forEach(p -> System.out.println(p.toString()));
 
         AbstractScheduler scheduler = getConfiguredScheduler();
 //        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
@@ -267,9 +265,7 @@ public class SchedulerControlPane extends SingleComponent {
             scheduleMethodComboBox.getItems().add(method.getValue());
         }
 
-        scheduleMethodComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            applyScheduleMethod(ScheduleMethod.getEnum(newValue.toString()));
-        });
+        scheduleMethodComboBox.valueProperty().addListener((observable, oldValue, newValue) -> applyScheduleMethod(ScheduleMethod.getEnum(newValue.toString())));
 
         setTimeQuantumDisable(true);
         setQueueLimitDisable(true);

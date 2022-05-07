@@ -44,7 +44,7 @@ public class GanttChartContainerPane extends SingleComponent {
         ganttChartTimelineVBox.getChildren().clear();
 
         scheduleData.getSchedule().forEach((k, v) -> {
-            UnionGanttChartTimeline unionGanttChartTimeline = UnionGanttChartTimeline.create(this, k, v);
+            UnionGanttChartTimeline unionGanttChartTimeline = UnionGanttChartTimeline.create(this, scheduleData, k);
             ganttChartTimelines.add(unionGanttChartTimeline);
             processNameVBox.getChildren().add(unionGanttChartTimeline.getWrappedIdText());
             ganttChartTimelineVBox.getChildren().add(unionGanttChartTimeline.getGanttChartTimeLine());

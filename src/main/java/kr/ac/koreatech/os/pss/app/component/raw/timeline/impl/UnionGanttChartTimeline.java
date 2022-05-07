@@ -1,15 +1,15 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import kr.ac.koreatech.os.pss.app.component.pane.GanttChartContainerPane;
 import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
+import kr.ac.koreatech.os.pss.app.component.utils.TooltipUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
-
-import java.util.List;
+import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 public class UnionGanttChartTimeline {
     private final GanttChartContainerPane container;
@@ -22,12 +22,22 @@ public class UnionGanttChartTimeline {
         this.ganttChartTimeLine = ganttChartTimeLinePane;
     }
 
-    public static UnionGanttChartTimeline create(GanttChartContainerPane container, AbstractCore core, List<DefaultProcess> processes) {
-        GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(core, processes);
+    public static UnionGanttChartTimeline create(GanttChartContainerPane container, ScheduleData scheduleData, AbstractCore core) {
+        GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(scheduleData, core);
         ganttChartTimeLine.updateScale(container.getGreatEndTime(), container.getLengthFactor());
 
         String coreType = core instanceof PerformanceCore ? " (성능)" : " (효율)";
-        return new UnionGanttChartTimeline(container, TextUtils.getDefaultText(core.getId() + coreType, 20), ganttChartTimeLine);
+        Text coreName = TextUtils.getDefaultText(core.getId() + coreType, 20);
+
+        Tooltip tooltip = TooltipUtils.getDefaultTooltip(coreName);
+
+        coreName.setOnMouseEntered(event -> tooltip.setText(
+                "코어 아이디: " + core.getId() + "\n" +
+                "코어 타입: " + coreType + "\n" +
+                "사용 전력: " + String.format("%.1f", scheduleData.getPowerUsage(core))
+        ));
+
+        return new UnionGanttChartTimeline(container, coreName, ganttChartTimeLine);
     }
 
     public Text getIdText() {
