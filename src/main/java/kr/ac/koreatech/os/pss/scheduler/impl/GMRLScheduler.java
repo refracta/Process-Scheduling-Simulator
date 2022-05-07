@@ -81,8 +81,10 @@ public class GMRLScheduler extends AbstractScheduler {
                 DefaultProcess targetProcess = processQueue.poll();
                 if (currentFlagCount >= flagCount && !processQueue.isEmpty()) {
                     LinkedList<DefaultProcess> copyProcessQueue = new LinkedList<>(processQueue);
+                    copyProcessQueue.add(targetProcess);
                     copyProcessQueue.sort(Comparator.comparingInt(DefaultProcess::getLeftBurstTime));
-                    System.out.print("Time: " + time + ", " + targetProcess.getName() + "'s flagCount = 3 → ");
+                    System.out.println(copyProcessQueue);
+                    System.out.print("flagCount = 3 → ");
                     targetProcess = copyProcessQueue.pollLast();
                     processQueue.remove(targetProcess);
                     System.out.println(targetProcess.getName() + " (Replaced)");
