@@ -25,7 +25,7 @@ public class NTimelineBarPane extends Pane {
     protected double fullWidth;
     protected double minWidth = 10;
 
-    protected Optional<BiConsumer<Double, Double>> scaleUpdateListener = Optional.empty();
+    protected Optional<BiConsumer<Double, Double>> barUpdateListener = Optional.empty();
 
     private Line getVerticalOutline() {
         Line line = new Line(0, 0, 0, innerRectangle.getHeight() - 2);
@@ -54,7 +54,7 @@ public class NTimelineBarPane extends Pane {
             innerRectangle.setWidth(width);
             innerRectangle.setX(left);
             fitOutline();
-            scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
+            barUpdateListener.ifPresent(l -> l.accept(start(), range()));
         }
     }
 
@@ -69,7 +69,7 @@ public class NTimelineBarPane extends Pane {
         }
         innerRectangle.setX(moveX);
         fitOutline();
-        scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
+        barUpdateListener.ifPresent(l -> l.accept(start(), range()));
 
     }
 
@@ -79,7 +79,7 @@ public class NTimelineBarPane extends Pane {
         if (isValidWidth(width) && width >= minWidth) {
             innerRectangle.setWidth(width);
             fitOutline();
-            scaleUpdateListener.ifPresent(l -> l.accept(start(), range()));
+            barUpdateListener.ifPresent(l -> l.accept(start(), range()));
         }
     }
 
@@ -155,11 +155,11 @@ public class NTimelineBarPane extends Pane {
         return innerRectangle.getWidth() / fullWidth;
     }
 
-    public BiConsumer<Double, Double> getScaleUpdateListener() {
-        return scaleUpdateListener.get();
+    public BiConsumer<Double, Double> getBarUpdateListener() {
+        return barUpdateListener.get();
     }
 
-    public void setScaleUpdateListener(BiConsumer<Double, Double> scaleUpdateListener) {
-        this.scaleUpdateListener = Optional.of(scaleUpdateListener);
+    public void setBarUpdateListener(BiConsumer<Double, Double> barUpdateListener) {
+        this.barUpdateListener = Optional.of(barUpdateListener);
     }
 }

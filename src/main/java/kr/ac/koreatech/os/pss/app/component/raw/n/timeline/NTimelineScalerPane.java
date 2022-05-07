@@ -17,6 +17,7 @@ import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 public class NTimelineScalerPane extends NTimelineComponent {
@@ -46,6 +47,8 @@ public class NTimelineScalerPane extends NTimelineComponent {
     protected NTimelineBarPane scalerBoxPane;
     protected Shape scalerBackgroundBox;
     protected Shape scalerLine;
+
+    protected Optional<NTimelineChangeListener> changeListener = Optional.empty();
 
     public NTimelineScalerPane(int endpoint, int numScaleInterval) {
         this.endpoint = endpoint;
@@ -79,6 +82,7 @@ public class NTimelineScalerPane extends NTimelineComponent {
         Rectangle boxRectangle = new Rectangle(getScalerWidth(), SEARCH_ICON_BOX_SIZE);
         boxRectangle.setFill(scalerBoxColor);
         NTimelineBarPane box = new NTimelineBarPane(boxRectangle, scalerBoxOutlineColor);
+        box.setBarUpdateListener((start, range) -> changeListener.ifPresent(c -> c.change(start, range, endpoint)));
         box.setLayoutX(SCALER_START_X);
         box.setLayoutY(VERTICAL_MARGIN);
         return box;
@@ -144,5 +148,13 @@ public class NTimelineScalerPane extends NTimelineComponent {
 
     public void addEventHandlerAtSearchButtonPane(EventType<? super Event> eventType, EventHandler<? super Event> eventFilter) {
         searchButtonPane.addEventHandler(eventType, eventFilter);
+    }
+
+    public double getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(double endpoint) {
+        this.endpoint = endpoint;
     }
 }
