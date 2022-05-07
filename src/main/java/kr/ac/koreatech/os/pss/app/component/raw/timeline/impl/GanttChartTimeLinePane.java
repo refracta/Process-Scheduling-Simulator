@@ -25,7 +25,7 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
     }
 
     public GanttChartTimeLinePane(int maxEndTime, double lengthFactor, double height, AbstractCore core, List<DefaultProcess> processes) {
-        this.partedScheduleTimeLineBar = new ArrayList<TimelineBar>();
+        this.partedScheduleTimeLineBar = new ArrayList<>();
         this.core = core;
         this.processes = processes;
 
@@ -55,6 +55,50 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
             ganttCharTimeLineBar.setColor(processColor.get(process.getName()));
             partedScheduleTimeLineBar.add(ganttCharTimeLineBar);
             getChildren().add(ganttCharTimeLineBar);
+
+            int timelineBarIndex = partedScheduleTimeLineBar.size() - 1;
+            ganttCharTimeLineBar.setOnMouseMoved(event -> makeAllRelatedTimelineBarTransparent(timelineBarIndex));
+            ganttCharTimeLineBar.setOnMouseExited(event -> makeAllRelatedTimelineBarOpaque(timelineBarIndex));
+        }
+    }
+
+    public void makeAllRelatedTimelineBarTransparent(int index) {
+        TimelineBar targetTimelineBar = partedScheduleTimeLineBar.get(index);
+
+        int i = index;
+        while (i >= 0) {
+            TimelineBar destTimelineBar = partedScheduleTimeLineBar.get(i);
+            if (!destTimelineBar.getOpaqueColor().equals(targetTimelineBar.getOpaqueColor())) break;
+            destTimelineBar.makeTransparent();
+            i--;
+        }
+
+        i = index + 1;
+        while (i < partedScheduleTimeLineBar.size()) {
+            TimelineBar destTimelineBar = partedScheduleTimeLineBar.get(i);
+            if (!destTimelineBar.getOpaqueColor().equals(targetTimelineBar.getOpaqueColor())) break;
+            destTimelineBar.makeTransparent();
+            i++;
+        }
+    }
+
+    public void makeAllRelatedTimelineBarOpaque(int index) {
+        TimelineBar targetTimelineBar = partedScheduleTimeLineBar.get(index);
+
+        int i = index;
+        while (i >= 0) {
+            TimelineBar destTimelineBar = partedScheduleTimeLineBar.get(i);
+            if (!destTimelineBar.getOpaqueColor().equals(targetTimelineBar.getOpaqueColor())) break;
+            destTimelineBar.makeOpaque();
+            i--;
+        }
+
+        i = index + 1;
+        while (i < partedScheduleTimeLineBar.size()) {
+            TimelineBar destTimelineBar = partedScheduleTimeLineBar.get(i);
+            if (!destTimelineBar.getOpaqueColor().equals(targetTimelineBar.getOpaqueColor())) break;
+            destTimelineBar.makeOpaque();
+            i++;
         }
     }
 

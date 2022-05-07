@@ -15,19 +15,17 @@ public class UnionGanttChartTimeline {
     private Text idText;
     private GanttChartTimeLinePane ganttChartTimeLine;
 
-    public UnionGanttChartTimeline(GanttChartContainerPane container, Text idText, GanttChartTimeLinePane timeline) {
+    public UnionGanttChartTimeline(GanttChartContainerPane container, Text idText, GanttChartTimeLinePane ganttChartTimeLinePane) {
         this.container = container;
         this.idText = idText;
-        this.ganttChartTimeLine = timeline;
+        this.ganttChartTimeLine = ganttChartTimeLinePane;
     }
 
     public static UnionGanttChartTimeline create(GanttChartContainerPane container, AbstractCore core, List<DefaultProcess> processes) {
         GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(core, processes);
         ganttChartTimeLine.updateScale(container.getGreatEndTime(), container.getLengthFactor());
 
-        UnionGanttChartTimeline unionGanttChartTimeline = new UnionGanttChartTimeline(container, TextUtils.getDefaultText(Integer.toString(core.getId()), 20), ganttChartTimeLine);
-
-        return unionGanttChartTimeline;
+        return new UnionGanttChartTimeline(container, TextUtils.getDefaultText(Integer.toString(core.getId()), 20), ganttChartTimeLine);
     }
 
     public Text getIdText() {

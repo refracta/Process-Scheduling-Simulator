@@ -68,28 +68,27 @@ public class GanttChartContainerPane extends SingleComponent {
 
         ganttChartIndexVBox.getChildren().add(ganttCharIndex);
 
-        processNameScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            ganttChartTimelineScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-        });
+        processNameScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) ->
+            ganttChartTimelineScrollPane.vvalueProperty().setValue(newValue.doubleValue())
+        );
 
-        ganttChartTimelineScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) -> {
-            processNameScrollPane.vvalueProperty().setValue(newValue.doubleValue());
-        });
+        ganttChartTimelineScrollPane.vvalueProperty().addListener((observable, oldValue, newValue) ->
+            processNameScrollPane.vvalueProperty().setValue(newValue.doubleValue())
+        );
 
-        ganttChartIndexScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) -> {
-            ganttChartTimelineScrollPane.hvalueProperty().setValue(newValue.doubleValue());
-        });
+        ganttChartIndexScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) ->
+            ganttChartTimelineScrollPane.hvalueProperty().setValue(newValue.doubleValue())
+        );
 
-        ganttChartTimelineScrollPane.hvalueProperty().addListener(((observable, oldValue, newValue) -> {
-            ganttChartIndexScrollPane.hvalueProperty().setValue(newValue.doubleValue());
-        }));
+        ganttChartTimelineScrollPane.hvalueProperty().addListener((observable, oldValue, newValue) ->
+            ganttChartIndexScrollPane.hvalueProperty().setValue(newValue.doubleValue())
+        );
     }
 
     public void updateAllScales() {
         ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
         if (ganttChartTimelines.isEmpty()) return;
-        maxEndTime = ganttChartTimelines.stream().mapToInt(l -> l.getEndTime()).max().getAsInt();
-        System.out.println(maxEndTime);
+        maxEndTime = ganttChartTimelines.stream().mapToInt(UnionGanttChartTimeline::getEndTime).max().getAsInt();
         ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
         ganttChartTimelines.forEach(t -> t.getGanttChartTimeLine().updateScale(getGreatEndTime(), lengthFactor));
     }
