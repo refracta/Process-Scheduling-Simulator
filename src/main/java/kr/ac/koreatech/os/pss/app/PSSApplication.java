@@ -2,6 +2,7 @@ package kr.ac.koreatech.os.pss.app;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import kr.ac.koreatech.os.pss.app.component.pane.VisualizerPane;
 import kr.ac.koreatech.os.pss.app.loader.FontLoader;
@@ -25,8 +26,10 @@ public class PSSApplication extends Application {
     public void start(Stage primaryStage) throws Exception {
         FontLoader.load();
 
-//        primaryStage.setScene(new Scene(LSchedulerControls.getSchedulerControls().getRoot()));
         primaryStage.setScene(new Scene(FXMLUtils.create(VisualizerPane.class)));
+
+        primaryStage.setTitle("프로세스 스케줄링 시뮬레이터 | 10조");
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("icon.png")));
 
         primaryStage.setResizable(false);
         primaryStage.show();
