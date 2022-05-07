@@ -4,32 +4,36 @@ import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
+import kr.ac.koreatech.os.pss.scheduler.utils.PrintUtils;
 
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Round Robin 스케줄러 클래스
- *
- * @author refracta
- */
-public class RRScheduler extends AbstractScheduler {
-    protected static final String PROCESS_QUEUE = "processQueue";
-    protected final int timeQuantum;
+public class GMRLScheduler extends AbstractScheduler {
 
-    public RRScheduler(int timeQuantum) {
+    private static final String PROCESS_QUEUE = "processQueue";
+    private static final String CURRENT_FLAG_COUNT = "processCount";
+    private int timeQuantum;
+    private int flagCount;
+
+
+    // 플래그 카운터
+
+    public GMRLScheduler(int timeQuantum, int flagCount) {
         this.timeQuantum = timeQuantum;
+        this.flagCount = flagCount;
     }
 
-    @Override
     protected void init(List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
-        scheduleData.put(PROCESS_QUEUE, new LinkedList<>());
+        scheduleData.put(PROCESS_QUEUE, new LinkedList<DefaultProcess>());
+        scheduleData.put(CURRENT_FLAG_COUNT, 0);
     }
-    // schedule 함수 호출을 Thread-Safe하게 만들기 위해서 스케줄링에 사용되는 변수를 멤버 변수로 사용하지 않고, 각 스케줄 함수마다 독립적으로 생성되는 ScheduleData 내부에 저장함
+
 
     @Override
     protected void schedule(int time, List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
+        Integer currentFlagCount = (Integer) scheduleData.get(CURRENT_FLAG_COUNT);
         List<DefaultProcess> previousList = scheduleData.getProcesses(time - 1);
         // 모든 코어의 스케줄 리스트에서 직전(t-1) 시간 색인에 적재된 모든 프로세스를 가져옴
         List<DefaultProcess> currentList = scheduleData.getProcesses(time);
@@ -64,17 +68,34 @@ public class RRScheduler extends AbstractScheduler {
                 break;
             }
             List<DefaultProcess> coreSchedule = scheduleData.getCoreSchedule(core);
+            boolean isValidScheduleTime = false;
             if (!coreSchedule.isEmpty()) {
                 if (coreSchedule.size() < time + 1) {
-                    DefaultProcess targetProcess = processQueue.poll();
-                    coreSchedule.addAll(targetProcess.getContiguousProcesses(timeQuantum * core.getPerformance(), core.getPerformance()));
-                    // timeQuantum 만큼만 스케줄 추가
+                    isValidScheduleTime = true;
                 } // else -> already exist schedule
             } else {
-                DefaultProcess targetProcess = processQueue.poll();
-                coreSchedule.addAll(targetProcess.getContiguousProcesses(timeQuantum * core.getPerformance(), core.getPerformance()));
-                // timeQuantum 만큼만 스케줄 추가
+                isValidScheduleTime = true;
             }
+
+            if (isValidScheduleTime) {
+                DefaultProcess targetProcess = processQueue.poll();
+                if (currentFlagCount >= flagCount && !processQueue.isEmpty()) {
+                    LinkedList<DefaultProcess> copyProcessQueue = new LinkedList<>(processQueue);
+                    copyProcessQueue.add(targetProcess);
+                    copyProcessQueue.sort(Comparator.comparingInt(DefaultProcess::getLeftBurstTime));
+                    System.out.println(copyProcessQueue);
+                    System.out.print("flagCount = 3 → ");
+                    targetProcess = copyProcessQueue.pollLast();
+                    processQueue.remove(targetProcess);
+                    System.out.println(targetProcess.getName() + " (Replaced)");
+                    currentFlagCount = 0;
+                } else {
+                    currentFlagCount++;
+                }
+                coreSchedule.addAll(targetProcess.getContiguousProcesses(timeQuantum * core.getPerformance(), core.getPerformance()));
+            }
+            scheduleData.put(CURRENT_FLAG_COUNT, currentFlagCount);
         }
     }
+
 }
