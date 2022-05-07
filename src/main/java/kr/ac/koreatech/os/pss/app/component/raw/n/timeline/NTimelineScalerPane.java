@@ -157,4 +157,12 @@ public class NTimelineScalerPane extends NTimelineComponent {
     public void setEndpoint(double endpoint) {
         this.endpoint = endpoint;
     }
+
+    public NTimelineChangeListener getChangeListener() {
+        return changeListener.get();
+    }
+
+    public void setChangeListener(NTimelineChangeListener changeListener) {
+        this.changeListener = Optional.of(changeListener);
+    }
 }

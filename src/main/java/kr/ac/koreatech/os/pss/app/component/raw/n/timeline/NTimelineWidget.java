@@ -37,6 +37,10 @@ public class NTimelineWidget extends BorderPane {
         timelineScrollPane.setFitToWidth(true);
         timelineScrollPane.getStyleClass().add("edge-to-edge");
         setCenter(timelineScrollPane);
+        scalerPane.setChangeListener((start, range, endpoint) -> {
+            scalePlatePane.drawScale(start, range, endpoint);
+        });
+
 
         initVerticalIndicator();
     }
