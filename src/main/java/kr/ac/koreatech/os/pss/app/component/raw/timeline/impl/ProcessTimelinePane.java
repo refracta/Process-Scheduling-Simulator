@@ -35,8 +35,8 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
         Tooltip tooltip = TooltipUtils.getDefaultTooltip(this.timeLineBar);
         this.timeLineBar.setOnMouseMoved(event -> tooltip.setText(
                 "프로세스 이름: " + "P" + this.id + "\n" +
-                "Arrival Time: " + this.timeLineBar.getArrivalTime() + "\n" +
-                "Burst Time: " + this.timeLineBar.getBurstTime()
+                "도착 시간: " + this.timeLineBar.getArrivalTime() + "\n" +
+                "실행 시간: " + this.timeLineBar.getBurstTime()
         ));
 
         updateScale(maxEndTime, lengthFactor);

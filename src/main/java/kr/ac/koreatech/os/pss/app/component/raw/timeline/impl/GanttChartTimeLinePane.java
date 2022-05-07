@@ -67,7 +67,7 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
 
             ganttCharTimeLineBar.setOnMouseEntered(event -> timelineBarTooltip.setText(
                     "프로세스 이름: " + process.getName() + "\n" +
-                    "남은 Burst Time: " + process.getLeftBurstTime() + "\n" +
+                    "남은 실행 시간: " + process.getLeftBurstTime() + "\n" +
                     "대기 시간: " + process.getWaitingTime() + "\n" +
                     "응답 시간: " + String.format("%.1f", process.getResponseRatio())
             ));

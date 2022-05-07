@@ -72,7 +72,7 @@ public class ScheduleResultPane extends SingleComponent {
             this.burstTime = burstTime;
             this.waitingTime = waitingTime;
             this.turnaroundTime = turnaroundTime;
-            this.normalizedTurnaroundTime = turnaroundTime;
+            this.normalizedTurnaroundTime = normalizedTurnaroundTime;
         }
 
         public ObservableValue<String> getProcessName() {
