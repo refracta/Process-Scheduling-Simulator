@@ -6,6 +6,7 @@ import kr.ac.koreatech.os.pss.app.component.pane.GanttChartContainerPane;
 import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
+import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public class UnionGanttChartTimeline {
         GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(core, processes);
         ganttChartTimeLine.updateScale(container.getGreatEndTime(), container.getLengthFactor());
 
-        return new UnionGanttChartTimeline(container, TextUtils.getDefaultText(Integer.toString(core.getId()), 20), ganttChartTimeLine);
+        String coreType = core instanceof PerformanceCore ? " (성능)" : " (효율)";
+        return new UnionGanttChartTimeline(container, TextUtils.getDefaultText(core.getId() + coreType, 20), ganttChartTimeLine);
     }
 
     public Text getIdText() {
