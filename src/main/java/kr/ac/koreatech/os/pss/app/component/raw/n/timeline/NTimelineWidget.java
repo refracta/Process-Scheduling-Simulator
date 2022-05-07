@@ -27,7 +27,7 @@ public class NTimelineWidget extends BorderPane {
         scalePlatePane = new NTimelineScalePlatePane();
         setTop(scalePlatePane);
 
-        scalerPane = new NTimelineScalerPane(240, 12);
+        scalerPane = new NTimelineScalerPane(10, 1);
         setBottom(scalerPane);
 
         timelineVBox = new VBox();
