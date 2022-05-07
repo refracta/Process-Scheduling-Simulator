@@ -18,6 +18,8 @@ public class UnionTimeline {
     private ProcessTimelinePane timeline;
     private JFXButton deleteButton;
 
+    private static double dx;
+
     public UnionTimeline(ProcessTimelineContainerPane container, Text idText, ProcessTimelinePane timeline, JFXButton deleteButton) {
         this.container = container;
         this.idText = idText;
@@ -57,8 +59,10 @@ public class UnionTimeline {
 
             switch (timeline.getActionState()) {
                 case IDLE:
-                    if (bar.isInMiddle(processedX, container.getLengthFactor()))
+                    if (bar.isInMiddle(processedX, container.getLengthFactor())) {
                         timeline.setActionState(ProcessTimelinePane.ActionState.MOVE);
+                        dx = processedX;
+                    }
                     else if (bar.isInLeft(processedX))
                         timeline.setActionState(ProcessTimelinePane.ActionState.EXTEND_LEFT);
                     else if (bar.isInRight(processedX, container.getLengthFactor()))
@@ -76,7 +80,7 @@ public class UnionTimeline {
                     bar.setWidth(newWidth);
                     break;
                 case MOVE:
-                    bar.setLayoutX(Math.max(0, e.getX() - bar.getWidth() / 2));
+                    bar.setLayoutX(Math.max(0, e.getX() - dx));
                     break;
             }
         });
@@ -93,7 +97,7 @@ public class UnionTimeline {
                     bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), container.getLengthFactor());
                     break;
                 case MOVE:
-                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2, container.getLengthFactor());
+                    index = bar.getMovedIndex(e.getX() - dx, container.getLengthFactor());
                     bar.update(index, bar.getBurstTime(), container.getLengthFactor());
                     bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
@@ -106,9 +110,7 @@ public class UnionTimeline {
         });
         JFXButton deleteButton = (JFXButton) FXMLUtils.create(ProcessDeleteButton.class);
         UnionTimeline unionTimeline = new UnionTimeline(container, TextUtils.getDefaultText(timeline.getProcess().getName(), 20), timeline, deleteButton);
-        deleteButton.setOnMouseClicked(e -> {
-            container.deleteTimeline(unionTimeline);
-        });
+        deleteButton.setOnMouseClicked(e -> container.deleteTimeline(unionTimeline));
         return unionTimeline;
     }
 
