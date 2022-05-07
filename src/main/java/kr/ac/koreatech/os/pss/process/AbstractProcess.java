@@ -62,6 +62,10 @@ public abstract class AbstractProcess implements Cloneable {
      */
     public abstract boolean isFinished();
 
+    public static void resetCoreIdCount() {
+        AbstractProcess.idCount.set(0);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

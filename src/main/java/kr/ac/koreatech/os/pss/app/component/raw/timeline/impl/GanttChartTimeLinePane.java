@@ -7,7 +7,6 @@ import kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
-import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.ArrayList;
@@ -44,14 +43,14 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
         }
 
         for (int i = 0; i < maxEndTime; i++)
-            getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30 - 1));
+            getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30));
 
-        for (DefaultProcess process : processes) {
+        for (int currentTime = 0; currentTime < processes.size(); currentTime++) {
+            DefaultProcess process = processes.get(currentTime);
+
             if (process.getId() == -1) continue;
-            int currentTime = process.getArrivalTime() + process.getWaitingTime() + (process.getBurstTime() - process.getLeftBurstTime()) / (core instanceof PerformanceCore ? 2 : 1);
-            System.out.println(currentTime);
-            System.out.println(process.getStartTime());
-            TimelineBar ganttCharTimeLineBar = new TimelineBar(process.getArrivalTime(), 1, lengthFactor, 30 - 1);
+
+            TimelineBar ganttCharTimeLineBar = new TimelineBar(process.getArrivalTime(), 1, lengthFactor, 30);
             ganttCharTimeLineBar.setLayoutX(currentTime * lengthFactor);
             ganttCharTimeLineBar.setColor(processColor.get(process.getName()));
             partedScheduleTimeLineBar.add(ganttCharTimeLineBar);
@@ -60,7 +59,6 @@ public class GanttChartTimeLinePane extends Pane implements ScaleHandler {
     }
 
     public int getEndTime() {
-        if (processes.isEmpty()) return 0;
-        return processes.stream().mapToInt(p -> p.getArrivalTime() + p.getWaitingTime() + p.getBurstTime() - p.getLeftBurstTime() + 1).max().getAsInt();
+        return processes.size();
     }
 }

@@ -9,7 +9,6 @@ import kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane;
 import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.Objects;
 
@@ -28,7 +27,7 @@ public class UnionTimeline {
 
     public static UnionTimeline create(ProcessTimelineContainerPane container) {
         ProcessTimelinePane timeline = new ProcessTimelinePane();
-        timeline.updateScale(Math.max(container.getCriteriaEndTime(), container.getMaxEndTime()), container.getLengthFactor());
+        timeline.updateScale(container.getGreatEndTime(), container.getLengthFactor());
         TimelineBar bar = timeline.getTimelineBar();
 
         timeline.setOnMouseMoved(e -> {
@@ -99,11 +98,6 @@ public class UnionTimeline {
                     bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
             }
-
-            DefaultProcess process = timeline.getProcess();
-            process.setArrivalTime(bar.getArrivalTime());
-            process.setBurstTime(bar.getBurstTime());
-            process.resetLeftBurstTime();
 
             timeline.setCursor(Cursor.DEFAULT);
             timeline.setActionState(ProcessTimelinePane.ActionState.IDLE);

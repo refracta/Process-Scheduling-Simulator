@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelineIndexPane;
+import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.ProcessTimelinePane;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.impl.UnionTimeline;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
@@ -94,6 +95,20 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         processDeleteVBox.getChildren().add(unionTimeline.getWrappedDeleteButton());
         processTimelineVBox.getChildren().add(unionTimeline.getTimeline());
         processTimeLines.add(unionTimeline);
+
+        updateAllScales();
+    }
+
+    public void addTimeline(int arrivalTime, int burstTime) {
+        UnionTimeline unionTimeline = UnionTimeline.create(this);
+        unionTimeline.getTimeline().getTimelineBar().update(arrivalTime, burstTime, lengthFactor);
+
+        processNameVBox.getChildren().add(unionTimeline.getWrappedIdText());
+        processDeleteVBox.getChildren().add(unionTimeline.getWrappedDeleteButton());
+        processTimelineVBox.getChildren().add(unionTimeline.getTimeline());
+        processTimeLines.add(unionTimeline);
+
+        updateAllScales();
     }
 
     public void deleteTimeline(UnionTimeline unionTimeline) {
@@ -114,22 +129,25 @@ public class ProcessTimelineContainerPane extends SingleComponent {
         processTimeLines.clear();
         maxEndTime = 0;
         updateAllScales();
+        ProcessTimelinePane.resetIdCount();
     }
 
     public List<DefaultProcess> getProcessList() {
         List<DefaultProcess> processList = new ArrayList<DefaultProcess>();
-        for (UnionTimeline t : processTimeLines) {
-            processList.add(t.getTimeline().getProcess());
+        for (int pid = 1; pid <= processTimeLines.size(); pid++) {
+            DefaultProcess process = processTimeLines.get(pid - 1).getTimeline().getProcess();
+            process.setId(pid);
+            processList.add(process);
         }
         return processList;
     }
 
     public void updateAllScales() {
-        processTimelineIndex.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor);
+        processTimelineIndex.updateScale(getGreatEndTime(), lengthFactor);
         if (processTimeLines.isEmpty()) return;
         maxEndTime = getProcessList().stream().mapToInt(p -> p.getArrivalTime() + p.getBurstTime()).max().getAsInt();
-        processTimelineIndex.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor);
-        processTimeLines.forEach(t -> t.getTimeline().updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
+        processTimelineIndex.updateScale(getGreatEndTime(), lengthFactor);
+        processTimeLines.forEach(t -> t.getTimeline().updateScale(getGreatEndTime(), lengthFactor));
     }
 
     public double getLengthFactor() {
@@ -138,6 +156,10 @@ public class ProcessTimelineContainerPane extends SingleComponent {
 
     public void setLengthFactor(double lengthFactor) {
         this.lengthFactor = lengthFactor;
+    }
+
+    public int getGreatEndTime() {
+        return Math.max(criteriaEndTime, maxEndTime);
     }
 
     public int getMaxEndTime() {

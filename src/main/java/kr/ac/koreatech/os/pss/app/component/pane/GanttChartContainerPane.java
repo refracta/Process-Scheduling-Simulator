@@ -86,12 +86,16 @@ public class GanttChartContainerPane extends SingleComponent {
     }
 
     public void updateAllScales() {
-        ganttCharIndex.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor);
+        ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
         if (ganttChartTimelines.isEmpty()) return;
         maxEndTime = ganttChartTimelines.stream().mapToInt(l -> l.getEndTime()).max().getAsInt();
         System.out.println(maxEndTime);
-        ganttCharIndex.updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor);
-        ganttChartTimelines.forEach(t -> t.getGanttChartTimeLine().updateScale(Math.max(criteriaEndTime, maxEndTime), lengthFactor));
+        ganttCharIndex.updateScale(getGreatEndTime(), lengthFactor);
+        ganttChartTimelines.forEach(t -> t.getGanttChartTimeLine().updateScale(getGreatEndTime(), lengthFactor));
+    }
+
+    public int getGreatEndTime() {
+        return Math.max(criteriaEndTime, maxEndTime);
     }
 
     public int getMaxEndTime() {

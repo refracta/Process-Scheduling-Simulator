@@ -23,7 +23,7 @@ public class UnionGanttChartTimeline {
 
     public static UnionGanttChartTimeline create(GanttChartContainerPane container, AbstractCore core, List<DefaultProcess> processes) {
         GanttChartTimeLinePane ganttChartTimeLine = new GanttChartTimeLinePane(core, processes);
-        ganttChartTimeLine.updateScale(Math.max(container.getCriteriaEndTime(), container.getMaxEndTime()), container.getLengthFactor());
+        ganttChartTimeLine.updateScale(container.getGreatEndTime(), container.getLengthFactor());
 
         UnionGanttChartTimeline unionGanttChartTimeline = new UnionGanttChartTimeline(container, TextUtils.getDefaultText(Integer.toString(core.getId()), 20), ganttChartTimeLine);
 

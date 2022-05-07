@@ -12,6 +12,7 @@ import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
+import kr.ac.koreatech.os.pss.process.AbstractProcess;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
@@ -140,6 +141,8 @@ public class SchedulerControlPane extends SingleComponent {
 
         List<DefaultProcess> processes = SingleComponent.getInstance(ProcessTimelineContainerPane.class).getProcessList();
 
+        processes.forEach(p -> System.out.println(p.toString()));
+
         AbstractScheduler scheduler = getConfiguredScheduler();
 //        ScheduleData scheduleData = scheduler.schedule(cores, Arrays.asList(processes));
         ScheduleData scheduleData = scheduler.schedule(cores, processes);
@@ -148,7 +151,8 @@ public class SchedulerControlPane extends SingleComponent {
         SingleComponent.getInstance(ScheduleResultPane.class).generateResultTable(scheduleData);
         SingleComponent.getInstance(GanttChartContainerPane.class).generateGanttChart(scheduleData);
 
-        AbstractCore.resetCoreID();
+        AbstractCore.resetCoreIdCount();
+        AbstractProcess.resetCoreIdCount();
     }
 
     /**

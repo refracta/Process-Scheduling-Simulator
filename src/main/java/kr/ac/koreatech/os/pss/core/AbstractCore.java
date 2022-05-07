@@ -107,7 +107,7 @@ public class AbstractCore implements Cloneable, Comparable<AbstractCore> {
         this.standbyPower = standbyPower;
     }
 
-    public static void resetCoreID() {
+    public static void resetCoreIdCount() {
         AbstractCore.idCount.set(0);
     }
 
