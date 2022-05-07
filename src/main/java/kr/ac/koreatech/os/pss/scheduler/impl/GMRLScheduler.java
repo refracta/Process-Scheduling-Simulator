@@ -6,14 +6,13 @@ import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GMRLScheduler extends AbstractScheduler {
 
     private static final String PROCESS_QUEUE = "processQueue";
-    private static final String PROCESS_COUNT_MAP = "processCountMap";
+    private static final String CURRENT_FLAG_COUNT = "processCount";
     private int timeQuantum;
     private int flagCount;
 
@@ -27,17 +26,13 @@ public class GMRLScheduler extends AbstractScheduler {
 
     protected void init(List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
         scheduleData.put(PROCESS_QUEUE, new LinkedList<DefaultProcess>());
-        HashMap<Integer, Integer> processCountMap = new HashMap<>();
-        for (DefaultProcess p : processes) {
-            processCountMap.put(p.getId(), 0);
-        }
-        scheduleData.put(PROCESS_COUNT_MAP, processCountMap);
+        scheduleData.put(CURRENT_FLAG_COUNT, 0);
     }
 
 
     @Override
     protected void schedule(int time, List<AbstractCore> cores, List<DefaultProcess> processes, ScheduleData scheduleData) {
-        HashMap<Integer, Integer> processCountMap = (HashMap<Integer, Integer>) scheduleData.get(PROCESS_COUNT_MAP);
+        Integer currentFlagCount = (Integer) scheduleData.get(CURRENT_FLAG_COUNT);
         List<DefaultProcess> previousList = scheduleData.getProcesses(time - 1);
         // 모든 코어의 스케줄 리스트에서 직전(t-1) 시간 색인에 적재된 모든 프로세스를 가져옴
         List<DefaultProcess> currentList = scheduleData.getProcesses(time);
@@ -83,19 +78,19 @@ public class GMRLScheduler extends AbstractScheduler {
 
             if (isValidScheduleTime) {
                 DefaultProcess targetProcess = processQueue.poll();
-                if (processCountMap.get(targetProcess.getId()) >= flagCount && !processQueue.isEmpty()) {
+                if (currentFlagCount >= flagCount && !processQueue.isEmpty()) {
                     LinkedList<DefaultProcess> copyProcessQueue = new LinkedList<>(processQueue);
                     System.out.print("Time: " + time + ", " + targetProcess.getName() + "'s flagCount = 3 → ");
                     targetProcess = copyProcessQueue.pop();
                     processQueue.remove(targetProcess);
                     System.out.println(targetProcess.getName() + " (Replaced)");
-                    processCountMap.put(targetProcess.getId(), 0);
+                    flagCount = 0;
                 } else {
-                    processCountMap.put(targetProcess.getId(), processCountMap.get(targetProcess.getId()) + 1);
+                    currentFlagCount++;
                 }
                 coreSchedule.addAll(targetProcess.getContiguousProcesses(timeQuantum * core.getPerformance(), core.getPerformance()));
             }
-
+            scheduleData.put(CURRENT_FLAG_COUNT, currentFlagCount);
         }
     }
 
