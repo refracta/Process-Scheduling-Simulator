@@ -1,13 +1,13 @@
 package kr.ac.koreatech.os.pss.app.component.raw.n.timeline;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class NTimelineWidget extends BorderPane {
     protected Color verticalIndicatorColor = Color.GRAY;
@@ -37,32 +37,52 @@ public class NTimelineWidget extends BorderPane {
         timelineScrollPane.setFitToWidth(true);
         timelineScrollPane.getStyleClass().add("edge-to-edge");
         setCenter(timelineScrollPane);
+        scalerPane.setChangeListener((start, range, endpoint) -> {
+            scalePlatePane.drawScale(start, range, endpoint);
+        });
+
 
         initVerticalIndicator();
     }
 
     private void initVerticalIndicator() {
-        AtomicReference<Line> verticalIndicator = new AtomicReference<>();
+        Line verticalIndicator = new Line();
+        verticalIndicator.setStroke(verticalIndicatorColor);
 
-        setOnMouseEntered(event -> {
-            Line line = new Line(0, 0, 0, getHeight() - scalerPane.getHeight());
-            line.setStroke(verticalIndicatorColor);
-            getChildren().add(line);
-            verticalIndicator.set(line);
-        });
-        setOnMouseExited(event -> getChildren().remove(verticalIndicator.get()));
-        setOnMouseMoved(event -> {
+        EventHandler<? super MouseEvent> showVerticalIndicator = (EventHandler<MouseEvent>) event -> {
+            verticalIndicator.setStartX(0);
+            verticalIndicator.setStartY(0);
+            verticalIndicator.setEndX(0);
+            verticalIndicator.setEndY(getHeight() - scalerPane.getHeight());
+            System.out.println(getHeight());
+            System.out.println(scalerPane.getHeight());
+
+            if (!getChildren().contains(verticalIndicator)) {
+                getChildren().add(verticalIndicator);
+            }
+        };
+
+        EventHandler<? super MouseEvent> hideVerticalIndicator = (EventHandler<MouseEvent>) event -> {
+            getChildren().remove(verticalIndicator);
+        };
+
+        EventHandler<? super MouseEvent> verticalIndicatorHandler = (EventHandler<MouseEvent>) event -> {
             if (event.getY() > getHeight() - scalerPane.getHeight()) {
-                getChildren().remove(verticalIndicator.get());
+                getChildren().remove(verticalIndicator);
                 return;
             }
 
-            if (!getChildren().contains(verticalIndicator.get())) {
-                getChildren().add(verticalIndicator.get());
+            if (!getChildren().contains(verticalIndicator)) {
+                getChildren().add(verticalIndicator);
             }
 
-            verticalIndicator.get().setLayoutX(event.getX());
-        });
+            verticalIndicator.setLayoutX(event.getX());
+        };
+
+        setOnMouseEntered(showVerticalIndicator);
+        setOnMouseMoved(verticalIndicatorHandler);
+        setOnMouseDragged(verticalIndicatorHandler);
+        setOnMouseExited(hideVerticalIndicator);
     }
 
     public void addTimeline() {
