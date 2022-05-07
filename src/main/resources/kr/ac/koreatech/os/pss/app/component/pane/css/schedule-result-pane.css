@@ -4,12 +4,13 @@
     -fx-font-smoothing-type: gray;
 }
 
-#details-container {
-    -fx-background-color: white;
+.table-column {
+    -fx-alignment: CENTER;
 }
 
-#process-name-column {
-    -fx-alignment: CENTER;
+
+#details-container {
+    -fx-background-color: white;
 }
 
 #title-container {
