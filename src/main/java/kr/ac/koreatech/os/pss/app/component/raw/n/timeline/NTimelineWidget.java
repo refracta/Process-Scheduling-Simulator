@@ -54,8 +54,6 @@ public class NTimelineWidget extends BorderPane {
             verticalIndicator.setStartY(0);
             verticalIndicator.setEndX(0);
             verticalIndicator.setEndY(getHeight() - scalerPane.getHeight());
-            System.out.println(getHeight());
-            System.out.println(scalerPane.getHeight());
 
             if (!getChildren().contains(verticalIndicator)) {
                 getChildren().add(verticalIndicator);
