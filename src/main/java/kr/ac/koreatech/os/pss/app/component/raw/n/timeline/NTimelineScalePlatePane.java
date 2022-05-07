@@ -40,7 +40,7 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
 
 
     public void drawScale(double start, double range, double endpoint) {
-// 640 -> 640
+        // 640 -> 640
         getChildren().clear();
         System.out.println(start + "/" + range + "/" + endpoint);
         double startValue = start * endpoint;
@@ -56,21 +56,24 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
 
         int outerEndSamplingPoint = (int) Math.ceil(endValue / samplingInterval) * samplingInterval;
 
+        if(endSamplingPoint == outerEndSamplingPoint){
+            outerEndSamplingPoint += 1;
+        }
+
         int numInterval = (int) Math.floor(endValue / samplingInterval) - (int) Math.ceil(startValue / samplingInterval) + 1;
-        System.out.println("F"+firstSamplingPoint);
-        System.out.println("E"+endSamplingPoint);
-        System.out.println("O"+outerEndSamplingPoint);
-        System.out.println("======================================");
+
+
+        double scaleY = MAX_HEIGHT - ;
         for (double i = firstSamplingPoint; i < outerEndSamplingPoint; i += samplingInterval) {
             Line line = new Line(0, 0, 0, SCALE_HEIGHT);
             double v = LEFT_MARGIN + ((i - firstSamplingPoint) / endpoint * getScalePlateWidth()) * (1 / range);
             line.setLayoutX(v);
+            line.setLayoutY(scaleY);
             Text defaultText = TextUtils.getDefaultText(scalerPlateLabelMapper.apply(i), 14);
             getChildren().add(defaultText);
             defaultText.applyCss();
             defaultText.setX(v - defaultText.getBoundsInLocal().getWidth() / 2);
             defaultText.setY(10 + defaultText.getBoundsInLocal().getHeight() + 2);
-
             getChildren().add(line);
         }
     }
