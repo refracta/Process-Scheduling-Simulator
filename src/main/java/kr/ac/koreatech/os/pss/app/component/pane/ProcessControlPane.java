@@ -4,21 +4,20 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import kr.ac.koreatech.os.pss.app.component.raw.n.timeline.NTimelineWidget;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ProcessControlPane extends SingleComponent {
-    @FXML
-    private JFXSlider criteriaEndTimeSlider;
 
     @FXML
     private JFXButton delAllButton;
 
     @FXML
-    private GridPane processTimelineContainerPane;
+    public Pane testContainerPane;
 
     private ProcessTimelineContainerPane containerPane;
 
@@ -27,17 +26,15 @@ public class ProcessControlPane extends SingleComponent {
         super.initialize(location, resources);
 
         containerPane = SingleComponent.getInstance(ProcessTimelineContainerPane.class);
-
-        // 축적 슬라이더 이벤트 핸들러.
-        criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            containerPane.setCriteriaEndTime(newValue.intValue());
-            containerPane.updateAllScales();
-        });
     }
 
     @FXML
     private void addProcess(MouseEvent event) {
-        containerPane.addTimeline();
+        ProcessControlPane instance = SingleComponent.getInstance(ProcessControlPane.class);
+
+        NTimelineWidget nTimelineWidget = new NTimelineWidget();
+        nTimelineWidget.bindToTargetPaneHeight(instance.testContainerPane);
+        instance.testContainerPane.getChildren().add(nTimelineWidget);
     }
 
     @FXML
