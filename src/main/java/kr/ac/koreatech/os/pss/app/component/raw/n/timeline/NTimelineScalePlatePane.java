@@ -12,7 +12,7 @@ import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 import java.util.function.Function;
 
 public class NTimelineScalePlatePane extends NTimelineComponent {
-    Function<Double, String> scalerPlateLabelMapper = aDouble -> String.valueOf(aDouble.intValue());
+    Function<Integer, String> scalerPlateLabelMapper = integer -> String.valueOf(integer);
 
     protected int LEFT_MARGIN = 8 + 24;
     protected int RIGHT_MARGIN = 14;
@@ -20,6 +20,8 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
     protected int SCALE_HEIGHT = 10;
 //    protected int LEFT
 
+    protected int SCALER_PLATE_LABEL_INTERVAL_MARGIN = 10;
+    protected int SCALER_PLATE_LABEL_TOP_MARGIN = 6;
     public NTimelineScalePlatePane() {
         setMinHeight(MAX_HEIGHT);
     }
@@ -40,41 +42,40 @@ public class NTimelineScalePlatePane extends NTimelineComponent {
 
 
     public void drawScale(double start, double range, double endpoint) {
-        // 640 -> 640
-        getChildren().clear();
-        System.out.println(start + "/" + range + "/" + endpoint);
         double startValue = start * endpoint;
         // 3.4
         double rangeValue = range * endpoint;
         double endValue = startValue + rangeValue;
 
-        int samplingInterval = 1;
-        // 7.4
-        int firstSamplingPoint = (int) Math.ceil(startValue / samplingInterval) * samplingInterval;
-        //2
-        int endSamplingPoint = (int) Math.floor(endValue / samplingInterval) * samplingInterval;
+        samplingLoop:
+        for (int samplingInterval = 1; ; samplingInterval++) {
+            getChildren().clear();
+            int firstSamplingPoint = (int) Math.ceil(startValue / samplingInterval) * samplingInterval;
+            int endSamplingPoint = (int) Math.floor(endValue / samplingInterval) * samplingInterval;
+            int outerEndSamplingPoint = (int) Math.ceil(endValue / samplingInterval) * samplingInterval;
+                outerEndSamplingPoint += endSamplingPoint == outerEndSamplingPoint ? 1 : 0;
 
-        int outerEndSamplingPoint = (int) Math.ceil(endValue / samplingInterval) * samplingInterval;
+            double prevHalfX = 0;
+            double scaleY = MAX_HEIGHT - SCALE_HEIGHT;
+            for (int i = firstSamplingPoint; i < outerEndSamplingPoint; i += samplingInterval) {
+                Line line = new Line(0, 0, 0, SCALE_HEIGHT);
+                double x = LEFT_MARGIN + ((i - firstSamplingPoint) / endpoint * getScalePlateWidth()) * (1 / range);
+                line.setLayoutX(x);
+                line.setLayoutY(scaleY);
+                Text text = TextUtils.getDefaultText(scalerPlateLabelMapper.apply(i), 14);
+                getChildren().add(text);
+                text.applyCss();
+                double textWidth = text.getBoundsInLocal().getWidth();
 
-        if(endSamplingPoint == outerEndSamplingPoint){
-            outerEndSamplingPoint += 1;
-        }
-
-        int numInterval = (int) Math.floor(endValue / samplingInterval) - (int) Math.ceil(startValue / samplingInterval) + 1;
-
-
-        double scaleY = MAX_HEIGHT - ;
-        for (double i = firstSamplingPoint; i < outerEndSamplingPoint; i += samplingInterval) {
-            Line line = new Line(0, 0, 0, SCALE_HEIGHT);
-            double v = LEFT_MARGIN + ((i - firstSamplingPoint) / endpoint * getScalePlateWidth()) * (1 / range);
-            line.setLayoutX(v);
-            line.setLayoutY(scaleY);
-            Text defaultText = TextUtils.getDefaultText(scalerPlateLabelMapper.apply(i), 14);
-            getChildren().add(defaultText);
-            defaultText.applyCss();
-            defaultText.setX(v - defaultText.getBoundsInLocal().getWidth() / 2);
-            defaultText.setY(10 + defaultText.getBoundsInLocal().getHeight() + 2);
-            getChildren().add(line);
+                text.setX(x - textWidth / 2);
+                if (prevHalfX + SCALER_PLATE_LABEL_INTERVAL_MARGIN > text.getX()) {
+                    continue samplingLoop;
+                }
+                prevHalfX = x + textWidth / 2;
+                text.setY(SCALER_PLATE_LABEL_TOP_MARGIN + text.getBoundsInLocal().getHeight() + 2);
+                getChildren().add(line);
+            }
+            break;
         }
     }
 }
