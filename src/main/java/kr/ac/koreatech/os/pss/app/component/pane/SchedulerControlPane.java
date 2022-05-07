@@ -8,10 +8,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.component.utils.RandomUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextFieldUtils;
 import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.core.impl.EfficiencyCore;
 import kr.ac.koreatech.os.pss.core.impl.PerformanceCore;
+import kr.ac.koreatech.os.pss.process.AbstractProcess;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.ScheduleMethod;
@@ -20,10 +22,7 @@ import kr.ac.koreatech.os.pss.scheduler.impl.*;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SchedulerControlPane extends SingleComponent {
 
@@ -39,6 +38,12 @@ public class SchedulerControlPane extends SingleComponent {
      */
     @FXML
     TextField numEfficiencyCoreTextField;
+
+    @FXML
+    TextField randomNumPerformanceCoreTextField;
+    @FXML
+    TextField randomNumEfficiencyCoreTextField;
+
     /**
      * 스케줄링 메소드를 설정하는 콤보 박스
      */
@@ -76,6 +81,10 @@ public class SchedulerControlPane extends SingleComponent {
     TextField flagLimitTextField;
     @FXML
     GridPane processTimelineContainerPane;
+
+    @FXML
+    JFXButton randomCoreButton;
+
     /**
      * 스케줄링 시작 버튼
      */
@@ -113,6 +122,16 @@ public class SchedulerControlPane extends SingleComponent {
         }
     }
 
+    @FXML
+    private void setRandomCore(MouseEvent event) {
+        int numPerformanceBound = TextFieldUtils.getNumericValue(randomNumPerformanceCoreTextField, 0) + 1;
+        int numEfficiencyBound = TextFieldUtils.getNumericValue(randomNumEfficiencyCoreTextField, 0) + 1;
+
+        RandomUtils.setRandomWithCurrentTime();
+        numPerformanceCoreTextField.setText("" + RandomUtils.random.nextInt(numPerformanceBound));
+        numEfficiencyCoreTextField.setText("" + RandomUtils.random.nextInt(numEfficiencyBound));
+    }
+
     /**
      * 스케줄링 시작 이벤트 처리기
      * 지정된 스케줄링의 파라미터 조건이 만족되었는지 확인 후 스케줄링 수행
@@ -125,7 +144,7 @@ public class SchedulerControlPane extends SingleComponent {
             return;
         }
 
-        List<AbstractCore> cores = new ArrayList<AbstractCore>();
+        List<AbstractCore> cores = new ArrayList<>();
         int numPerformanceCore = TextFieldUtils.getNumericValue(numPerformanceCoreTextField, 0);
         for (int i = 0; i < numPerformanceCore; i++) cores.add(new PerformanceCore());
 
@@ -148,7 +167,11 @@ public class SchedulerControlPane extends SingleComponent {
         ScheduleData scheduleData = scheduler.schedule(cores, processes);
 
         SingleComponent.getInstance(ProcessorStatusPane.class).setInformation(scheduleData);
-        SingleComponent.getInstance(ScheduleResultPane.class).printResultConsole(scheduleData);
+        SingleComponent.getInstance(ScheduleResultPane.class).generateResultTable(scheduleData);
+        SingleComponent.getInstance(GanttChartContainerPane.class).generateGanttChart(scheduleData);
+
+        AbstractCore.resetCoreIdCount();
+        AbstractProcess.resetCoreIdCount();
     }
 
     /**
@@ -192,9 +215,9 @@ public class SchedulerControlPane extends SingleComponent {
                 case RR:
                     return isRRReady();
                 case RR2Q:
-                    return isCustom1Ready();
+                    return isRR2QReady();
                 case GMRL:
-                    return isCustom2Ready();
+                    return isGMRLReady();
                 default:
                     return true;
             }
@@ -213,20 +236,20 @@ public class SchedulerControlPane extends SingleComponent {
     }
 
     /**
-     * Custom 1 스케줄링이 가능한 상태인지 검사하여 반환
+     * RR2Q 스케줄링이 가능한 상태인지 검사하여 반환
      *
-     * @return Custom 1 스케줄링 수행 가능 여부
+     * @return RR2Q 스케줄링 수행 가능 여부
      */
-    private boolean isCustom1Ready() {
+    private boolean isRR2QReady() {
         return isRRReady() && TextFieldUtils.getNumericValue(queueLimitTextField, 0) > 0;
     }
 
     /**
-     * Custom 2 스케줄링이 가능한 상태인지 검사하여 반환
+     * GMRL 스케줄링이 가능한 상태인지 검사하여 반환
      *
-     * @return Custom 2 스케줄링 수행 가능 여부
+     * @return GMRL 스케줄링 수행 가능 여부
      */
-    private boolean isCustom2Ready() {
+    private boolean isGMRLReady() {
         return isRRReady() && TextFieldUtils.getNumericValue(flagLimitTextField, 0) > 0;
     }
 
@@ -250,6 +273,7 @@ public class SchedulerControlPane extends SingleComponent {
                 case HRRN:
                     return new HRRNScheduler();
                 case RR2Q:
+                    return new RR2QScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1), TextFieldUtils.getNumericValue(queueLimitTextField, 5));
                 case GMRL:
             }
         }
@@ -263,9 +287,7 @@ public class SchedulerControlPane extends SingleComponent {
             scheduleMethodComboBox.getItems().add(method.getValue());
         }
 
-        scheduleMethodComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
-            applyScheduleMethod(ScheduleMethod.getEnum(newValue.toString()));
-        });
+        scheduleMethodComboBox.valueProperty().addListener((observable, oldValue, newValue) -> applyScheduleMethod(ScheduleMethod.getEnum(newValue.toString())));
 
         setTimeQuantumDisable(true);
         setQueueLimitDisable(true);

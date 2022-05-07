@@ -9,7 +9,6 @@ import kr.ac.koreatech.os.pss.app.component.pane.ProcessTimelineContainerPane;
 import kr.ac.koreatech.os.pss.app.component.utils.GridPaneUtils;
 import kr.ac.koreatech.os.pss.app.component.utils.TextUtils;
 import kr.ac.koreatech.os.pss.app.loader.utils.FXMLUtils;
-import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
 import java.util.Objects;
 
@@ -18,6 +17,8 @@ public class UnionTimeline {
     private Text idText;
     private ProcessTimelinePane timeline;
     private JFXButton deleteButton;
+
+    private static double dx;
 
     public UnionTimeline(ProcessTimelineContainerPane container, Text idText, ProcessTimelinePane timeline, JFXButton deleteButton) {
         this.container = container;
@@ -28,7 +29,7 @@ public class UnionTimeline {
 
     public static UnionTimeline create(ProcessTimelineContainerPane container) {
         ProcessTimelinePane timeline = new ProcessTimelinePane();
-        timeline.updateScale(Math.max(container.getCriteriaEndTime(), container.getMaxEndTime()), container.getLengthFactor());
+        timeline.updateScale(container.getGreatEndTime(), container.getLengthFactor());
         TimelineBar bar = timeline.getTimelineBar();
 
         timeline.setOnMouseMoved(e -> {
@@ -58,8 +59,10 @@ public class UnionTimeline {
 
             switch (timeline.getActionState()) {
                 case IDLE:
-                    if (bar.isInMiddle(processedX, container.getLengthFactor()))
+                    if (bar.isInMiddle(processedX, container.getLengthFactor())) {
                         timeline.setActionState(ProcessTimelinePane.ActionState.MOVE);
+                        dx = processedX;
+                    }
                     else if (bar.isInLeft(processedX))
                         timeline.setActionState(ProcessTimelinePane.ActionState.EXTEND_LEFT);
                     else if (bar.isInRight(processedX, container.getLengthFactor()))
@@ -77,7 +80,7 @@ public class UnionTimeline {
                     bar.setWidth(newWidth);
                     break;
                 case MOVE:
-                    bar.setLayoutX(Math.max(0, e.getX() - bar.getWidth() / 2));
+                    bar.setLayoutX(Math.max(0, e.getX() - dx));
                     break;
             }
         });
@@ -94,15 +97,11 @@ public class UnionTimeline {
                     bar.update(bar.getArrivalTime(), index - bar.getArrivalTime(), container.getLengthFactor());
                     break;
                 case MOVE:
-                    index = bar.getMovedIndex(e.getX() - bar.getWidth() / 2, container.getLengthFactor());
+                    index = bar.getMovedIndex(e.getX() - dx, container.getLengthFactor());
                     bar.update(index, bar.getBurstTime(), container.getLengthFactor());
                     bar.setLayoutX(bar.getArrivalTime() * container.getLengthFactor());
                     break;
             }
-
-            DefaultProcess process = timeline.getProcess();
-            process.setArrivalTime(bar.getArrivalTime());
-            process.setBurstTime(bar.getBurstTime());
 
             timeline.setCursor(Cursor.DEFAULT);
             timeline.setActionState(ProcessTimelinePane.ActionState.IDLE);
@@ -111,9 +110,7 @@ public class UnionTimeline {
         });
         JFXButton deleteButton = (JFXButton) FXMLUtils.create(ProcessDeleteButton.class);
         UnionTimeline unionTimeline = new UnionTimeline(container, TextUtils.getDefaultText(timeline.getProcess().getName(), 20), timeline, deleteButton);
-        deleteButton.setOnMouseClicked(e -> {
-            container.deleteTimeline(unionTimeline);
-        });
+        deleteButton.setOnMouseClicked(e -> container.deleteTimeline(unionTimeline));
         return unionTimeline;
     }
 

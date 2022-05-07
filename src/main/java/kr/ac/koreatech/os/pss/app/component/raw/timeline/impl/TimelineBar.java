@@ -4,8 +4,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class TimelineBar extends Rectangle {
-    private final Color opaqueColor;
-    private final Color transparentColor;
+    private Color opaqueColor;
+    private Color transparentColor;
     private int arrivalTime;
     private int burstTime;
 
@@ -83,5 +83,15 @@ public class TimelineBar extends Rectangle {
 
     public int getEndTime() {
         return arrivalTime + burstTime;
+    }
+
+    public Color getOpaqueColor() {
+        return opaqueColor;
+    }
+
+    public void setColor(Color color) {
+        this.opaqueColor = color;
+        this.transparentColor = Color.color(color.darker().getRed(), color.darker().getGreen(), color.darker().getBlue(), 0.8);
+        this.setFill(opaqueColor);
     }
 }

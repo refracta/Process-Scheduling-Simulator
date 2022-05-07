@@ -1,12 +1,22 @@
 package kr.ac.koreatech.os.pss.app.component.raw.timeline.impl;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import kr.ac.koreatech.os.pss.app.component.raw.timeline.ScaleHandler;
+import kr.ac.koreatech.os.pss.app.component.utils.TooltipUtils;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ProcessTimelinePane extends Pane implements ScaleHandler {
-    private final DefaultProcess process;
+    /**
+     * getProcess 실행 시 프로세스의 정수 식별자(id)를 중복없이 자동 생성하기 위한 카운터
+     */
+    private static final AtomicInteger idCount = new AtomicInteger(0);
+
+    private int id;
+
     private final TimelineBar timeLineBar;
     private ActionState actionState;
 
@@ -16,10 +26,18 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
     }
 
     public ProcessTimelinePane(int maxEndTime, double lengthFactor, double height) {
+        this.id = idCount.incrementAndGet();
+
         this.actionState = ActionState.IDLE;
 
-        this.process = new DefaultProcess(0, 1);
-        this.timeLineBar = new TimelineBar(process.getArrivalTime(), process.getBurstTime(), lengthFactor, height);
+        this.timeLineBar = new TimelineBar(0, 1, lengthFactor, height);
+
+        Tooltip tooltip = TooltipUtils.getDefaultTooltip(this.timeLineBar);
+        this.timeLineBar.setOnMouseMoved(event -> tooltip.setText(
+                "프로세스 이름: " + "P" + this.id + "\n" +
+                "도착 시간: " + this.timeLineBar.getArrivalTime() + "\n" +
+                "실행 시간: " + this.timeLineBar.getBurstTime()
+        ));
 
         updateScale(maxEndTime, lengthFactor);
     }
@@ -28,7 +46,7 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
     public void updateScale(int maxEndTime, double lengthFactor) {
         getChildren().clear();
         for (int i = 0; i < maxEndTime; i++)
-            this.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30 - 1));
+            this.getChildren().add(new Line(i * lengthFactor, 0, i * lengthFactor, 30));
 
         this.getChildren().add(this.timeLineBar);
 
@@ -36,8 +54,12 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
         timeLineBar.setLayoutX(timeLineBar.getArrivalTime() * lengthFactor);
     }
 
+    public static void resetIdCount() {
+        idCount.set(0);
+    }
+
     public DefaultProcess getProcess() {
-        return process;
+        return new DefaultProcess(id, timeLineBar.getArrivalTime(), timeLineBar.getBurstTime());
     }
 
     public TimelineBar getTimelineBar() {
@@ -50,6 +72,10 @@ public class ProcessTimelinePane extends Pane implements ScaleHandler {
 
     public void setActionState(ActionState actionState) {
         this.actionState = actionState;
+    }
+
+    public int getProcessId() {
+        return id;
     }
 
     public enum ActionState {

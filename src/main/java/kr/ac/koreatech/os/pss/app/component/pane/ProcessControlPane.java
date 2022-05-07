@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import kr.ac.koreatech.os.pss.app.component.raw.n.timeline.NTimelineWidget;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
+import kr.ac.koreatech.os.pss.app.component.utils.RandomUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,7 +40,10 @@ public class ProcessControlPane extends SingleComponent {
 
     @FXML
     private void addRandomProcess(MouseEvent event) {
-        // TODO: 무작위 프로세스 추가 로직.
+        int arrivalTime = RandomUtils.random.nextInt(containerPane.getCriteriaEndTime());
+        int burstTime = RandomUtils.random.nextInt(containerPane.getCriteriaEndTime() - arrivalTime) + 1;
+
+        containerPane.addTimeline(arrivalTime, burstTime);
     }
 
     @FXML

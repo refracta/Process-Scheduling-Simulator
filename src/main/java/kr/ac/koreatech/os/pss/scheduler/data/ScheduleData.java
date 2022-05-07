@@ -42,7 +42,7 @@ public class ScheduleData {
      */
     public Map<AbstractCore, List<DefaultProcess>> getSchedule() {
         if (!containsKey(SCHEDULE)) {
-            put(SCHEDULE, new HashMap<AbstractCore, List<DefaultProcess>>());
+            put(SCHEDULE, new TreeMap<AbstractCore, List<DefaultProcess>>());
         }
         return (Map<AbstractCore, List<DefaultProcess>>) get(SCHEDULE);
     }

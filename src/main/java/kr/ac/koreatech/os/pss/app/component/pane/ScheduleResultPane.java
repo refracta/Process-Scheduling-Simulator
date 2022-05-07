@@ -5,9 +5,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import kr.ac.koreatech.os.pss.app.component.structure.SingleComponent;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
@@ -16,9 +16,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ScheduleResultPane extends SingleComponent {
-    @FXML
-    private VBox tempVBox;
-
     @FXML
     private TableView<ScheduleResultModel> resultTable;
 
@@ -35,12 +32,24 @@ public class ScheduleResultPane extends SingleComponent {
     @FXML
     private TableColumn<ScheduleResultModel, Double> normalizedTurnaroundTimeColumn;
 
+    @FXML
+    private Slider criteriaEndTimeSlider;
+
+    private GanttChartContainerPane containerPane;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+
+        containerPane = SingleComponent.getInstance(GanttChartContainerPane.class);
+
+        criteriaEndTimeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            containerPane.setCriteriaEndTime(newValue.intValue());
+            containerPane.updateAllScales();
+        });
     }
 
-    public void printResultConsole(ScheduleData scheduleData) {
+    public void generateResultTable(ScheduleData scheduleData) {
         ObservableList<ScheduleResultModel> scheduleResultList = FXCollections.observableArrayList();
         for (DefaultProcess p : scheduleData.getResultProcesses())
             scheduleResultList.add(new ScheduleResultModel(p.getName(), p.getArrivalTime(), p.getBurstTime(), p.getWaitingTime(), p.getTurnaroundTime(), p.getNormalizedTurnaroundTime()));
@@ -63,7 +72,7 @@ public class ScheduleResultPane extends SingleComponent {
             this.burstTime = burstTime;
             this.waitingTime = waitingTime;
             this.turnaroundTime = turnaroundTime;
-            this.normalizedTurnaroundTime = turnaroundTime;
+            this.normalizedTurnaroundTime = normalizedTurnaroundTime;
         }
 
         public ObservableValue<String> getProcessName() {
