@@ -215,9 +215,9 @@ public class SchedulerControlPane extends SingleComponent {
                 case RR:
                     return isRRReady();
                 case RR2Q:
-                    return isCustom1Ready();
+                    return isRR2QReady();
                 case GMRL:
-                    return isCustom2Ready();
+                    return isGMRLReady();
                 default:
                     return true;
             }
@@ -236,20 +236,20 @@ public class SchedulerControlPane extends SingleComponent {
     }
 
     /**
-     * Custom 1 스케줄링이 가능한 상태인지 검사하여 반환
+     * RR2Q 스케줄링이 가능한 상태인지 검사하여 반환
      *
-     * @return Custom 1 스케줄링 수행 가능 여부
+     * @return RR2Q 스케줄링 수행 가능 여부
      */
-    private boolean isCustom1Ready() {
+    private boolean isRR2QReady() {
         return isRRReady() && TextFieldUtils.getNumericValue(queueLimitTextField, 0) > 0;
     }
 
     /**
-     * Custom 2 스케줄링이 가능한 상태인지 검사하여 반환
+     * GMRL 스케줄링이 가능한 상태인지 검사하여 반환
      *
-     * @return Custom 2 스케줄링 수행 가능 여부
+     * @return GMRL 스케줄링 수행 가능 여부
      */
-    private boolean isCustom2Ready() {
+    private boolean isGMRLReady() {
         return isRRReady() && TextFieldUtils.getNumericValue(flagLimitTextField, 0) > 0;
     }
 
@@ -273,6 +273,7 @@ public class SchedulerControlPane extends SingleComponent {
                 case HRRN:
                     return new HRRNScheduler();
                 case RR2Q:
+                    return new RR2QScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1), TextFieldUtils.getNumericValue(queueLimitTextField, 5));
                 case GMRL:
             }
         }
