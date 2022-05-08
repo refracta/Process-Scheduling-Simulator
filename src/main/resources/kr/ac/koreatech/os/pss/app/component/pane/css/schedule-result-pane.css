@@ -1,0 +1,23 @@
+.text {
+    -fx-font-family: "NanumSquare";
+    -fx-font-size: 16px;
+    -fx-font-smoothing-type: gray;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+}
+
+
+#details-container {
+    -fx-background-color: white;
+}
+
+#title-container {
+    -fx-background-color: lightgray;
+}
+
+#title {
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 26px;
+}

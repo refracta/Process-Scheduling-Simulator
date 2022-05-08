@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.beryx.jlink' version '2.25.0'
+    id 'org.openjfx.javafxplugin' version '0.0.12'
+}
+
+group 'kr.ac.koreatech.os.pss'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
+application {
+    mainModule = 'kr.ac.koreatech.os.pss'
+    mainClass = 'kr.ac.koreatech.os.pss.entrypoint.Starter'
+}
+
+
+jlink {
+    launcher {
+        name = rootProject.name + '-' + version
+    }
+}
+
+javafx {
+    version = '18'
+    modules = ['javafx.controls', 'javafx.fxml']
+}
+
+configurations {
+    umlDoclet
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    umlDoclet 'nl.talsmasoftware:umldoclet:2.0.15'
+    implementation 'com.jfoenix:jfoenix:9.0.10'
+    implementation 'org.kordamp.ikonli:ikonli-javafx:12.3.1'
+    implementation 'org.kordamp.ikonli:ikonli-fontawesome5-pack:12.3.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+    source = sourceSets.main.allJava
+    options.docletpath = configurations.umlDoclet.files.asType(List)
+    options.doclet = 'nl.talsmasoftware.umldoclet.UMLDoclet'
+}
+
+task versionTxt() {
+    doLast {
+        buildDir.mkdir()
+        new File(projectDir, "build/version.txt").text = version
+    }
+}
+
+var backup = new File(projectDir, "build/module-info.java")
+var target = new File(projectDir, "src/main/java/module-info.java")
+task moduleInfoBackup() {
+    doLast {
+        target.renameTo(backup)
+    }
+}
+
+task moduleInfoRestore() {
+    doLast {
+        backup.renameTo(target)
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

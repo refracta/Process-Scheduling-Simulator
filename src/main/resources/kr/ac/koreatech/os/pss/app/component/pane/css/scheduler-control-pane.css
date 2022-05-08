@@ -1,0 +1,65 @@
+.text {
+    -fx-font-smoothing-type: gray;
+}
+
+#parameter-combo {
+    -fx-min-width: 190px;
+    -jfx-focus-color: transparent;
+    -jfx-unfocus-color: transparent;
+    -fx-font-family: "NanumSquare";
+    -fx-font-size: 16px;
+    -fx-font-smoothing-type: gray;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 1px;
+}
+
+.text-parameter {
+    -fx-text-fill: white;
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 1px;
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 16px;
+}
+
+.apply-button {
+    -fx-font-family: "NanumSquare";
+    -fx-font-size: 16px;
+    -fx-font-smoothing-type: gray;
+    -fx-padding: 5px;
+    -fx-pref-width: 40px;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-radius: 1px;
+}
+
+#start-button {
+    -fx-font-family: "NanumSquare";
+    -fx-font-size: 16px;
+    -fx-font-smoothing-type: gray;
+    -fx-padding: 5px;
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-radius: 1px;
+}
+
+#random-core-button {
+    -fx-font-family: "NanumSquare";
+    -fx-background-color: white;
+    -fx-background-radius: 1px;
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+}
+
+#title-container {
+    -fx-background-color: #FF8C32;
+}
+
+#details-container {
+    -fx-background-color: #06113C;
+}
+
+#title {
+    -fx-font-family: "NanumSquare Bold";
+    -fx-font-size: 26px;
+    -fx-fill: white;
+}
