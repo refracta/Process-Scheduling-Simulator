@@ -64,17 +64,7 @@ public class ScheduleResultPane extends SingleComponent {
         resultTable.setItems(scheduleResultList);
     }
 
-    public record ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime,
-                                      int turnaroundTime, double normalizedTurnaroundTime) {
-        public ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime, int turnaroundTime, double normalizedTurnaroundTime) {
-            this.processName = processName;
-            this.arrivalTime = arrivalTime;
-            this.burstTime = burstTime;
-            this.waitingTime = waitingTime;
-            this.turnaroundTime = turnaroundTime;
-            this.normalizedTurnaroundTime = normalizedTurnaroundTime;
-        }
-
+    public record ScheduleResultModel(String processName, int arrivalTime, int burstTime, int waitingTime, int turnaroundTime, double normalizedTurnaroundTime) {
         public ObservableValue<String> getProcessName() {
             return new ReadOnlyObjectWrapper<>(processName);
         }
@@ -96,7 +86,7 @@ public class ScheduleResultPane extends SingleComponent {
         }
 
         public ObservableValue<Double> getNormalizedTurnaroundTime() {
-            return new ReadOnlyObjectWrapper<>(normalizedTurnaroundTime);
+            return new ReadOnlyObjectWrapper<>(Math.round(normalizedTurnaroundTime * 10) / 10.0);
         }
     }
 }

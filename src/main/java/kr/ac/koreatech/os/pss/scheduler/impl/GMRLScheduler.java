@@ -4,7 +4,6 @@ import kr.ac.koreatech.os.pss.core.AbstractCore;
 import kr.ac.koreatech.os.pss.process.impl.DefaultProcess;
 import kr.ac.koreatech.os.pss.scheduler.AbstractScheduler;
 import kr.ac.koreatech.os.pss.scheduler.data.ScheduleData;
-import kr.ac.koreatech.os.pss.scheduler.utils.PrintUtils;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -83,11 +82,8 @@ public class GMRLScheduler extends AbstractScheduler {
                     LinkedList<DefaultProcess> copyProcessQueue = new LinkedList<>(processQueue);
                     copyProcessQueue.add(targetProcess);
                     copyProcessQueue.sort(Comparator.comparingInt(DefaultProcess::getLeftBurstTime));
-                    System.out.println(copyProcessQueue);
-                    System.out.print("flagCount = 3 → ");
                     targetProcess = copyProcessQueue.pollLast();
                     processQueue.remove(targetProcess);
-                    System.out.println(targetProcess.getName() + " (Replaced)");
                     currentFlagCount = 0;
                 } else {
                     currentFlagCount++;

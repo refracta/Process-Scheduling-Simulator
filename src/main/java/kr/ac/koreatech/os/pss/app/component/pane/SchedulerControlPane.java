@@ -275,6 +275,7 @@ public class SchedulerControlPane extends SingleComponent {
                 case RR2Q:
                     return new RR2QScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1), TextFieldUtils.getNumericValue(queueLimitTextField, 5));
                 case GMRL:
+                    return new GMRLScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1), TextFieldUtils.getNumericValue(flagLimitTextField, 3));
             }
         }
         return new FCFSScheduler();
