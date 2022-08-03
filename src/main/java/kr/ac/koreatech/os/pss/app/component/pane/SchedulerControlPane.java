@@ -267,9 +267,9 @@ public class SchedulerControlPane extends SingleComponent {
                 case RR:
                     return new RRScheduler(TextFieldUtils.getNumericValue(timeQuantumTextField, 1));
                 case SPN:
-                    return new SRTNScheduler();
-                case SRTN:
                     return new SPNScheduler();
+                case SRTN:
+                    return new SRTNScheduler();
                 case HRRN:
                     return new HRRNScheduler();
                 case RR2Q:
